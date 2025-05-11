@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:logger/logger.dart';
 import '../../model/user_model.dart';
 import '../../utils/utils.dart';
 import '../../view_model/user_view_model.dart';
@@ -11,6 +12,7 @@ import '../api_exception.dart';
 import 'package:http/http.dart' as http;
 
 class AuthNetworkApiService {
+
   Future<Map<String, String>> _getHeaders() async {
     final headers = {
       HttpHeaders.contentTypeHeader: 'application/json',
@@ -23,6 +25,7 @@ class AuthNetworkApiService {
   Future getPostResponse(String url, dynamic data) async {
     dynamic responseJson;
     try {
+      var logger=Logger();
       final headers = await _getHeaders();
       final response = await http
           .post(
@@ -32,7 +35,7 @@ class AuthNetworkApiService {
       )
           .timeout(const Duration(seconds: 10));
       final responseBody = jsonDecode(response.body);
-      print(responseBody);
+logger.d(responseBody);
       if (responseBody != null) {
         UserModel user = UserModel.fromJson(responseBody);
         await UserViewModel().saveUser(user);
@@ -49,6 +52,9 @@ class AuthNetworkApiService {
   dynamic returnResponse(http.Response response, {BuildContext? context}) {
     final responseBody = jsonDecode(response.body);
     String errorMessage = "Something went wrong";
+    var logger=Logger();
+    logger.d(response.statusCode);
+
     if(responseBody['email'] is List){
       errorMessage = responseBody['email'][0];
     }
@@ -60,6 +66,8 @@ class AuthNetworkApiService {
 
     switch (response.statusCode) {
       case 200:
+        return responseBody;
+      case 201:
         return responseBody;
       case 400:
         Utils.noInternet(errorMessage);

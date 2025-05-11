@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../resource/colors.dart';
 import '../../utils/utils.dart';
+import '../../view_model/auth_view_model.dart';
+import '../../widgets/form_widget/custom_button.dart';
+import '../../widgets/form_widget/custom_label_password.dart';
+import '../../widgets/form_widget/custom_label_textfield.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -58,14 +62,11 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     children: [
                       Container(
-                        child: const Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            CustomTitle(
-                              title: "Sign in",
-                              subTitle: "Sign in to your account",
-                            ),
-                          ],
+                        child: const Image(
+                          image: AssetImage('assets/images/card_bg.png'),
+                          fit: BoxFit.contain,
+                          width: 140,
+                          height: 140,
                         ),
                       ),
                       Container(
@@ -79,10 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                               outlinedColor: Colors.grey,
                               focusedColor: AppColors.primary,
                               width: size.width,
-                              helper: _isSubmitted
-                                  ? Validators.validateEmail(
-                                  _emailController.text)
-                                  : null,
+
                               helperStyle: const TextStyle(
                                 color: Colors.red,
                                 fontFamily: 'poppins',
@@ -98,10 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                               outlinedColor: Colors.grey,
                               focusedColor: AppColors.primary,
                               width: size.width,
-                              helper: _isSubmitted
-                                  ? Validators.validatePassword(
-                                  _passwordController.text)
-                                  : null,
+
                               helperStyle: const TextStyle(
                                 color: Colors.red,
                                 fontFamily: 'poppins',
@@ -110,42 +105,42 @@ class _LoginPageState extends State<LoginPage> {
                               text: "Password",
                             ),
                             const SizedBox(height: 8),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                      PageRouteBuilder(
-                                        pageBuilder: (context, animation,
-                                            secondaryAnimation) =>
-                                        const ForgetPassword(),
-                                        transitionsBuilder: (context, animation,
-                                            secondaryAnimation, child) {
-                                          const begin = Offset(1.0, 0.0);
-                                          const end = Offset.zero;
-                                          const curve = Curves.easeInOut;
-                                          var tween = Tween(
-                                              begin: begin, end: end)
-                                              .chain(CurveTween(curve: curve));
-                                          return SlideTransition(
-                                              position: animation.drive(tween),
-                                              child: child);
-                                        },
-                                      ),
-                                    );
-                                  },
-                                  child: const Text(
-                                    "Forget Password?",
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      fontFamily: 'poppins',
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.end,
+                            //   children: [
+                            //     // GestureDetector(
+                            //     //   onTap: () {
+                            //     //     Navigator.of(context).push(
+                            //     //       PageRouteBuilder(
+                            //     //         pageBuilder: (context, animation,
+                            //     //             secondaryAnimation) =>
+                            //     //         const ForgetPassword(),
+                            //     //         transitionsBuilder: (context, animation,
+                            //     //             secondaryAnimation, child) {
+                            //     //           const begin = Offset(1.0, 0.0);
+                            //     //           const end = Offset.zero;
+                            //     //           const curve = Curves.easeInOut;
+                            //     //           var tween = Tween(
+                            //     //               begin: begin, end: end)
+                            //     //               .chain(CurveTween(curve: curve));
+                            //     //           return SlideTransition(
+                            //     //               position: animation.drive(tween),
+                            //     //               child: child);
+                            //     //         },
+                            //     //       ),
+                            //     //     );
+                            //     //   },
+                            //     //   child: const Text(
+                            //     //     "Forget Password?",
+                            //     //     style: TextStyle(
+                            //     //       fontSize: 11,
+                            //     //       fontFamily: 'poppins',
+                            //     //       fontWeight: FontWeight.w400,
+                            //     //     ),
+                            //     //   ),
+                            //     // ),
+                            //   ],
+                            // ),
                             const SizedBox(height: 8),
                             CustomButton(
                                 isLoading: isLoading,
@@ -212,108 +207,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomOutlined(
-                      onPressed: () {},
-                      icon: const Icon(Icons.facebook),
-                      text: 'Google',
-                    ),
-                  ],
-                ),
-                Padding(
-                    padding: const EdgeInsets.only(bottom: 25, top: 13),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "New To Platform?",
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontFamily: 'poppins',
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            GestureDetector(
-                              onTap: () {
-                                // Navigator.pushNamed(context, '/home');
-                              },
-                              child: const Text(
-                                "Register Now",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: 'poppins',
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomOutlined(
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    PageRouteBuilder(
-                                      pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      const VendorRegistration(),
-                                      transitionsBuilder: (context, animation,
-                                          secondaryAnimation, child) {
-                                        const begin = Offset(1.0, 0.0);
-                                        const end = Offset.zero;
-                                        const curve = Curves.easeInOut;
-                                        var tween = Tween(
-                                            begin: begin, end: end)
-                                            .chain(CurveTween(curve: curve));
-                                        return SlideTransition(
-                                            position: animation.drive(tween),
-                                            child: child);
-                                      },
-                                    ),
-                                  );
-                                },
-                                icon: Icon(Icons.shopping_bag_outlined),
-                                text: 'Vendor'),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            CustomOutlined(
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    PageRouteBuilder(
-                                      pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      const CustomerRegistration(),
-                                      transitionsBuilder: (context, animation,
-                                          secondaryAnimation, child) {
-                                        const begin = Offset(1.0, 0.0);
-                                        const end = Offset.zero;
-                                        const curve = Curves.easeInOut;
-                                        var tween = Tween(
-                                            begin: begin, end: end)
-                                            .chain(CurveTween(curve: curve));
-                                        return SlideTransition(
-                                            position: animation.drive(tween),
-                                            child: child);
-                                      },
-                                    ),
-                                  );
-                                },
-                                icon: Icon(Icons.person),
-                                text: 'User')
-                          ],
-                        )
-                      ],
-                    )),
+
+
               ],
             ),
           ),
