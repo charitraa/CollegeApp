@@ -193,7 +193,7 @@ packages:
     source: hosted
     version: "1.4.0"
   http_parser:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http_parser
       sha256: "2aa08ce0341cc9b354a498388e30986515406668dbcc4f7c950c3e715496693b"
@@ -296,6 +296,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
+  loading_indicator:
+    dependency: "direct main"
+    description:
+      name: loading_indicator
+      sha256: a101ffb2aa3e646137d7810bfa90b50525dd3f72c01235b6df7491cf6af6f284
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
   logger:
     dependency: "direct main"
     description:

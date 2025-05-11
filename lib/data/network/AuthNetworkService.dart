@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import '../../utils/utils.dart';
-import '../api_exception.dart';
-import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart';
+import 'package:http_parser/http_parser.dart';
+import '../../model/user_model.dart';
+import '../../utils/utils.dart';
+import '../../view_model/user_view_model.dart';
+import '../api_exception.dart';
+import 'package:http/http.dart' as http;
+
 class AuthNetworkApiService {
   Future<Map<String, String>> _getHeaders() async {
     final headers = {
@@ -16,6 +18,8 @@ class AuthNetworkApiService {
     };
     return headers;
   }
+
+
   Future getPostResponse(String url, dynamic data) async {
     dynamic responseJson;
     try {
@@ -30,10 +34,7 @@ class AuthNetworkApiService {
       final responseBody = jsonDecode(response.body);
       print(responseBody);
       if (responseBody != null) {
-        User user = User(
-            userRole: responseBody['user_role'],
-            email: responseBody['email'],
-            accessToken: responseBody['access_token']);
+        UserModel user = UserModel.fromJson(responseBody);
         await UserViewModel().saveUser(user);
       } else {
         throw Exception('Incorrect username or password!!');
