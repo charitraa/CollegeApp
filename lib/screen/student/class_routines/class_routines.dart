@@ -68,7 +68,13 @@ class _ClassRoutinesState extends State<ClassRoutines> {
           "Class Routines",
           style: TextStyle(fontFamily: 'poppins'),
         ),
-        automaticallyImplyLeading: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: AppColors.primary),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          iconSize: 18,
+        ),
         actions: const [
           Image(
             image: AssetImage('assets/images/lbef.png'),

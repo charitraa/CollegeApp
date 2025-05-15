@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lbef/resource/routes_name.dart';
 import 'package:lbef/screen/auth/login_page.dart';
 import 'package:lbef/screen/auth/unauthorised.dart';
+import 'package:lbef/screen/navbar/student_navbar.dart';
 import 'package:lbef/screen/student/dashboard/dashboard.dart';
 
 class Routes {
@@ -19,7 +20,7 @@ class Routes {
 
       case RoutesName.student:
         return MaterialPageRoute(
-          builder: (BuildContext context) => const Dashboard(),
+          builder: (BuildContext context) =>  StudentNavbar(),
         );
       case RoutesName.unauthorised:
         return MaterialPageRoute(
