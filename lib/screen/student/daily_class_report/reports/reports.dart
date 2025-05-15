@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lbef/screen/student/daily_class_report/reports/stacked_reports.dart';
 import 'package:lbef/screen/student/daily_class_report/widgets/attendence_bar.dart';
 import 'package:lbef/screen/student/daily_class_report/widgets/individual_card_head.dart';
 
@@ -46,33 +47,43 @@ class _ReportsState extends State<Reports> {
       body: Container(
         width: size.width,
         padding: const EdgeInsets.all(12.0),
-        child: Column(
-          children: [
-            const IndividualCardHead(
-                image: 'assets/images/mountain.jpg',
-                tutor: "Nujan Shrestha",
-                subject: 'OBJECT ORIENTED PROGRAMMING AND SOFTWARE ENGINEERING',
-                code: 'CIS6FGV8'),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  'View reports from the last 30 classes.',
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primary),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const AttendanceBar(percentage: 75),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const IndividualCardHead(
+                  image: 'assets/images/mountain.jpg',
+                  tutor: "Nujan Shrestha",
+                  subject: 'OBJECT ORIENTED PROGRAMMING AND SOFTWARE ENGINEERING',
+                  code: 'CIS6FGV8'),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'View reports from the last 30 classes.',
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const AttendanceBar(percentage: 75),
+              const SizedBox(
+                height: 15,
+              ),
+              StackedReports(),
+              const SizedBox(
+                height: 15,
+              ),
+              StackedReports(),
+            ],
+          ),
         ),
       ),
     );
