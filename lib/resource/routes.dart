@@ -1,0 +1,34 @@
+import 'package:flutter/material.dart';
+import 'package:lbef/resource/routes_name.dart';
+import 'package:lbef/screen/auth/login_page.dart';
+import 'package:lbef/screen/auth/unauthorised.dart';
+import 'package:lbef/screen/student/dashboard/dashboard.dart';
+
+class Routes {
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case RoutesName.flash:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => const LoginPage(),
+        );
+
+      case RoutesName.login:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => const LoginPage(),
+        );
+
+      case RoutesName.student:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => const Dashboard(),
+        );
+      case RoutesName.unauthorised:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => const UnauthorisedPage(),
+        );
+      default:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => const UnauthorisedPage(),
+        );
+    }
+  }
+}

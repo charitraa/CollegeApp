@@ -12,7 +12,7 @@ class CustomButton extends StatefulWidget {
     super.key,
     required this.text,
     required this.onPressed,
-    this.buttonColor = const Color(0xFF393A8F),
+    this.buttonColor = const Color(0xFF1967B5),
     this.width,
     this.isLoading, // Default color
   });
@@ -52,7 +52,7 @@ class _CustomButtonState extends State<CustomButton> {
           ? const SizedBox(
               height: 28,
               child: LoadingIndicator(
-                indicatorType: Indicator.ballSpinFadeLoader,
+                indicatorType: Indicator.ballPulseSync,
                 colors: _kDefaultRainbowColors,
                 strokeWidth: 2.0,
               ),

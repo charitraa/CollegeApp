@@ -55,14 +55,14 @@ class _CustomLabelTextfieldState extends State<CustomLabelTextfield> {
             Text(
               widget.text,
               style: const TextStyle(
-
+color: Color(0xff1967B5),
                 fontFamily: 'poppins',
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
               ),
             ),
             const SizedBox(
-              height: 8,
+              height: 4,
             ),
             TextField(
               controller: widget.textController,
@@ -71,32 +71,32 @@ class _CustomLabelTextfieldState extends State<CustomLabelTextfield> {
               style: const TextStyle(fontFamily: 'poppins', fontSize: 15),
               readOnly: widget.readonly,
               decoration: InputDecoration(
-                  helperText: widget.helper,
-                  helperStyle: widget.helperStyle,
-                  hintText: widget.hintText,
-                  hintStyle: const TextStyle(
-                    color: Colors.grey,
-                    fontFamily: 'poppins',
-                    fontSize: 16,
+                helperText: widget.helper,
+                helperStyle: widget.helperStyle,
+                hintText: widget.hintText,
+                hintStyle: const TextStyle(
+                  color: Colors.grey,
+                  fontFamily: 'poppins',
+                  fontSize: 16,
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: widget.outlinedColor,
+                    width: 1.5,
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(
-                      color: widget.outlinedColor,
-                      width: 1.5,
-                    ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: widget.focusedColor,
+                    width: 1.5,
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(
-                      color: widget.focusedColor,
-                      width: 1.5,
-                    ),
-                  ),
-                  suffixIcon: widget.prefixicon,
-                  prefixIcon: widget.prefixicon,
-                  suffix: widget.suffixText),
+                ),
+                suffixIcon: widget.prefixicon,
+                prefixIcon: widget.prefixicon,
+                suffix: widget.suffixText,
+              ),
             ),
+
           ],
         ),
       ),

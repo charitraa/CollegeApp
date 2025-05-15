@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lbef/resource/routes.dart';
+import 'package:lbef/resource/routes_name.dart';
 import 'package:lbef/screen/auth/login_page.dart';
+import 'package:lbef/screen/student/class_routines/class_routines.dart';
+import 'package:lbef/screen/student/dashboard/dashboard.dart';
 import 'package:lbef/view_model/auth_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -30,6 +34,8 @@ class MyApp extends StatelessWidget {
                 fontFamily: 'Poppins',
               ),
               debugShowCheckedModeBanner: false,
+              initialRoute: RoutesName.flash,
+              onGenerateRoute: Routes.generateRoute,
               home: const LoginPage(),
             ),
           );

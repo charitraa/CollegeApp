@@ -51,7 +51,7 @@ class _PasswordTextfieldState extends State<PasswordTextfield> {
           Text(
             widget.text,
             style: const TextStyle(
-
+              color: Color(0xff1967B5),
               fontFamily: 'poppins',
               fontWeight: FontWeight.bold,
               fontSize: 14,
@@ -64,7 +64,9 @@ class _PasswordTextfieldState extends State<PasswordTextfield> {
             keyboardType: widget.keyboardType,
             obscureText: isPasswordVisible,
             style: const TextStyle(
-                fontFamily: 'poppins', fontSize: 15), // Toggle visibility
+              fontFamily: 'poppins',
+              fontSize: 15,
+            ),
             decoration: InputDecoration(
               helperText: widget.helper,
               helperStyle: widget.helperStyle,
@@ -74,28 +76,24 @@ class _PasswordTextfieldState extends State<PasswordTextfield> {
                 fontFamily: 'Poppins',
                 fontSize: 16,
               ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
+              enabledBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
                   color: widget.outlinedColor,
                   width: 1.5,
                 ),
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
+              focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
                   color: widget.focusedColor,
                   width: 1.5,
                 ),
               ),
-              suffixIcon:
-              widget.obscureText // Show toggle only for password fields
+              suffixIcon: widget.obscureText
                   ? IconButton(
                 icon: Icon(
                   isPasswordVisible
                       ? Icons.visibility_off
                       : Icons.visibility,
-
                 ),
                 onPressed: () {
                   setState(() {
@@ -106,6 +104,7 @@ class _PasswordTextfieldState extends State<PasswordTextfield> {
                   : null,
             ),
           ),
+
         ],
       ),
     );

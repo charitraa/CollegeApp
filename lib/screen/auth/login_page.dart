@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lbef/widgets/form_widget/role_selection.dart';
 import 'package:provider/provider.dart';
 import '../../resource/colors.dart';
 import '../../utils/utils.dart';
@@ -47,28 +48,53 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const SizedBox(height: 10),
+                const SizedBox(height: 30),
                 Container(
                   child: const Image(
-                    image: AssetImage('assets/images/card_bg.png'),
-                    fit: BoxFit.contain,
-                    width: 140,
-                    height: 140,
+                    image: AssetImage('assets/images/lbef.png'),
+                    fit: BoxFit.cover,
+                    width: 280,
+                    height: 180,
                   ),
                 ),
                 const SizedBox(height: 18),
+                if(isLoading)  const LinearProgressIndicator(),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Sign in",
+                            style: TextStyle(
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            "Hi there! Nice to see you again.",
+                            style: TextStyle(
+                              fontFamily: 'poppins',
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                RoleSelectionWidget(),
+                const SizedBox(height: 20,),
                 Form(
                   key: _formKey,
                   child: Column(
                     children: [
-                      Container(
-                        child: const Image(
-                          image: AssetImage('assets/images/card_bg.png'),
-                          fit: BoxFit.contain,
-                          width: 140,
-                          height: 140,
-                        ),
-                      ),
+
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Column(
@@ -76,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             CustomLabelTextfield(
                               textController: _emailController,
-                              hintText: "Email",
+                              hintText: "Student Id",
                               outlinedColor: Colors.grey,
                               focusedColor: AppColors.primary,
                               width: size.width,
@@ -86,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                                 fontFamily: 'poppins',
                                 fontStyle: FontStyle.italic,
                               ),
-                              text: "Email",
+                              text: "Student Id",
                             ),
                             const SizedBox(height: 14),
                             PasswordTextfield(
@@ -104,56 +130,41 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               text: "Password",
                             ),
-                            const SizedBox(height: 8),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.end,
-                            //   children: [
-                            //     // GestureDetector(
-                            //     //   onTap: () {
-                            //     //     Navigator.of(context).push(
-                            //     //       PageRouteBuilder(
-                            //     //         pageBuilder: (context, animation,
-                            //     //             secondaryAnimation) =>
-                            //     //         const ForgetPassword(),
-                            //     //         transitionsBuilder: (context, animation,
-                            //     //             secondaryAnimation, child) {
-                            //     //           const begin = Offset(1.0, 0.0);
-                            //     //           const end = Offset.zero;
-                            //     //           const curve = Curves.easeInOut;
-                            //     //           var tween = Tween(
-                            //     //               begin: begin, end: end)
-                            //     //               .chain(CurveTween(curve: curve));
-                            //     //           return SlideTransition(
-                            //     //               position: animation.drive(tween),
-                            //     //               child: child);
-                            //     //         },
-                            //     //       ),
-                            //     //     );
-                            //     //   },
-                            //     //   child: const Text(
-                            //     //     "Forget Password?",
-                            //     //     style: TextStyle(
-                            //     //       fontSize: 11,
-                            //     //       fontFamily: 'poppins',
-                            //     //       fontWeight: FontWeight.w400,
-                            //     //     ),
-                            //     //   ),
-                            //     // ),
-                            //   ],
-                            // ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 18),
+                            const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Forgot Password?",
+                                  style: TextStyle(
+                                    color:Colors.grey,
+                                    fontFamily: 'poppins',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 26
+                            ),
                             CustomButton(
                                 isLoading: isLoading,
-                                text: "Login",
+                                text: "Sign in",
                                 onPressed: () async {
                                   setState(() {
                                     isLoading = true;
                                   });
                                   if (_emailController.text.isEmpty) {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
                                     return Utils.flushBarErrorMessage(
                                         "Email Address is required.", context);
                                   }
                                   if (_passwordController.text.isEmpty) {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
                                     return Utils.flushBarErrorMessage(
                                         "Password is required.", context);
                                   }
@@ -177,37 +188,6 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          color: Colors.grey,
-                          thickness: 1,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          "or",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          color: Colors.grey,
-                          thickness: 1,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-
 
               ],
             ),
