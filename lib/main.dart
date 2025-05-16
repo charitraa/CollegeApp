@@ -5,7 +5,7 @@ import 'package:lbef/screen/auth/login_page.dart';
 import 'package:lbef/screen/navbar/student_navbar.dart';
 import 'package:lbef/screen/student/class_routines/class_routines.dart';
 import 'package:lbef/screen/student/dashboard/dashboard.dart';
-import 'package:lbef/view_model/auth_view_model.dart';
+import 'package:lbef/view_model/user_view_model/auth_view_model.dart';
 import 'package:provider/provider.dart';
 
 void main() {

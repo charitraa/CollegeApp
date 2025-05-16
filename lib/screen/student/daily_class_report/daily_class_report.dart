@@ -24,7 +24,6 @@ class _DailyClassReportState extends State<DailyClassReport> {
   }
 
   void _loadDummyData() async {
-    await Future.delayed(const Duration(seconds: 2));
     classReports = [
       {
         'image': 'assets/images/mountain.jpg',

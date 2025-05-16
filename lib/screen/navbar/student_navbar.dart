@@ -6,6 +6,8 @@ import 'package:lbef/screen/student/daily_class_report/daily_class_report.dart';
 import 'package:lbef/screen/student/daily_class_report/reports/reports.dart';
 import 'package:lbef/screen/student/dashboard/dashboard.dart';
 
+import '../student/application/application.dart';
+
 class StudentNavbar extends StatefulWidget {
   final int? index;
   const StudentNavbar({super.key, this.index=0});
@@ -34,7 +36,7 @@ class _StudentNavbarState extends State<StudentNavbar> {
   final List<Widget> _pages = [
    const Dashboard(),
     DailyClassReport(),
-    Center(child: Text('notice')),
+ Application(),
     Center(child: Text('Fees')),
     Center(child: Text('Profile')),
   ];

@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:lbef/model/user_model.dart';
+import 'package:lbef/view_model/user_view_model/user_view_model.dart';
 import 'package:logger/logger.dart';
 
-import '../data/api_response.dart';
-import '../data/status.dart';
-import '../repository/authentication_repo/auth_repository.dart';
-import '../resource/routes_name.dart';
-import '../utils/utils.dart';
+import '../../data/api_response.dart';
+import '../../data/status.dart';
+import '../../repository/authentication_repo/auth_repository.dart';
+import '../../resource/routes_name.dart';
+import '../../utils/utils.dart';
 
 class AuthViewModel with ChangeNotifier {
   final AuthRepository _myrepo = AuthRepository();
@@ -63,6 +64,24 @@ class AuthViewModel with ChangeNotifier {
     } catch (error) {
       logger.e("Login Error", error: error);
       Utils.flushBarErrorMessage(error.toString(), context);
+      setLoading(false);
+    }
+  }
+  Future<void> logout(BuildContext context) async {
+    setLoading(true);
+    try {
+      final response = await _myrepo.logout(context);
+      if (response.status == Status.COMPLETED) {
+        Utils.flushBarSuccessMessage("User Logged out Successfully!", context);
+        await UserViewModel().remove();
+        Navigator.pushReplacementNamed(context, RoutesName.login);
+      } else {
+        Utils.flushBarErrorMessage(
+            response.message ?? "An error occurred", context);
+      }
+    } catch (e) {
+      Utils.flushBarErrorMessage("Error: $e", context);
+    } finally {
       setLoading(false);
     }
   }

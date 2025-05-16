@@ -3,7 +3,7 @@ import 'package:lbef/widgets/form_widget/role_selection.dart';
 import 'package:provider/provider.dart';
 import '../../resource/colors.dart';
 import '../../utils/utils.dart';
-import '../../view_model/auth_view_model.dart';
+import '../../view_model/user_view_model/auth_view_model.dart';
 import '../../widgets/form_widget/custom_button.dart';
 import '../../widgets/form_widget/custom_label_password.dart';
 import '../../widgets/form_widget/custom_label_textfield.dart';

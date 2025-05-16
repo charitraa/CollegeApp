@@ -31,8 +31,6 @@ class _ReportsState extends State<Reports> {
   }
 
   void _simulateApiLoad() async {
-    // Simulate a delay like fetching from an API
-    await Future.delayed(const Duration(seconds: 2));
     setState(() {
       classReports = [
         {
@@ -42,7 +40,8 @@ class _ReportsState extends State<Reports> {
           "taughtHead": "Taught in Class",
           "taught": "Deep Analysis on Literature Review",
           "assignmentHead": "Assignment",
-          "assignment": "Do 16 literature reviews and start writing proposal with referencing",
+          "assignment":
+              "Do 16 literature reviews and start writing proposal with referencing",
           "activityHead": "Activity",
           "activity": "Review two sample thesis from seniors",
           "AttendenceHead": "Attendance",
@@ -165,12 +164,7 @@ class _ReportsState extends State<Reports> {
           "AttendenceHead": "Attendance",
           "attendence": "Present"
         }
-        // You can add more items here...
       ];
-
-      // Uncomment the line below to simulate empty state:
-      // classReports = [];
-
       isLoading = false;
     });
   }
@@ -243,47 +237,47 @@ class _ReportsState extends State<Reports> {
               child: isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : classReports.isEmpty
-                  ? const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.report_gmailerrorred_outlined,
-                        size: 60, color: Colors.grey),
-                    SizedBox(height: 12),
-                    Text(
-                      "No Daily Class Reports",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-                  : ListView.builder(
-                physics: const AlwaysScrollableScrollPhysics(),
-                itemCount: classReports.length,
-                itemBuilder: (context, index) {
-                  final report = classReports[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 16.0),
-                    child: StackedReports(
-                      date: report['date'] ?? '',
-                      time: "10:00 AM",
-                      room: report['roomHead'] ?? '',
-                      roomNo: report['roomNo'] ?? '',
-                      taught: report['taughtHead'] ?? '',
-                      taughtInClass: report['taught'] ?? '',
-                      assignment: report['assignmentHead'] ?? '',
-                      assignmentInClass: report['assignment'] ?? '',
-                      activity: report['activityHead'] ?? '',
-                      task: report['activity'] ?? '',
-                      attendence: report['AttendenceHead'] ?? '',
-                      attendenceScore: report['attendence'] ?? '',
-                    ),
-                  );
-                },
-              ),
+                      ? const Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.report_gmailerrorred_outlined,
+                                  size: 60, color: Colors.grey),
+                              SizedBox(height: 12),
+                              Text(
+                                "No Daily Class Reports",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : ListView.builder(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemCount: classReports.length,
+                          itemBuilder: (context, index) {
+                            final report = classReports[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16.0),
+                              child: StackedReports(
+                                date: report['date'] ?? '',
+                                time: "10:00 AM",
+                                room: report['roomHead'] ?? '',
+                                roomNo: report['roomNo'] ?? '',
+                                taught: report['taughtHead'] ?? '',
+                                taughtInClass: report['taught'] ?? '',
+                                assignment: report['assignmentHead'] ?? '',
+                                assignmentInClass: report['assignment'] ?? '',
+                                activity: report['activityHead'] ?? '',
+                                task: report['activity'] ?? '',
+                                attendence: report['AttendenceHead'] ?? '',
+                                attendenceScore: report['attendence'] ?? '',
+                              ),
+                            );
+                          },
+                        ),
             ),
           ],
         ),

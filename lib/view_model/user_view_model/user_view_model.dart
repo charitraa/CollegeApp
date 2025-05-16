@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../model/user_model.dart';
+import '../../../model/user_model.dart';
 
 class UserViewModel with ChangeNotifier {
   Future<bool> saveUser(UserModel user) async {

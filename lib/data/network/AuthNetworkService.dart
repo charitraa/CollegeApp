@@ -7,7 +7,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:logger/logger.dart';
 import '../../model/user_model.dart';
 import '../../utils/utils.dart';
-import '../../view_model/user_view_model.dart';
+import '../../view_model/user_view_model/user_view_model.dart';
 import '../api_exception.dart';
 import 'package:http/http.dart' as http;
 

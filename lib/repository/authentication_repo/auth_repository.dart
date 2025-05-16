@@ -43,23 +43,23 @@ class AuthRepository {
 
 
 
-  // Future<dynamic> logout(BuildContext context) async {
-  //   try {
-  //     final response =
-  //     await _apiServices2.getDeleteApiResponse(AuthEndPoints.logout);
-  //     if (response != null) {
-  //       return ApiResponse.completed(response);
-  //     } else {
-  //       return ApiResponse.error(response['errorMessage'] ?? "Unknown error");
-  //     }
-  //   } on TimeoutException {
-  //     Utils.flushBarErrorMessage(
-  //         "No internet connection. Please try again later.", context);
-  //     ApiResponse.error("No internet connection. Please try again later.");
-  //     rethrow;
-  //   } catch (e) {
-  //     ApiResponse.error(e.toString());
-  //     rethrow;
-  //   }
-  // }
+  Future<dynamic> logout(BuildContext context) async {
+    try {
+      final response =
+      await _apiServices2.getDeleteApiResponse(AuthEndPoints.logoutUrl);
+      if (response != null) {
+        return ApiResponse.completed(response);
+      } else {
+        return ApiResponse.error(response['errorMessage'] ?? "Unknown error");
+      }
+    } on TimeoutException {
+      Utils.flushBarErrorMessage(
+          "No internet connection. Please try again later.", context);
+      ApiResponse.error("No internet connection. Please try again later.");
+      rethrow;
+    } catch (e) {
+      ApiResponse.error(e.toString());
+      rethrow;
+    }
+  }
 }
