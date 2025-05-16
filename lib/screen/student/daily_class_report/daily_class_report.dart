@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lbef/screen/student/daily_class_report/reports/reports.dart';
+import 'package:lbef/screen/student/daily_class_report/shimmer/class_card_shimmer.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:lbef/screen/student/daily_class_report/widgets/class_card.dart';
+
+import '../../../utils/navigate_to.dart';
 
 class DailyClassReport extends StatefulWidget {
   const DailyClassReport({super.key});
@@ -9,9 +14,56 @@ class DailyClassReport extends StatefulWidget {
 }
 
 class _DailyClassReportState extends State<DailyClassReport> {
+  bool _isLoading = true;
+  List<Map<String, String>> classReports = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDummyData();
+  }
+
+  void _loadDummyData() async {
+    await Future.delayed(const Duration(seconds: 2));
+    classReports = [
+      {
+        'image': 'assets/images/mountain.jpg',
+        'subject': 'OBJECT ORIENTED PROGRAMMING AND SOFTWARE ENGINEERING',
+        'code': 'CIS-0756465',
+        'section': 'C',
+        'facultyName': 'Krishna Aryal',
+      },
+      {
+        'image': 'assets/images/sunburn.jpg',
+        'subject': 'DATA COMMUNICATION AND NETWORKING',
+        'code': 'CIS-0756466',
+        'section': 'C',
+        'facultyName': 'Nujan Shrestha',
+      },
+      {
+        'image': 'assets/images/content.png',
+        'subject': 'WEB TECHNOLOGIES',
+        'section': 'C',
+        'code': 'CIS-0756467',
+        'facultyName': 'Season Maharjan',
+      },
+      {
+        'image': 'assets/images/content.png',
+        'subject': 'WEB TECHNOLOGIES',
+        'section': 'C',
+        'code': 'CIS-0756467',     'facultyName': 'Tara GC',
+      },
+    ];
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -32,32 +84,36 @@ class _DailyClassReportState extends State<DailyClassReport> {
       ),
       body: Container(
         width: size.width,
-        padding: const EdgeInsets.all(10),
-        child: const SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              ClassCard(
-                image: 'assets/images/content.png',
-                text: "OBJECT ORIENTED PROGRAMMING AND SOFTWARE ENGINEERING",
-                code: 'CIS-0756465',
-              ),
-              SizedBox(height: 14,),
-              ClassCard(
-                image: 'assets/images/content.png',
-                text: "OBJECT ORIENTED PROGRAMMING AND SOFTWARE ENGINEERING",
-                code: 'CIS-0756465',
-              ),
-              SizedBox(height: 14,),
-          
-              ClassCard(
-                image: 'assets/images/content.png',
-                text: "OBJECT ORIENTED PROGRAMMING AND SOFTWARE ENGINEERING",
-                code: 'CIS-0756465',
-              ),
-              SizedBox(height: 18,),
-            ],
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        child: _isLoading
+            ?ListView.builder(
+          itemCount: 3,
+          itemBuilder: (context, index) => const Padding(
+            padding: EdgeInsets.only(bottom: 14),
+            child: ClassCardShimmer(),
           ),
+        )
+            : ListView.separated(
+          physics: const BouncingScrollPhysics(),
+          itemCount: classReports.length,
+          separatorBuilder: (context, index) =>
+          const SizedBox(height: 14),
+          itemBuilder: (context, index) {
+            final report = classReports[index];
+            return InkWell(
+              onTap: (){
+                Navigator.of(context).push(
+                  SlideRightRoute(page: Reports(image: report['image']!, facultyName:  report['facultyName']!, code:  report['code']!, section:  report['section']!, subject:  report['subject']!)
+                  ),
+                );
+              },
+              child: ClassCard(
+                image: report['image']!,
+                text: report['subject']!,
+                code: report['code']!,
+              ),
+            );
+          },
         ),
       ),
     );

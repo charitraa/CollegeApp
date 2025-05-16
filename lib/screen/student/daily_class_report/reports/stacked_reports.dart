@@ -1,9 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:lbef/screen/student/daily_class_report/widgets/report_detail.dart';
 
-
 class StackedReports extends StatefulWidget {
-  const StackedReports({super.key});
+  final String date,
+      time,
+      room,
+      roomNo,
+      taught,
+      taughtInClass,
+      assignmentInClass,
+      assignment,
+      activity,
+      task,
+      attendenceScore,
+      attendence;
+  const StackedReports(
+      {super.key,
+      required this.date,
+      required this.time,
+      required this.room,
+      required this.roomNo,
+      required this.taught,
+      required this.taughtInClass,
+      required this.assignmentInClass,
+      required this.assignment,
+      required this.activity,
+      required this.task,
+      required this.attendenceScore,
+      required this.attendence});
 
   @override
   State<StackedReports> createState() => _StackedReportsState();
@@ -26,16 +50,16 @@ class _StackedReportsState extends State<StackedReports> {
                 borderRadius: BorderRadius.circular(5),
                 border: Border.all(color: Colors.transparent),
               ),
-              child: const Text(
-                "2024-04-02",
-                style: TextStyle(
+              child: Text(
+                widget.date,
+                style: const TextStyle(
                     color: Colors.white,
                     fontSize: 12,
                     fontWeight: FontWeight.bold),
               ),
             ),
-            const Text(
-              "9:30 AM - 11:30 AM",
+            Text(
+              widget.time,
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
           ],
@@ -43,18 +67,24 @@ class _StackedReportsState extends State<StackedReports> {
         const SizedBox(
           height: 15,
         ),
-        const ReportDetail(
-            head: 'Room No', value: 'A-103', icon: Icons.dashboard_rounded),
-        const ReportDetail(
-            head: 'Taught in CLass', value: 'Deep Analysis on Literature Review', icon: Icons.chrome_reader_mode_outlined),
-        const ReportDetail(
-            head: 'Assignment', value: 'Do 16 literature review and start writing proposal with referencing', icon: Icons.assignment),
-
-        const ReportDetail(
-            head: 'Activity', value: 'Review other thesis', icon: Icons.read_more),
-        const ReportDetail(
-            head: 'You Attendence', value: 'Absent', icon: Icons.check_circle),
-
+        ReportDetail(
+            head: widget.room,
+            value: widget.roomNo,
+            icon: Icons.dashboard_rounded),
+        ReportDetail(
+            head: widget.taught,
+            value: widget.taughtInClass,
+            icon: Icons.chrome_reader_mode_outlined),
+        ReportDetail(
+            head: widget.assignment,
+            value: widget.assignmentInClass,
+            icon: Icons.assignment),
+        ReportDetail(
+            head: widget.activity, value: widget.task, icon: Icons.read_more),
+        ReportDetail(
+            head: widget.attendence,
+            value: widget.attendenceScore,
+            icon: Icons.check_circle),
       ],
     );
   }

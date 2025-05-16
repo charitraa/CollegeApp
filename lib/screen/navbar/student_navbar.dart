@@ -34,7 +34,7 @@ class _StudentNavbarState extends State<StudentNavbar> {
   final List<Widget> _pages = [
    const Dashboard(),
     DailyClassReport(),
-    Reports(),
+    Center(child: Text('notice')),
     Center(child: Text('Fees')),
     Center(child: Text('Profile')),
   ];
