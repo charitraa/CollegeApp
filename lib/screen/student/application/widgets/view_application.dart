@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lbef/screen/student/application/edit_application.dart';
+import 'package:lbef/widgets/form_widget/custom_button.dart';
 import '../../../../resource/colors.dart';
+import '../../../../utils/navigate_to.dart';
 
 class ViewApplicationPage extends StatelessWidget {
   final Map<String, String> applicationData;
@@ -14,7 +17,8 @@ class ViewApplicationPage extends StatelessWidget {
     final email = applicationData['email'] ?? 'No Email';
     final department = applicationData['department'] ?? 'No Department';
     final status = applicationData['status'] ?? 'Unknown';
-    final description = applicationData['description'] ?? 'No description provided.';
+    final description =
+        applicationData['description'] ?? 'No description provided.';
 
     return Scaffold(
       appBar: AppBar(
@@ -61,13 +65,11 @@ class ViewApplicationPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-
             _buildDetailRow(Icons.email, "Email", email),
             _buildDetailRow(Icons.apartment, "Department", department),
             _buildDetailRow(Icons.label, "Status", status,
                 valueColor: _getStatusColor(status)),
             const Divider(height: 32),
-
             const Text(
               "Description",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
@@ -78,7 +80,6 @@ class ViewApplicationPage extends StatelessWidget {
               style: const TextStyle(fontSize: 15, height: 1.5),
             ),
             const SizedBox(height: 28),
-
             if (attachment.isNotEmpty) ...[
               const Text(
                 "Attachment",
@@ -87,7 +88,8 @@ class ViewApplicationPage extends StatelessWidget {
               const SizedBox(height: 10),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey.shade300),
                   borderRadius: BorderRadius.circular(8),
@@ -107,6 +109,22 @@ class ViewApplicationPage extends StatelessWidget {
                   ],
                 ),
               ),
+              const SizedBox(
+                height: 15,
+              ),
+              CustomButton(
+                  text: 'Edit Application',
+                  isLoading: false,
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      SlideRightRoute(
+                          page: EditApplication(
+                              subject: subject,
+                              department: department,
+                              description: description,
+                          )),
+                    );
+                  })
             ],
           ],
         ),
@@ -114,7 +132,8 @@ class ViewApplicationPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailRow(IconData icon, String label, String value, {Color? valueColor}) {
+  Widget _buildDetailRow(IconData icon, String label, String value,
+      {Color? valueColor}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(

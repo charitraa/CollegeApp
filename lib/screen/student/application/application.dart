@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lbef/resource/colors.dart';
+import 'package:lbef/screen/student/application/file_application.dart';
 import 'package:lbef/screen/student/application/widgets/view_application.dart';
 import 'package:lbef/screen/student/daily_class_report/shimmer/class_card_shimmer.dart';
 import 'package:lbef/screen/student/application/widgets/application_widget.dart';
@@ -34,7 +35,7 @@ class _ApplicationState extends State<Application> {
         'subject': 'Medical Leave - Fever',
         'department': 'Academic Department',
         'description':
-        'I am suffering from a high fever and have been advised bed rest. I would like to apply for leave from 10th to 12th May.',
+            'I am suffering from a high fever and have been advised bed rest. I would like to apply for leave from 10th to 12th May.',
         'attachment': 'leave_certificate.pdf',
       },
       {
@@ -45,7 +46,7 @@ class _ApplicationState extends State<Application> {
         'subject': 'Missed Midterm - Request Retake',
         'department': 'Examination Cell',
         'description':
-        'Due to severe flu, I missed my midterm on Data Structures. Kindly approve my request for a retake next week.',
+            'Due to severe flu, I missed my midterm on Data Structures. Kindly approve my request for a retake next week.',
         'attachment': 'medical_report.jpg',
       },
       {
@@ -56,7 +57,7 @@ class _ApplicationState extends State<Application> {
         'subject': 'Fee Waiver Request',
         'department': 'Finance Department',
         'description':
-        'I am facing financial hardship at home. I humbly request a 30% concession on this semester\'s fees.',
+            'I am facing financial hardship at home. I humbly request a 30% concession on this semester\'s fees.',
         'attachment': 'income_certificate.pdf',
       },
       {
@@ -67,7 +68,7 @@ class _ApplicationState extends State<Application> {
         'subject': 'Hostel Change Request',
         'department': 'Student Affairs',
         'description':
-        'I am currently staying in South Block, but due to poor internet, I’m requesting a transfer to North Block.',
+            'I am currently staying in South Block, but due to poor internet, I’m requesting a transfer to North Block.',
         'attachment': 'speed_test_results.png',
       },
       {
@@ -78,7 +79,7 @@ class _ApplicationState extends State<Application> {
         'subject': 'Lost ID Card - Reissue Request',
         'department': 'Admin Office',
         'description':
-        'I lost my student ID card while commuting. Please issue a new one at the earliest.',
+            'I lost my student ID card while commuting. Please issue a new one at the earliest.',
         'attachment': 'fir_report.pdf',
       },
     ];
@@ -115,9 +116,8 @@ class _ApplicationState extends State<Application> {
         actions: [
           InkWell(
             onTap: () {
-              // TODO: Replace this with your actual create application page
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Create Application tapped")),
+              Navigator.of(context).push(
+                SlideRightRoute(page: const FileApplication()),
               );
             },
             child: Container(
@@ -127,7 +127,7 @@ class _ApplicationState extends State<Application> {
                 borderRadius: BorderRadius.circular(5),
                 border: Border.all(color: AppColors.primary),
               ),
-              child: const Row(
+              child: Row(
                 children: [
                   Text(
                     "Create",
@@ -137,10 +137,15 @@ class _ApplicationState extends State<Application> {
                     ),
                   ),
                   SizedBox(width: 5),
-                  Icon(
-                    Icons.add_box_outlined,
-                    color: Colors.white,
-                    size: 18,
+                  InkWell(
+                    onTap: () {
+
+                    },
+                    child: Icon(
+                      Icons.add_box_outlined,
+                      color: Colors.white,
+                      size: 18,
+                    ),
                   )
                 ],
               ),
@@ -154,42 +159,42 @@ class _ApplicationState extends State<Application> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         child: _isLoading
             ? ListView.builder(
-          itemCount: 3,
-          itemBuilder: (context, index) => const Padding(
-            padding: EdgeInsets.only(bottom: 14),
-            child: ClassCardShimmer(),
-          ),
-        )
+                itemCount: 3,
+                itemBuilder: (context, index) => const Padding(
+                  padding: EdgeInsets.only(bottom: 14),
+                  child: ClassCardShimmer(),
+                ),
+              )
             : ListView.separated(
-          physics: const BouncingScrollPhysics(),
-          itemCount: applications.length,
-          separatorBuilder: (context, index) =>
-          const SizedBox(height: 14),
-          itemBuilder: (context, index) {
-            final application = applications[index];
-            final iconColor = _getIconColor(application['status']!);
+                physics: const BouncingScrollPhysics(),
+                itemCount: applications.length,
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 14),
+                itemBuilder: (context, index) {
+                  final application = applications[index];
+                  final iconColor = _getIconColor(application['status']!);
 
-            return InkWell(
-              onTap: () {
-                Navigator.of(context).push(
-                  SlideRightRoute(
-                    page: ViewApplicationPage(
-                      applicationData: application,
+                  return InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        SlideRightRoute(
+                          page: ViewApplicationPage(
+                            applicationData: application,
+                          ),
+                        ),
+                      );
+                    },
+                    child: ApplicationWidget(
+                      iconColor: iconColor,
+                      textColor: Colors.white,
+                      btnColor: iconColor,
+                      status: application['status']!,
+                      title: application['title']!,
+                      subBody: application['subBody']!,
                     ),
-                  ),
-                );
-              },
-              child: ApplicationWidget(
-                iconColor: iconColor,
-                textColor: Colors.white,
-                btnColor: iconColor,
-                status: application['status']!,
-                title: application['title']!,
-                subBody: application['subBody']!,
+                  );
+                },
               ),
-            );
-          },
-        ),
       ),
     );
   }

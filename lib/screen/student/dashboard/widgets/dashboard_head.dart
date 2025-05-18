@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:lbef/resource/colors.dart';
 import 'package:lbef/screen/student/class_routines/class_routines.dart';
+import 'package:lbef/screen/student/notice/notice.dart';
 import 'package:lbef/utils/navigate_to.dart';
 
+import '../../download_forums/download_forums.dart';
 import 'dashboard_card.dart';
 
 class DashboardHead extends StatefulWidget {
@@ -21,10 +23,10 @@ class _DashboardHeadState extends State<DashboardHead> {
   final List<Map<String, dynamic>> allCards = [
     {'text': 'Class Routines', 'icon': Icons.schedule, 'className':const ClassRoutines()},
     {'text': 'Results', 'icon': Icons.grade},
-    {'text': 'Notice', 'icon': Icons.notifications},
+    {'text': 'Notice', 'icon': Icons.notifications,'className':const NoticeBoard()},
     {'text': 'Calendar', 'icon': Icons.calendar_month},
     {'text': 'Breo', 'icon': Icons.web},
-    {'text': 'Class Report', 'icon': Icons.assignment},
+    {'text': "Download forms", 'icon': Icons.assignment,'className': DocumentListPage()},
     {'text': 'Evision', 'icon': Icons.laptop},
     {'text': 'E-Library', 'icon': Icons.menu_book},
   ];
