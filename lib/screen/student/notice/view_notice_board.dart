@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../resource/colors.dart';
+
 class ViewNoticeBoard extends StatelessWidget {
   final Map<String, String> noticeData;
 
@@ -10,17 +12,26 @@ class ViewNoticeBoard extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 1,
         title: const Text(
-          'Notice Details',
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
-            color: Colors.black,
-          ),
+          "Notice Details",
+          style: TextStyle(fontFamily: 'poppins'),
         ),
-        iconTheme: const IconThemeData(color: Colors.black),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: AppColors.primary),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          iconSize: 18,
+        ),
+        actions: const [
+          Image(
+            image: AssetImage('assets/images/lbef.png'),
+            width: 56,
+            height: 50,
+            fit: BoxFit.cover,
+          ),
+          SizedBox(width: 14),
+        ],
       ),
       body: Container(
         padding: const EdgeInsets.all(24),
@@ -38,10 +49,10 @@ class ViewNoticeBoard extends StatelessWidget {
           children: [
             Text(
               noticeData['subBody'] ?? 'No Title',textAlign: TextAlign.center ,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF1F2937),
+                color: AppColors.primary,
               ),
             ),
             const SizedBox(height: 8),
