@@ -45,17 +45,17 @@ class AuthViewModel with ChangeNotifier {
         setLoading(false);
         return;
       }
-
       Utils.flushBarSuccessMessage("User Logged in successfully!", context);
       final String userRole = response.data.user.parentTable ?? "Unknown";
       _role = userRole;
       setUser(ApiResponse.completed(response.data));
       setLoading(false);
-
       switch (userRole) {
         case 'employee':
+          Navigator.pushReplacementNamed(context, RoutesName.student);
+          break;
         case 'admin':
-        case 'vendor':
+        case 'student':
           Navigator.pushReplacementNamed(context, RoutesName.student);
           break;
         default:

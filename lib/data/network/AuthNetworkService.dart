@@ -12,7 +12,6 @@ import '../api_exception.dart';
 import 'package:http/http.dart' as http;
 
 class AuthNetworkApiService {
-
   Future<Map<String, String>> _getHeaders() async {
     final headers = {
       HttpHeaders.contentTypeHeader: 'application/json',
@@ -21,21 +20,20 @@ class AuthNetworkApiService {
     return headers;
   }
 
-
   Future getPostResponse(String url, dynamic data) async {
     dynamic responseJson;
     try {
-      var logger=Logger();
+      var logger = Logger();
       final headers = await _getHeaders();
       final response = await http
           .post(
-        Uri.parse(url),
-        body: jsonEncode(data),
-        headers: headers,
-      )
+            Uri.parse(url),
+            body: jsonEncode(data),
+            headers: headers,
+          )
           .timeout(const Duration(seconds: 10));
       final responseBody = jsonDecode(response.body);
-logger.d(responseBody);
+      logger.d(responseBody);
       if (responseBody != null) {
         UserModel user = UserModel.fromJson(responseBody);
         await UserViewModel().saveUser(user);
@@ -52,10 +50,10 @@ logger.d(responseBody);
   dynamic returnResponse(http.Response response, {BuildContext? context}) {
     final responseBody = jsonDecode(response.body);
     String errorMessage = "Something went wrong";
-    var logger=Logger();
+    var logger = Logger();
     logger.d(response.statusCode);
 
-    if(responseBody['email'] is List){
+    if (responseBody['email'] is List) {
       errorMessage = responseBody['email'][0];
     }
     if (responseBody is Map && responseBody.containsKey('err')) {

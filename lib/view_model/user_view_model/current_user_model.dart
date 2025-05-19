@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-
 import '../../data/api_response.dart';
 import '../../model/user_model.dart';
 import '../../repository/user_data_repository/user_data_repository.dart';
@@ -30,7 +29,6 @@ class UserDataViewModel with ChangeNotifier {
     setUser(ApiResponse.loading());
     try {
       UserModel user = await _myRepo.getUser(context);
-
       if (kDebugMode) {
         print('User data: ${user.toJson()}');
       }

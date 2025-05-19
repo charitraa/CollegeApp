@@ -21,19 +21,21 @@ class NoticeBoard extends StatefulWidget {
 
 class _NoticeBoardState extends State<NoticeBoard> {
   late ScrollController _scrollController;
-  var logger=Logger();
+  var logger = Logger();
   bool isLoad = false;
   void _scrollListener() {
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent &&
+            _scrollController.position.maxScrollExtent &&
         !isLoad) {
       loadMore();
     }
   }
+
   void fetch() async {
     await Provider.of<NoticeBoardViewModel>(context, listen: false)
         .fetch(context);
   }
+
   Future<void> loadMore() async {
     if (isLoad) return;
     setState(() => isLoad = true);
@@ -46,6 +48,7 @@ class _NoticeBoardState extends State<NoticeBoard> {
       setState(() => isLoad = false);
     }
   }
+
   bool _isLoading = true;
   List<Map<String, String>> notices = [];
 
@@ -61,7 +64,8 @@ class _NoticeBoardState extends State<NoticeBoard> {
     notices = [
       {
         'published': '2025-05-18',
-        'subBody': 'Urgent: Class relocation notice.Student election results announced.',
+        'subBody':
+            'Urgent: Class relocation notice.Student election results announced.',
         'body':
             'Dear Students, please note that all classes scheduled in Block B will be temporarily shifted to Block D due to ongoing maintenance. Thank you for your cooperation. Regards, Admin'
       },
