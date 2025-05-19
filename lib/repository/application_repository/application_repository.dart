@@ -12,7 +12,7 @@ import '../../utils/utils.dart';
 class ApplicationRepository {
   final NetworkApiService _apiServices = NetworkApiService();
   var logger = Logger();
-  Future<ApiResponse> createOffer(
+  Future<ApiResponse> createApplication(
       dynamic data, File file, BuildContext context) async {
     try {
       logger.d(ApplicationEndpoints.createApplication);
@@ -57,7 +57,7 @@ class ApplicationRepository {
     }
     try {
       dynamic response = await _apiServices.getApiResponse(
-          "${ApplicationEndpoints.createApplication}?page=$page&size=$limit");
+          "${ApplicationEndpoints.createApplication}?page=$page&pp=$limit");
       if (response is List) {
         //todo change the model over herr
         List<UserModel> applications =

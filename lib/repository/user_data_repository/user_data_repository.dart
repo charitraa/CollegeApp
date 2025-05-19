@@ -11,10 +11,8 @@ import '../../utils/utils.dart';
 class UserDataRepository {
   final BaseApiServices _apiServices = NetworkApiService();
   var logger = Logger();
-
   Future getUser(BuildContext context) async {
     logger.d(UserEndpoints.fetchUser);
-
     try {
       dynamic response =
       await _apiServices.getApiResponse(UserEndpoints.fetchUser);
@@ -32,6 +30,5 @@ class UserDataRepository {
       return Utils.noInternet(e.toString());
     }
   }
-
 }
 

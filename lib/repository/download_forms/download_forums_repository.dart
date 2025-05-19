@@ -8,7 +8,7 @@ import 'package:lbef/model/user_model.dart';
 import 'package:logger/logger.dart';
 import '../../utils/utils.dart';
 
-class ApplicationRepository {
+class DownloadForumsRepository {
   final NetworkApiService _apiServices = NetworkApiService();
   var logger = Logger();
   Future<Map<String, dynamic>> getDocuments(
@@ -19,7 +19,7 @@ class ApplicationRepository {
     }
     try {
       dynamic response = await _apiServices.getApiResponse(
-          "${DownloadFormsEndpoints.getForms}?page=$page&size=$limit");
+          "${DownloadFormsEndpoints.getForms}?page=$page&pp=$limit");
       if (response is List) {
         //todo change the model over herr
         List<UserModel> forms =

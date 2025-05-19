@@ -14,7 +14,7 @@ class ClassRoutineRepository {
   Future<Map<String, dynamic>> fetchClassRoutine(
       int page, int limit, BuildContext context) async {
     if (kDebugMode) {
-      logger.d("${RoutineEndpoints.getRoutine}?page=$page&size=$limit");
+      logger.d("${RoutineEndpoints.getRoutine}?page=$page&pp=$limit");
     }
     try {
       dynamic response = await _apiServices.getApiResponse(

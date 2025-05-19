@@ -5,7 +5,15 @@ import 'package:lbef/screen/auth/login_page.dart';
 import 'package:lbef/screen/navbar/student_navbar.dart';
 import 'package:lbef/screen/student/class_routines/class_routines.dart';
 import 'package:lbef/screen/student/dashboard/dashboard.dart';
+import 'package:lbef/view_model/application_files/application_view_model.dart';
+import 'package:lbef/view_model/class_routine/class_routine_view_model.dart';
+import 'package:lbef/view_model/daily_class_report/dcr_detail_view_model.dart';
+import 'package:lbef/view_model/daily_class_report/dcr_view_model.dart';
+import 'package:lbef/view_model/download_forms/download_forms_view_model.dart';
+import 'package:lbef/view_model/notice_board/notice_board_view_model.dart';
 import 'package:lbef/view_model/user_view_model/auth_view_model.dart';
+import 'package:lbef/view_model/user_view_model/current_user_model.dart';
+import 'package:lbef/view_model/user_view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -20,6 +28,14 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
+        ChangeNotifierProvider(create: (_) => ApplicationViewModel()),
+        ChangeNotifierProvider(create: (_) => ClassRoutineViewModel()),
+        ChangeNotifierProvider(create: (_) => DcrViewModel()),
+        ChangeNotifierProvider(create: (_) => DcrDetailViewModel()),
+        ChangeNotifierProvider(create: (_) => DownloadFormViewModel()),
+        ChangeNotifierProvider(create: (_) => NoticeBoardViewModel()),
+        ChangeNotifierProvider(create: (_) => UserViewModel()),
+        ChangeNotifierProvider(create: (_) => UserDataViewModel()),
       ],
       child: Builder(
         builder: (context) {
@@ -37,8 +53,9 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               // initialRoute: RoutesName.student,
               // onGenerateRoute: Routes.generateRoute,
-              home:  StudentNavbar(index: 2,),
-
+              home: const StudentNavbar(
+                index: 0,
+              ),
             ),
           );
         },

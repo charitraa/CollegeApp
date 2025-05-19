@@ -20,7 +20,7 @@ class NoticeBoardRepository {
     }
     try {
       dynamic response = await _apiServices.getApiResponse(
-          "${NoticeBoardEndpoints.fetch}?page=$page&size=$limit");
+          "${NoticeBoardEndpoints.fetch}?page=$page&pp=$limit");
       if (response is List) {
         //todo change the model over herr
         List<UserModel> notices =

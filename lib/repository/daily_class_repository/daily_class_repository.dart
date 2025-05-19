@@ -18,7 +18,7 @@ class DailyClassRepository {
     }
     try {
       dynamic response = await _apiServices.getApiResponse(
-          "${ClassReportEndpoints.getReports}?page=$page&size=$limit");
+          "${ClassReportEndpoints.getReports}?page=$page&pp=$limit");
       if (response is List) {
         //todo change the model over herr
         List<UserModel> classReport =
@@ -45,7 +45,7 @@ class DailyClassRepository {
     }
     try {
       dynamic response = await _apiServices.getApiResponse(
-          "${ClassReportEndpoints.getReports}?page=$page&size=$limit");
+          "${ClassReportEndpoints.getReports}?page=$page&pp=$limit");
       if (response is List) {
         //todo change the model over herr
         List<UserModel> dcr =
