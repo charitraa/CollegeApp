@@ -3,7 +3,11 @@ import 'package:lbef/resource/colors.dart';
 import 'package:lbef/screen/student/class_routines/class_routines.dart';
 import 'package:lbef/screen/student/notice/notice.dart';
 import 'package:lbef/utils/navigate_to.dart';
+import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
+import '../../../../data/status.dart';
+import '../../../../view_model/user_view_model/current_user_model.dart';
 import '../../download_forums/download_forums.dart';
 import 'dashboard_card.dart';
 
@@ -19,7 +23,11 @@ class DashboardHead extends StatefulWidget {
 class _DashboardHeadState extends State<DashboardHead> {
   late final TextEditingController _controller;
   String searchQuery = '';
+  void fetch() async {
+    await Provider.of<UserDataViewModel>(context, listen: false)
+        .getUser(context);
 
+  }
   final List<Map<String, dynamic>> allCards = [
     {'text': 'Class Routines', 'icon': Icons.schedule, 'className':const ClassRoutines()},
     {'text': 'Results', 'icon': Icons.grade},
@@ -36,6 +44,7 @@ class _DashboardHeadState extends State<DashboardHead> {
   @override
   void initState() {
     super.initState();
+    fetch();
     _controller = TextEditingController();
     filteredCards = List.from(allCards);
   }
@@ -76,13 +85,6 @@ class _DashboardHeadState extends State<DashboardHead> {
                 right: 0,
                 child: Container(
                   height: 320,
-                  // decoration: const BoxDecoration(
-                  //   gradient: LinearGradient(
-                  //     begin: Alignment.topCenter,
-                  //     end: Alignment.bottomCenter,
-                  //     colors: [Color(0xFF1967B8), Color(0xFF408EDB)],
-                  //   ),
-                  // ),
                   child: SizedBox(
                     width: 150,
                     height: 120,
@@ -99,20 +101,81 @@ class _DashboardHeadState extends State<DashboardHead> {
                   child: Image.asset('assets/images/lbef.png', fit: BoxFit.cover),
                 ),
               ),
+              Consumer<UserDataViewModel>(
+                builder: (context, userDataViewModel, child) {
+                  final user = userDataViewModel.currentUser;
+                  if (userDataViewModel.isLoading) {
+                    return Positioned(
+                      bottom: 90,
+                      left: 20,
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          width: 120,
+                          height: 50,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    );
+                  } else if (userDataViewModel.userData.status == Status.ERROR) {
+                    return   const Positioned(
+                      bottom: 90,
+                      left: 24,
+                      child: Text(
+                        'Hi,\n Unexpected issue!!',
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
+                      ),
+                    );
+                  } else if (user == null) {
+                    String? getFirstWordsOrShrink(String? input) {
+                      if (input == null || input.trim().isEmpty) return input;
+                      List<String> words = input.trim().split(RegExp(r'\s+'));
+                      if (words.length < 2) return words[0];
+                      String twoWords = '${words[0]} ${words[1]}';
+                      if (twoWords.length > 30) {
+                        return words[0];
+                      }
+                      return twoWords;
+                    }
+                    String? name = getFirstWordsOrShrink("Unknown");
+                    return    Positioned(
+                      bottom: 90,
+                      left: 20,
+                      child: Text(
+                        'Hi,\n $name!!',
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
+                      ),
+                    );
+                  } else {
+                    String? getFirstWordsOrShrink(String? input) {
+                      if (input == null || input.trim().isEmpty) return input;
+                      List<String> words = input.trim().split(RegExp(r'\s+'));
+                      if (words.length < 2) return words[0];
+                      String twoWords = '${words[0]} ${words[1]}';
+                      if (twoWords.length > 30) {
+                        return words[0];
+                      }
+                      return twoWords;
+                    }
+                    String? name = getFirstWordsOrShrink(user.user!.username);
+                    return     Positioned(
+                      bottom: 90,
+                      left: 24,
+                      child: Text(
+                        'Hi,\n$name!!',
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
+                      ),
+                    );
+                  }
+                },
+              ),
               Positioned(
                 top: 70,
                 right: 24,
                 child: InkWell(
                   onTap: () {},
                   child: const Icon(Icons.notifications, size: 32, color: Colors.white),
-                ),
-              ),
-              Positioned(
-                bottom: 90,
-                left: 24,
-                child: Text(
-                  'Hi,\n${widget.userName}!!',
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
                 ),
               ),
               Positioned(

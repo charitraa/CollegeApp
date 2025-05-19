@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
                 fontFamily: 'Poppins',
               ),
               debugShowCheckedModeBanner: false,
-              // initialRoute: RoutesName.student,
+              // initialRoute: RoutesName.flash,
               // onGenerateRoute: Routes.generateRoute,
               home: const StudentNavbar(
                 index: 0,

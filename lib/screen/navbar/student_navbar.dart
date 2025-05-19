@@ -5,12 +5,13 @@ import 'package:lbef/screen/auth/unauthorised.dart';
 import 'package:lbef/screen/student/daily_class_report/daily_class_report.dart';
 import 'package:lbef/screen/student/daily_class_report/reports/reports.dart';
 import 'package:lbef/screen/student/dashboard/dashboard.dart';
+import 'package:lbef/screen/student/student_fees/student_fees.dart';
 
 import '../student/application/application.dart';
 
 class StudentNavbar extends StatefulWidget {
   final int? index;
-  const StudentNavbar({super.key, this.index=0});
+  const StudentNavbar({super.key, this.index = 0});
 
   @override
   State<StudentNavbar> createState() => _StudentNavbarState();
@@ -34,10 +35,10 @@ class _StudentNavbarState extends State<StudentNavbar> {
   }
 
   final List<Widget> _pages = [
-   const Dashboard(),
+    const Dashboard(),
     DailyClassReport(),
- Application(),
-    Center(child: Text('Fees')),
+    Application(),
+    const StudentFees(),
     Center(child: Text('Profile')),
   ];
 
@@ -73,7 +74,9 @@ class _StudentNavbarState extends State<StudentNavbar> {
               ),
             ),
             label: 'Home',
-            labelStyle: const TextStyle(fontSize: 12,),
+            labelStyle: const TextStyle(
+              fontSize: 12,
+            ),
           ),
           CurvedNavigationBarItem(
             child: SizedBox(
@@ -86,7 +89,9 @@ class _StudentNavbarState extends State<StudentNavbar> {
               ),
             ),
             label: 'DCR',
-            labelStyle: const TextStyle(fontSize: 12,),
+            labelStyle: const TextStyle(
+              fontSize: 12,
+            ),
           ),
           CurvedNavigationBarItem(
             child: SizedBox(
