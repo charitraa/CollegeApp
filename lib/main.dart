@@ -7,6 +7,7 @@ import 'package:lbef/screen/student/class_routines/class_routines.dart';
 import 'package:lbef/screen/student/dashboard/dashboard.dart';
 import 'package:lbef/view_model/application_files/application_view_model.dart';
 import 'package:lbef/view_model/class_routine/class_routine_view_model.dart';
+import 'package:lbef/view_model/college_fees/college_fee_view_model.dart';
 import 'package:lbef/view_model/daily_class_report/dcr_detail_view_model.dart';
 import 'package:lbef/view_model/daily_class_report/dcr_view_model.dart';
 import 'package:lbef/view_model/download_forms/download_forms_view_model.dart';
@@ -36,6 +37,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => NoticeBoardViewModel()),
         ChangeNotifierProvider(create: (_) => UserViewModel()),
         ChangeNotifierProvider(create: (_) => UserDataViewModel()),
+        ChangeNotifierProvider(create: (_) => CollegeFeeViewModel()),
+
       ],
       child: Builder(
         builder: (context) {

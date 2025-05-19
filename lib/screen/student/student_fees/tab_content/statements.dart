@@ -1,4 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lbef/view_model/college_fees/college_fee_view_model.dart';
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 
 class Statements extends StatefulWidget {
   const Statements({super.key});
@@ -8,10 +12,43 @@ class Statements extends StatefulWidget {
 }
 
 class _StatementsState extends State<Statements> {
+  late ScrollController _scrollController;
+  var logger=Logger();
+  bool isLoad = false;
+  void _scrollListener() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent &&
+        !isLoad) {
+      loadMore();
+    }
+  }
+
+  void fetch() async {
+    await Provider.of<CollegeFeeViewModel>(context, listen: false)
+        .fetchStatement(context);
+  }
+
+  Future<void> loadMore() async {
+    if (isLoad) return;
+    setState(() => isLoad = true);
+    try {
+      await Provider.of<CollegeFeeViewModel>(context, listen: false)
+          .loadMore(context);
+    } catch (e) {
+      if (kDebugMode) logger.d("Error loading more: $e");
+    } finally {
+      setState(() => isLoad = false);
+    }
+  }
+  @override
+  void initState() {
+    _scrollController = ScrollController()..addListener(_scrollListener);
+    super.initState();
+    // fetch();
+  }
   final int rowsPerPage = 10;
   int currentPage = 0;
 
-  final ScrollController _scrollController = ScrollController();
 
   final List<Map<String, dynamic>> creditNotes = [
     {

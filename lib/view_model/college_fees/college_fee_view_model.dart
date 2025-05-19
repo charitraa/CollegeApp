@@ -22,13 +22,34 @@ class CollegeFeeViewModel with ChangeNotifier {
 
   int _currentPage = 1;
   int _limit = 10;
-
+  int get totalPages => (_statementList.length / _limit).ceil();
   bool get isLoading => _isLoading;
   BalanceModel? get currentUser => userData.data;
   List<StatementModel> get statementList => _statementList;
   List<CreditNoteModel> get creditList => _creditList;
   List<TaxModel> get taxList => _taxList;
   int get currentPage => _currentPage;
+  void goToPage(int index) {
+    if (index >= 0 && index < totalPages) {
+      _currentPage = index;
+      notifyListeners();
+    }
+  }
+  void nextPage(BuildContext context) {
+    if (_currentPage < totalPages - 1) {
+      _currentPage++;
+      loadMore(context);
+      notifyListeners();
+    }
+  }
+
+  void previousPage(BuildContext context) {
+    if (_currentPage > 0) {
+      _currentPage--;
+      loadMore(context);
+      notifyListeners();
+    }
+  }
   void setLoading(bool value) {
     _isLoading = value;
     Future.microtask(() => notifyListeners());
@@ -66,7 +87,7 @@ class CollegeFeeViewModel with ChangeNotifier {
           await _myrepo.getStatements(_currentPage, _limit, context);
       if (response['statements'] != []) {
         _statementList.addAll(response['statements']);
-        _currentPage++;
+
       }
       notifyListeners();
     } catch (error) {
