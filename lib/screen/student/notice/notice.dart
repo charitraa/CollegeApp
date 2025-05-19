@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lbef/resource/colors.dart';
 import 'package:lbef/screen/student/application/file_application.dart';
@@ -6,6 +7,9 @@ import 'package:lbef/screen/student/daily_class_report/shimmer/class_card_shimme
 import 'package:lbef/screen/student/application/widgets/application_widget.dart';
 import 'package:lbef/screen/student/notice/view_notice_board.dart';
 import 'package:lbef/screen/student/notice/widgets/notice_widget.dart';
+import 'package:lbef/view_model/notice_board/notice_board_view_model.dart';
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 import '../../../utils/navigate_to.dart';
 
 class NoticeBoard extends StatefulWidget {
@@ -16,12 +20,40 @@ class NoticeBoard extends StatefulWidget {
 }
 
 class _NoticeBoardState extends State<NoticeBoard> {
+  late ScrollController _scrollController;
+  var logger=Logger();
+  bool isLoad = false;
+  void _scrollListener() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent &&
+        !isLoad) {
+      loadMore();
+    }
+  }
+  void fetch() async {
+    await Provider.of<NoticeBoardViewModel>(context, listen: false)
+        .fetch(context);
+  }
+  Future<void> loadMore() async {
+    if (isLoad) return;
+    setState(() => isLoad = true);
+    try {
+      await Provider.of<NoticeBoardViewModel>(context, listen: false)
+          .loadMore(context);
+    } catch (e) {
+      if (kDebugMode) logger.d("Error loading more: $e");
+    } finally {
+      setState(() => isLoad = false);
+    }
+  }
   bool _isLoading = true;
   List<Map<String, String>> notices = [];
 
   @override
   void initState() {
+    _scrollController = ScrollController()..addListener(_scrollListener);
     super.initState();
+    // fetch();
     _loadDummyData();
   }
 

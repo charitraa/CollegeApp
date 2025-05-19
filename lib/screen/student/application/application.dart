@@ -1,9 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lbef/resource/colors.dart';
 import 'package:lbef/screen/student/application/file_application.dart';
 import 'package:lbef/screen/student/application/widgets/view_application.dart';
 import 'package:lbef/screen/student/daily_class_report/shimmer/class_card_shimmer.dart';
 import 'package:lbef/screen/student/application/widgets/application_widget.dart';
+import 'package:lbef/view_model/application_files/application_view_model.dart';
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 
 import '../../../utils/navigate_to.dart';
 import '../daily_class_report/reports/reports.dart';
@@ -16,12 +20,44 @@ class Application extends StatefulWidget {
 }
 
 class _ApplicationState extends State<Application> {
+  late ScrollController _scrollController;
+  var logger=Logger();
+  bool isLoad = false;
+
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent &&
+        !isLoad) {
+      loadMore();
+    }
+  }
+
+  void fetch() async {
+    await Provider.of<ApplicationViewModel>(context, listen: false)
+        .fetch(context);
+  }
+
+  Future<void> loadMore() async {
+    if (isLoad) return;
+    setState(() => isLoad = true);
+    try {
+      await Provider.of<ApplicationViewModel>(context, listen: false)
+          .loadMore(context);
+    } catch (e) {
+      if (kDebugMode) logger.d("Error loading more: $e");
+    } finally {
+      setState(() => isLoad = false);
+    }
+  }
   bool _isLoading = true;
   List<Map<String, String>> applications = [];
 
   @override
   void initState() {
+    _scrollController = ScrollController()..addListener(_scrollListener);
     super.initState();
+    // fetch();
     _loadDummyData();
   }
 

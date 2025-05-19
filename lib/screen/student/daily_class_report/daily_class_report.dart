@@ -1,6 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lbef/screen/student/daily_class_report/reports/reports.dart';
 import 'package:lbef/screen/student/daily_class_report/shimmer/class_card_shimmer.dart';
+import 'package:lbef/view_model/daily_class_report/dcr_view_model.dart';
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:lbef/screen/student/daily_class_report/widgets/class_card.dart';
 
@@ -14,12 +18,42 @@ class DailyClassReport extends StatefulWidget {
 }
 
 class _DailyClassReportState extends State<DailyClassReport> {
+  late ScrollController _scrollController;
+  var logger=Logger();
+  bool isLoad = false;
+  void _scrollListener() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent &&
+        !isLoad) {
+      loadMore();
+    }
+  }
+
+  void fetch() async {
+    await Provider.of<DcrViewModel>(context, listen: false)
+        .fetch(context);
+  }
+
+  Future<void> loadMore() async {
+    if (isLoad) return;
+    setState(() => isLoad = true);
+    try {
+      await Provider.of<DcrViewModel>(context, listen: false)
+          .loadMore(context);
+    } catch (e) {
+      if (kDebugMode) logger.d("Error loading more: $e");
+    } finally {
+      setState(() => isLoad = false);
+    }
+  }
   bool _isLoading = true;
   List<Map<String, String>> classReports = [];
 
   @override
   void initState() {
+    _scrollController = ScrollController()..addListener(_scrollListener);
     super.initState();
+    // fetch();
     _loadDummyData();
   }
 
@@ -102,7 +136,7 @@ class _DailyClassReportState extends State<DailyClassReport> {
             return InkWell(
               onTap: (){
                 Navigator.of(context).push(
-                  SlideRightRoute(page: Reports(image: report['image']!, facultyName:  report['facultyName']!, code:  report['code']!, section:  report['section']!, subject:  report['subject']!)
+                  SlideRightRoute(page: Reports(uid:"",image: report['image']!, facultyName:  report['facultyName']!, code:  report['code']!, section:  report['section']!, subject:  report['subject']!)
                   ),
                 );
               },

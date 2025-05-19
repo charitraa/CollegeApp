@@ -1,4 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lbef/view_model/download_forms/download_forms_view_model.dart';
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../model/document.dart';
 import '../../../resource/colors.dart';
@@ -9,11 +13,42 @@ class DocumentListPage extends StatefulWidget {
 }
 
 class _DocumentListPageState extends State<DocumentListPage> {
-  List<Document> documents = [];
+  late ScrollController _scrollController;
+  var logger = Logger();
+  bool isLoad = false;
 
+  void _scrollListener() {
+    if (_scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent &&
+        !isLoad) {
+      loadMore();
+    }
+  }
+
+  void fetch() async {
+    await Provider.of<DownloadFormViewModel>(context, listen: false)
+        .fetch(context);
+  }
+
+  Future<void> loadMore() async {
+    if (isLoad) return;
+    setState(() => isLoad = true);
+    try {
+      await Provider.of<DownloadFormViewModel>(context, listen: false)
+          .loadMore(context);
+    } catch (e) {
+      if (kDebugMode) logger.d("Error loading more: $e");
+    } finally {
+      setState(() => isLoad = false);
+    }
+  }
+
+  List<Document> documents = [];
   @override
   void initState() {
+    _scrollController = ScrollController()..addListener(_scrollListener);
     super.initState();
+    // fetch();
     documents = getDocuments();
   }
 
@@ -21,31 +56,37 @@ class _DocumentListPageState extends State<DocumentListPage> {
     return [
       Document(
         title: 'Online Course Enrollment Contract',
-        description: 'This contract is for students to enroll based on their course and level options.',
+        description:
+            'This contract is for students to enroll based on their course and level options.',
         publishedDate: '2019-06-10',
-        pdfUrl: 'https://edusys.patancollege.edu.np/html/profiles/downloads/Online_Course_Enrollment_Contract_35b7bbb6408cfb.pdf',
+        pdfUrl:
+            'https://edusys.patancollege.edu.np/html/profiles/downloads/Online_Course_Enrollment_Contract_35b7bbb6408cfb.pdf',
       ),
       Document(
         title: 'Group Weekly Progress Report',
-        description: 'Required for group assessments. Submit weekly to faculty, HOD, and Program Coordinator.',
+        description:
+            'Required for group assessments. Submit weekly to faculty, HOD, and Program Coordinator.',
         publishedDate: '2019-06-10',
         pdfUrl: 'https://example.com/group_weekly_progress_report.pdf',
       ),
       Document(
         title: 'Individual Weekly Progress Report',
-        description: 'Submit weekly to faculty, HOD, and Program Coordinator for individual assessments.',
+        description:
+            'Submit weekly to faculty, HOD, and Program Coordinator for individual assessments.',
         publishedDate: '2019-06-10',
         pdfUrl: 'https://example.com/individual_weekly_progress_report.pdf',
       ),
       Document(
         title: 'Character Certificate Application',
-        description: 'Fill, print, and submit this to the program coordinator for processing.',
+        description:
+            'Fill, print, and submit this to the program coordinator for processing.',
         publishedDate: '2019-06-10',
         pdfUrl: 'https://example.com/character_certificate_application.pdf',
       ),
       Document(
         title: 'Security Deposit Refund Application',
-        description: 'Fill and submit this to the accounts department for refund processing.',
+        description:
+            'Fill and submit this to the accounts department for refund processing.',
         publishedDate: '2019-06-10',
         pdfUrl: 'https://example.com/security_deposit_refund.pdf',
       ),
@@ -116,7 +157,8 @@ class _DocumentListPageState extends State<DocumentListPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.picture_as_pdf, color: Colors.red, size: 40),
+                    const Icon(Icons.picture_as_pdf,
+                        color: Colors.red, size: 40),
                     const SizedBox(height: 10),
                     Text(
                       doc.title,

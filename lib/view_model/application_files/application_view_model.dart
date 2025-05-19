@@ -43,7 +43,7 @@ class ApplicationViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> loadMore(String dcrId, BuildContext context) async {
+  Future<void> loadMore( BuildContext context) async {
     try {
       final Map<String, dynamic> response =
           await _myrepo.fetchApplications(_currentPage, _limit, context);

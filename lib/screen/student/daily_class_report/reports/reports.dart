@@ -1,11 +1,17 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lbef/screen/student/daily_class_report/reports/stacked_reports.dart';
 import 'package:lbef/screen/student/daily_class_report/widgets/attendence_bar.dart';
 import 'package:lbef/screen/student/daily_class_report/widgets/individual_card_head.dart';
+import 'package:lbef/view_model/daily_class_report/dcr_detail_view_model.dart';
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 import '../../../../resource/colors.dart';
+import '../../../../view_model/daily_class_report/dcr_view_model.dart';
 
 class Reports extends StatefulWidget {
-  final String image, facultyName, subject, code, section;
+
+  final String uid, image, facultyName, subject, code, section;
 
   const Reports({
     super.key,
@@ -13,7 +19,7 @@ class Reports extends StatefulWidget {
     required this.facultyName,
     required this.code,
     required this.section,
-    required this.subject,
+    required this.subject, required this.uid,
   });
 
   @override
@@ -21,11 +27,40 @@ class Reports extends StatefulWidget {
 }
 
 class _ReportsState extends State<Reports> {
+  late ScrollController _scrollController;
+  var logger=Logger();
+  bool isLoad = false;
+  void _scrollListener() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent &&
+        !isLoad) {
+      loadMore();
+    }
+  }
+
+  void fetch() async {
+    await Provider.of<DcrDetailViewModel>(context, listen: false)
+        .fetch(widget.uid,context);
+  }
+
+  Future<void> loadMore() async {
+    if (isLoad) return;
+    setState(() => isLoad = true);
+    try {
+      await Provider.of<DcrDetailViewModel>(context, listen: false)
+          .loadMore(widget.uid,context);
+    } catch (e) {
+      if (kDebugMode) logger.d("Error loading more: $e");
+    } finally {
+      setState(() => isLoad = false);
+    }
+  }
   List<Map<String, String>> classReports = [];
   bool isLoading = true;
 
   @override
   void initState() {
+    _scrollController = ScrollController()..addListener(_scrollListener);
     super.initState();
     _simulateApiLoad();
   }
