@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lbef/resource/colors.dart';
 import 'package:lbef/screen/student/class_routines/class_routines.dart';
 import 'package:lbef/screen/student/notice/notice.dart';
+import 'package:lbef/screen/student/notification/notification.dart';
 import 'package:lbef/utils/navigate_to.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -26,15 +27,27 @@ class _DashboardHeadState extends State<DashboardHead> {
   void fetch() async {
     await Provider.of<UserDataViewModel>(context, listen: false)
         .getUser(context);
-
   }
+
   final List<Map<String, dynamic>> allCards = [
-    {'text': 'Class Routines', 'icon': Icons.schedule, 'className':const ClassRoutines()},
+    {
+      'text': 'Class Routines',
+      'icon': Icons.schedule,
+      'className': const ClassRoutines()
+    },
     {'text': 'Results', 'icon': Icons.grade},
-    {'text': 'Notice', 'icon': Icons.notifications,'className':const NoticeBoard()},
+    {
+      'text': 'Notice',
+      'icon': Icons.notifications,
+      'className': const NoticeBoard()
+    },
     {'text': 'Calendar', 'icon': Icons.calendar_month},
     {'text': 'Breo', 'icon': Icons.web},
-    {'text': "Download forms", 'icon': Icons.assignment,'className': DocumentListPage()},
+    {
+      'text': "Download forms",
+      'icon': Icons.assignment,
+      'className': DocumentListPage()
+    },
     {'text': 'Evision', 'icon': Icons.laptop},
     {'text': 'E-Library', 'icon': Icons.menu_book},
   ];
@@ -57,9 +70,8 @@ class _DashboardHeadState extends State<DashboardHead> {
         filteredCards = List.from(allCards);
       } else {
         filteredCards = allCards
-            .where((card) => (card['text'] as String)
-            .toLowerCase()
-            .contains(lowercaseQuery))
+            .where((card) =>
+                (card['text'] as String).toLowerCase().contains(lowercaseQuery))
             .toList();
       }
     });
@@ -83,12 +95,13 @@ class _DashboardHeadState extends State<DashboardHead> {
                 top: 0,
                 left: 0,
                 right: 0,
-                child: Container(
+                child: SizedBox(
                   height: 320,
                   child: SizedBox(
                     width: 150,
                     height: 120,
-                    child: Image.asset('assets/images/content.png', fit: BoxFit.cover),
+                    child: Image.asset('assets/images/content.png',
+                        fit: BoxFit.cover),
                   ),
                 ),
               ),
@@ -98,7 +111,8 @@ class _DashboardHeadState extends State<DashboardHead> {
                 child: SizedBox(
                   width: 150,
                   height: 120,
-                  child: Image.asset('assets/images/lbef.png', fit: BoxFit.cover),
+                  child:
+                      Image.asset('assets/images/lbef.png', fit: BoxFit.cover),
                 ),
               ),
               Consumer<UserDataViewModel>(
@@ -118,13 +132,17 @@ class _DashboardHeadState extends State<DashboardHead> {
                         ),
                       ),
                     );
-                  } else if (userDataViewModel.userData.status == Status.ERROR) {
-                    return   const Positioned(
+                  } else if (userDataViewModel.userData.status ==
+                      Status.ERROR) {
+                    return const Positioned(
                       bottom: 90,
                       left: 24,
                       child: Text(
                         'Hi,\n Unexpected issue!!',
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24),
                       ),
                     );
                   } else if (user == null) {
@@ -138,13 +156,17 @@ class _DashboardHeadState extends State<DashboardHead> {
                       }
                       return twoWords;
                     }
+
                     String? name = getFirstWordsOrShrink("Unknown");
-                    return    Positioned(
+                    return Positioned(
                       bottom: 90,
                       left: 20,
                       child: Text(
                         'Hi,\n $name!!',
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24),
                       ),
                     );
                   } else {
@@ -158,13 +180,17 @@ class _DashboardHeadState extends State<DashboardHead> {
                       }
                       return twoWords;
                     }
+
                     String? name = getFirstWordsOrShrink(user.user!.username);
-                    return     Positioned(
+                    return Positioned(
                       bottom: 90,
                       left: 24,
                       child: Text(
                         'Hi,\n$name!!',
-                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24),
                       ),
                     );
                   }
@@ -174,8 +200,29 @@ class _DashboardHeadState extends State<DashboardHead> {
                 top: 70,
                 right: 24,
                 child: InkWell(
-                  onTap: () {},
-                  child: const Icon(Icons.notifications, size: 32, color: Colors.white),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const NotificationScreen(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(1.0, 0.0);
+                          const end = Offset.zero;
+                          const curve = Curves.easeInOut;
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+                          var offsetAnimation = animation.drive(tween);
+                          return SlideTransition(
+                            position: offsetAnimation,
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  child: const Icon(Icons.notifications,
+                      size: 32, color: Colors.white),
                 ),
               ),
               Positioned(
@@ -211,49 +258,53 @@ class _DashboardHeadState extends State<DashboardHead> {
                     prefixIcon: const Icon(Icons.search),
                     suffixIcon: searchQuery.isNotEmpty
                         ? Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            _controller.clear();
-                            filterCards('');
-                          },
-                          child: const Icon(Icons.clear, color: Colors.grey),
-                        ),
-                        const SizedBox(width: 8),
-                        GestureDetector(
-                          onTap: () {
-                            filterCards(_controller.text);
-                          },
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: AppColors.primary,
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            child: const Icon(Icons.search, color: Colors.white),
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                      ],
-                    )
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  _controller.clear();
+                                  filterCards('');
+                                },
+                                child:
+                                    const Icon(Icons.clear, color: Colors.grey),
+                              ),
+                              const SizedBox(width: 8),
+                              GestureDetector(
+                                onTap: () {
+                                  filterCards(_controller.text);
+                                },
+                                child: Container(
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  child: const Icon(Icons.search,
+                                      color: Colors.white),
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                            ],
+                          )
                         : GestureDetector(
-                      onTap: () {
-                        filterCards(_controller.text);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
-                        child: Container(
-                          width: 45,
-                          decoration: BoxDecoration(
-                            color: AppColors.primary,
-                            borderRadius: BorderRadius.circular(8.0),
+                            onTap: () {
+                              filterCards(_controller.text);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0, vertical: 2),
+                              child: Container(
+                                width: 45,
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary,
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: const Icon(Icons.search,
+                                    color: Colors.white, size: 26),
+                              ),
+                            ),
                           ),
-                          child: const Icon(Icons.search, color: Colors.white, size: 26),
-                        ),
-                      ),
-                    ),
                   ),
                 ),
               ),
@@ -265,29 +316,28 @@ class _DashboardHeadState extends State<DashboardHead> {
           child: filteredCards.isEmpty
               ? const Text("No results found.")
               : GridView.count(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            crossAxisCount: 4,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            childAspectRatio: 0.85,
-            children: filteredCards.map((card) {
-              return InkWell(
-                onTap: () {
-                  if (card.containsKey('className')) {
-                    Navigator.of(context).push(
-                      SlideRightRoute(page: card['className']),
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  crossAxisCount: 4,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  childAspectRatio: 0.85,
+                  children: filteredCards.map((card) {
+                    return InkWell(
+                      onTap: () {
+                        if (card.containsKey('className')) {
+                          Navigator.of(context).push(
+                            SlideRightRoute(page: card['className']),
+                          );
+                        }
+                      },
+                      child: DashboardCard(
+                        text: card['text']!,
+                        icon: card['icon'],
+                      ),
                     );
-                  }
-                },
-                child: DashboardCard(
-                  text: card['text']!,
-                  icon: card['icon'],
+                  }).toList(),
                 ),
-              );
-            }).toList(),
-
-          ),
         ),
       ],
     );
