@@ -1,0 +1,2 @@
+/home/chari/code/LBEF-Mobile-App/android/app/.cxx/Debug/g5q3f1f3/x86_64/CMakeFiles/edit_cache.dir
+/home/chari/code/LBEF-Mobile-App/android/app/.cxx/Debug/g5q3f1f3/x86_64/CMakeFiles/rebuild_cache.dir
