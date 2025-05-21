@@ -26,9 +26,9 @@ class ViewNoticeBoard extends StatelessWidget {
         actions: const [
           Image(
             image: AssetImage('assets/images/lbef.png'),
-            width: 56,
+            width: 70,
             height: 50,
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
           ),
           SizedBox(width: 14),
         ],

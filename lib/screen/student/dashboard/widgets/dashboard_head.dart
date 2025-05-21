@@ -8,6 +8,7 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../../data/status.dart';
 import '../../../../view_model/user_view_model/current_user_model.dart';
+import '../../calender/calender.dart';
 import '../../download_forums/download_forums.dart';
 import 'dashboard_card.dart';
 
@@ -32,7 +33,7 @@ class _DashboardHeadState extends State<DashboardHead> {
     {'text': 'Class Routines', 'icon': Icons.schedule, 'className':const ClassRoutines()},
     {'text': 'Results', 'icon': Icons.grade},
     {'text': 'Notice', 'icon': Icons.notifications,'className':const NoticeBoard()},
-    {'text': 'Calendar', 'icon': Icons.calendar_month},
+    {'text': 'Calendar', 'icon': Icons.calendar_month,'className':const AcademicCalender()},
     {'text': 'Breo', 'icon': Icons.web},
     {'text': "Download forms", 'icon': Icons.assignment,'className': DocumentListPage()},
     {'text': 'Evision', 'icon': Icons.laptop},

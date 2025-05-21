@@ -35,6 +35,7 @@ class CollegeFeeViewModel with ChangeNotifier {
       notifyListeners();
     }
   }
+
   void nextPage(BuildContext context) {
     if (_currentPage < totalPages - 1) {
       _currentPage++;
@@ -50,6 +51,7 @@ class CollegeFeeViewModel with ChangeNotifier {
       notifyListeners();
     }
   }
+
   void setLoading(bool value) {
     _isLoading = value;
     Future.microtask(() => notifyListeners());
@@ -71,23 +73,23 @@ class CollegeFeeViewModel with ChangeNotifier {
       final Map<String, dynamic> response =
           await _myrepo.getStatements(1, _limit, context);
       _statementList.addAll(response['statements']);
-      if (response['statements'] != []) {
+      if (response['statements'] != [] && response['statements'] != null) {
         _currentPage++;
       }
       notifyListeners();
     } catch (error) {
-      Utils.flushBarErrorMessage("Error fetching data: $error", context);
+      Utils.flushBarErrorMessage("Error fetching data s: $error", context);
     } finally {
       setLoading(false);
     }
   }
+
   Future<void> loadMore(BuildContext context) async {
     try {
       final Map<String, dynamic> response =
           await _myrepo.getStatements(_currentPage, _limit, context);
-      if (response['statements'] != []) {
+      if (response['statements'] != []&& response['statements'] != null) {
         _statementList.addAll(response['statements']);
-
       }
       notifyListeners();
     } catch (error) {
@@ -99,7 +101,7 @@ class CollegeFeeViewModel with ChangeNotifier {
   Future<void> fetchReceipts(BuildContext context) async {
     try {
       final Map<String, dynamic> response = await _myrepo.getReceipts(context);
-      if (response['receipts'] != []) {
+      if (response['receipts'] != []&& response['statements'] != null) {
         _taxList.addAll(response['receipts']);
         _currentPage++;
       }
@@ -113,7 +115,7 @@ class CollegeFeeViewModel with ChangeNotifier {
   Future<void> fetchCredits(BuildContext context) async {
     try {
       final Map<String, dynamic> response = await _myrepo.getCredits(context);
-      if (response['credits'] != []) {
+      if (response['credits'] != []&& response['statements'] != null) {
         _creditList.addAll(response['credits']);
         _currentPage++;
       }
