@@ -8,6 +8,7 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../../data/status.dart';
 import '../../../../view_model/user_view_model/current_user_model.dart';
+import '../../../admit_card/admit_card.dart';
 import '../../calender/calender.dart';
 import '../../download_forums/download_forums.dart';
 import 'dashboard_card.dart';
@@ -31,7 +32,7 @@ class _DashboardHeadState extends State<DashboardHead> {
   }
   final List<Map<String, dynamic>> allCards = [
     {'text': 'Class Routines', 'icon': Icons.schedule, 'className':const ClassRoutines()},
-    {'text': 'Results', 'icon': Icons.grade},
+    {'text': 'Results', 'icon': Icons.grade, 'className':const AdmitCard()},
     {'text': 'Notice', 'icon': Icons.notifications,'className':const NoticeBoard()},
     {'text': 'Calendar', 'icon': Icons.calendar_month,'className':const AcademicCalender()},
     {'text': 'Breo', 'icon': Icons.web},
@@ -99,7 +100,7 @@ class _DashboardHeadState extends State<DashboardHead> {
                 child: SizedBox(
                   width: 150,
                   height: 120,
-                  child: Image.asset('assets/images/lbef.png', fit: BoxFit.cover),
+                  child: Image.asset('assets/images/lbef.png', fit: BoxFit.contain),
                 ),
               ),
               Consumer<UserDataViewModel>(
