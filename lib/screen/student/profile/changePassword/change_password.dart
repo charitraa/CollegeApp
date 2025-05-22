@@ -55,6 +55,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                 keyboardType: TextInputType.visiblePassword,
                 onChanged: (value) {},
               ),
+              const SizedBox(height: 5),
+
               PasswordTextfield(
                 text: 'New Password',
                 hintText: 'Enter your new password',
@@ -66,6 +68,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                 keyboardType: TextInputType.visiblePassword,
                 onChanged: (value) {},
               ),
+              const SizedBox(height: 5),
+
               PasswordTextfield(
                 text: 'Confirm New Password',
                 hintText: 'Re-enter your new password',

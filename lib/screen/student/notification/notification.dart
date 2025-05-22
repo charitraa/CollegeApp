@@ -47,14 +47,23 @@ class _NotificationScreenState extends State<NotificationScreen>
             Tab(text: 'Read'),
           ],
         ),
-        actions: const [
-          Image(
-            image: AssetImage('assets/images/lbef.png'),
-            width: 56,
-            height: 50,
-            fit: BoxFit.cover,
+        actions: [
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert),
+            onSelected: (value) {
+              // Handle menu action
+              if (value == 'mark') {
+                // Navigate to profile
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'mark',
+                child: Text('Mark All as Read'),
+              ),
+            ],
           ),
-          SizedBox(width: 14),
+          const SizedBox(width: 14),
         ],
       ),
       body: TabBarView(

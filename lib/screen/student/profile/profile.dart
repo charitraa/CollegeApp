@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lbef/screen/student/profile/changePassword/change_password.dart';
+import 'package:lbef/screen/student/profile/event/event.dart';
+import 'package:lbef/screen/student/profile/teachers/teachers.dart';
 import 'package:lbef/screen/student/profile/widgets/build_list_tile.dart';
 import 'package:lbef/screen/student/profile/widgets/info_box.dart';
 
@@ -71,7 +73,27 @@ class ProfilePage extends StatelessWidget {
               const SizedBox(height: 20),
 
               // List Items
-              buildListTile(Icons.event, 'Events', () {}),
+              buildListTile(Icons.event, 'Events', () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const Event(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(1.0, 0.0);
+                      const end = Offset.zero;
+                      const curve = Curves.easeInOut;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      var offsetAnimation = animation.drive(tween);
+                      return SlideTransition(
+                        position: offsetAnimation,
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              }),
               buildListTile(Icons.lock, 'Change Password', () {
                 Navigator.of(context).push(
                   PageRouteBuilder(
@@ -94,7 +116,27 @@ class ProfilePage extends StatelessWidget {
                 );
               }),
               buildListTile(Icons.picture_as_pdf, 'Print Admit Card', () {}),
-              buildListTile(Icons.people, 'Teachers', () {}),
+              buildListTile(Icons.people, 'Teachers', () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const TeachersPage(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(1.0, 0.0);
+                      const end = Offset.zero;
+                      const curve = Curves.easeInOut;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      var offsetAnimation = animation.drive(tween);
+                      return SlideTransition(
+                        position: offsetAnimation,
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              }),
               buildListTile(Icons.info, 'About', () {}),
               buildListTile(Icons.help_outline, 'Help', () {}),
               buildListTile(Icons.call, 'Contact', () {}),
