@@ -31,14 +31,15 @@ class StudentFees extends StatelessWidget {
           automaticallyImplyLeading: false,
           bottom: const TabBar(
             tabs: [
+              Tab(text: 'Statement'),
               Tab(text: 'Balance'),
               Tab(text: 'Receipts'),
-              Tab(text: 'Statement'),
+
             ],
           ),
         ),
         body: const TabBarView(
-          children: [Balance(), Receipts(), Statements()],
+          children: [Statements(),Balance(), Receipts(), ],
         ),
       ),
     );

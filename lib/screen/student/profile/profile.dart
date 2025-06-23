@@ -4,12 +4,19 @@ import 'package:lbef/screen/student/profile/event/event.dart';
 import 'package:lbef/screen/student/profile/teachers/teachers.dart';
 import 'package:lbef/screen/student/profile/widgets/build_list_tile.dart';
 import 'package:lbef/screen/student/profile/widgets/info_box.dart';
+import 'package:provider/provider.dart';
+
+import '../../../resource/colors.dart';
+import '../../../view_model/user_view_model/auth_view_model.dart';
+import '../../../widgets/form_widget/btn/outlned_btn.dart';
+import '../../../widgets/form_widget/custom_outlined.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -140,7 +147,56 @@ class ProfilePage extends StatelessWidget {
               buildListTile(Icons.info, 'About', () {}),
               buildListTile(Icons.help_outline, 'Help', () {}),
               buildListTile(Icons.call, 'Contact', () {}),
-              buildListTile(Icons.logout, 'Sign Out', () {}),
+              buildListTile(Icons.logout, 'Sign Out', () async {
+                bool? shouldLogout = await showDialog<bool>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    title: const Row(
+                      children: [
+                        Icon(Icons.exit_to_app, color: Colors.redAccent),
+                        SizedBox(width: 10),
+                        Text('Logout'),
+                      ],
+                    ),
+                    content: const Text(
+                      'Are you sure you want to logout?',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    actionsPadding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    actions: [
+                      CustomOutlineButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        labelText: 'Cancel',
+                        width: size.width * 0.2,
+                        height: size.height * 0.04,
+                        buttonColor: Colors.red,
+                        textColor: Colors.red,
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: () => Navigator.of(context).pop(true),
+                        child: const Text('Logout'),
+                      ),
+                    ],
+                  ),
+                );
+
+                if (shouldLogout == true) {
+                  await Provider.of<AuthViewModel>(context, listen: false)
+                      .logout(context);
+                }
+              })
             ],
           ),
         ),

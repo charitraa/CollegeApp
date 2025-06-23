@@ -46,12 +46,13 @@ dependencies:
   uuid: ^4.5.1
   font_awesome_flutter: ^10.8.0
   permission_handler: ^11.3.1
-  table_calendar: ^3.2.0
+  table_calendar: ^3.0.9
   logger: ^2.5.0
   shimmer: ^3.0.0
   pdf: ^3.11.3
   http_parser: ^4.0.0
   printing: ^5.14.2
+  khalti_flutter: ^3.0.0
   loading_indicator: ^3.1.1
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lbef/screen/student/student_fees/pay_khalti.dart';
 import 'package:lbef/screen/student/student_fees/tab_content/widgets/balance_card.dart';
 import 'package:lbef/screen/student/student_fees/tab_content/widgets/credit_notes.dart';
+import 'package:lbef/widgets/no_data/no_data_widget.dart';
 
 class Balance extends StatefulWidget {
   const Balance({super.key});
@@ -18,6 +20,8 @@ class _BalanceState extends State<Balance> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          PayKhalti(),
+          const SizedBox(height: 16),
           const Text(
             'Your Balance',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -62,13 +66,16 @@ class _BalanceState extends State<Balance> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
-          buildCreditNotesSection(),
+          buildCreditNotesSection(context),
           const SizedBox(height: 20),
           const Text(
             'Your Credit Settlements',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          const Text('(No settlements available)'),
+          const SizedBox(height: 8),
+
+         BuildNoData(size, "No settlements available!", Icons.do_not_disturb),
+          const SizedBox(height: 30),
         ],
       ),
     );

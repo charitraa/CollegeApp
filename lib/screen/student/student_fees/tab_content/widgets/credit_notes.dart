@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-Widget buildCreditNotesSection() {
+import '../../../../../widgets/display_dialog/display_dialog.dart';
+import '../dialog_content/credit_note_content.dart';
+
+Widget buildCreditNotesSection(BuildContext context) {
   final creditNotes = [
     {
       'date': '2023-01-24',
@@ -30,40 +34,59 @@ Widget buildCreditNotesSection() {
 
   return Column(
     children: creditNotes.map((note) {
-      return Card(
-        color: Colors.white,
-        margin: const EdgeInsets.only(bottom: 10),
-        elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(note['date']!, style: const TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 5),
-              Text(note['noteNo']!, style: const TextStyle(fontWeight: FontWeight.w500)),
-              const SizedBox(height: 5),
-              Text(note['description']!),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(note['amount']!, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.green[100],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(note['status']!, style: const TextStyle(color: Colors.green)),
-                  )
-                ],
-              )
-            ],
+      return GestureDetector(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) => DisplayDialog(
+              text: 'Credit Note Details',
+              show: CreditNoteContent(
+                date: note['date']!,
+                noteNo: note['noteNo']!,
+                description: note['description']!,
+                amount: note['amount']!,
+                status: note['status']!,
+              ),
+            ),
+          );
+        },
+        child: Card(
+          color: Colors.white,
+          margin: const EdgeInsets.only(bottom: 10),
+          elevation: 2,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(note['date']!, style: const TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 5),
+                Text(note['noteNo']!, style: const TextStyle(fontWeight: FontWeight.w500)),
+                const SizedBox(height: 5),
+                Text(note['description']!),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(note['amount']!, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.green[100],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(note['status']!, style: const TextStyle(color: Colors.green)),
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       );
     }).toList(),
   );
 }
+
+

@@ -5,6 +5,7 @@ import 'package:lbef/screen/student/dashboard/widgets/dashboard_head.dart';
 import 'package:lbef/screen/student/notice/notice.dart';
 
 import '../../../utils/navigate_to.dart';
+import '../../../widgets/no_data/no_data_widget.dart';
 import '../notice/view_notice_board.dart';
 import '../notice/widgets/notice_widget.dart';
 
@@ -45,6 +46,7 @@ class _DashboardState extends State<Dashboard> {
   ];
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -81,6 +83,13 @@ class _DashboardState extends State<Dashboard> {
                     ],
                   ),
                 ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: BuildNoData(size,
+                  "No upcoming events at the moment. Stay tuned for future updates!",
+                  Icons.event_busy
               ),
             ),
             const SizedBox(
@@ -120,7 +129,9 @@ class _DashboardState extends State<Dashboard> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Wrap(
                     spacing: 0,
                     runSpacing: 14,
@@ -141,7 +152,9 @@ class _DashboardState extends State<Dashboard> {
                       );
                     }).toList(),
                   ),
-                  const SizedBox(height: 25,),
+                  const SizedBox(
+                    height: 25,
+                  ),
                 ],
               ),
             )

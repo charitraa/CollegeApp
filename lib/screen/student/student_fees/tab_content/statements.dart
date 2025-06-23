@@ -1,8 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lbef/screen/student/student_fees/tab_content/dialog_content/statement_dialog.dart';
+import 'package:lbef/screen/student/student_fees/pay_khalti.dart';
+import 'package:lbef/screen/student/student_fees/tab_content/widgets/statement_card.dart';
 import 'package:lbef/view_model/college_fees/college_fee_view_model.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../widgets/display_dialog/display_dialog.dart';
 
 class Statements extends StatefulWidget {
   const Statements({super.key});
@@ -13,8 +18,9 @@ class Statements extends StatefulWidget {
 
 class _StatementsState extends State<Statements> {
   late ScrollController _scrollController;
-  var logger=Logger();
+  var logger = Logger();
   bool isLoad = false;
+
   void _scrollListener() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent &&
@@ -40,15 +46,16 @@ class _StatementsState extends State<Statements> {
       setState(() => isLoad = false);
     }
   }
+
   @override
   void initState() {
     _scrollController = ScrollController()..addListener(_scrollListener);
     super.initState();
     // fetch();
   }
+
   final int rowsPerPage = 10;
   int currentPage = 0;
-
 
   final List<Map<String, dynamic>> creditNotes = [
     {
@@ -78,7 +85,6 @@ class _StatementsState extends State<Statements> {
       'remarks': 'Adjusted via CREDIT NOTE - 108',
       'paid': true,
     },
-    // Duplicate entries to make up at least 15 total for pagination test
     {
       'date': '2022-12-30',
       'particular': 'Induction Cost Admission',
@@ -164,8 +170,9 @@ class _StatementsState extends State<Statements> {
 
   List<Map<String, dynamic>> get pagedData {
     final startIndex = currentPage * rowsPerPage;
-    final endIndex =
-    (startIndex + rowsPerPage) > creditNotes.length ? creditNotes.length : startIndex + rowsPerPage;
+    final endIndex = (startIndex + rowsPerPage) > creditNotes.length
+        ? creditNotes.length
+        : startIndex + rowsPerPage;
     return creditNotes.sublist(startIndex, endIndex);
   }
 
@@ -201,7 +208,11 @@ class _StatementsState extends State<Statements> {
       children: [
         TextButton(
           onPressed: currentPage > 0 ? _previousPage : null,
-          child: const Text("Previous"),
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.blue,
+            textStyle: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          child: const Text('Previous'),
         ),
         Row(
           mainAxisSize: MainAxisSize.min,
@@ -214,13 +225,27 @@ class _StatementsState extends State<Statements> {
                 height: buttonSize,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: currentPage == i ? Colors.blue : Colors.white,
-                  border: Border.all(color: Colors.grey),
+                  gradient: LinearGradient(
+                    colors: currentPage == i
+                        ? [Colors.blue, Colors.blueAccent]
+                        : [Colors.white, Colors.grey.shade100],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  border: Border.all(color: Colors.grey.shade400),
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 child: Text(
                   '${i + 1}',
                   style: TextStyle(
-                    color: currentPage == i ? Colors.white : Colors.black,
+                    color: currentPage == i ? Colors.white : Colors.black87,
                     fontWeight:
                     currentPage == i ? FontWeight.bold : FontWeight.normal,
                   ),
@@ -231,7 +256,11 @@ class _StatementsState extends State<Statements> {
         ),
         TextButton(
           onPressed: currentPage < totalPages - 1 ? _nextPage : null,
-          child: const Text("Next"),
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.blue,
+            textStyle: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          child: const Text('Next'),
         ),
       ],
     );
@@ -250,75 +279,57 @@ class _StatementsState extends State<Statements> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          PayKhalti(),
+          const SizedBox(height: 16),
           const Text(
             'Your Statement',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 16),
           Expanded(
             child: ScrollConfiguration(
-              behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Scrollbar(
-                        controller: _scrollController,
-                        thumbVisibility: true,
-                        trackVisibility: true,
-                        scrollbarOrientation: ScrollbarOrientation.bottom,
-                        child: SingleChildScrollView(
-                          controller: _scrollController,
-                          scrollDirection: Axis.horizontal,
-                          child: DataTable(
-                            columns: const [
-                              DataColumn(label: SizedBox(width: 30, child: Text('SN'))),
-                              DataColumn(label: Text('Date')),
-                              DataColumn(label: Text('Particular')),
-                              DataColumn(label: Text('Debit')),
-                              DataColumn(label: Text('Credit')),
-                              DataColumn(label: Text('Balance')),
-                              DataColumn(label: Text('Status')),
-                              DataColumn(label: Text('Remarks')),
-                            ],
-                            rows:List<DataRow>.generate(
-                              pagedData.length,
-                                  (index) {
-                                final note = pagedData[index];
-                                final serialNumber = currentPage * rowsPerPage + index + 1;
-                                return DataRow(
-                                  cells: [
-                                    DataCell(Text(serialNumber.toString())),
-                                    DataCell(Text(note['date'] ?? '')),
-                                    DataCell(Text(note['particular'] ?? '')),
-                                    DataCell(Text(note['dr'] ?? '')),
-                                    DataCell(Text(note['cr'] ?? '')),
-                                    DataCell(Text(note['bal'] ?? '')),
-                                    DataCell(
-                                      Text(
-                                        note['paid'] == true ? 'Paid' : 'Unpaid',
-                                        style: TextStyle(
-                                          color: note['paid'] == true ? Colors.green : Colors.red,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    DataCell(Text(note['remarks'] ?? '')),
-                                  ],
-                                );
-                              },
-                            ),
-                          ),
+              behavior:
+              ScrollConfiguration.of(context).copyWith(scrollbars: false),
+              child: ListView.builder(
+                controller: _scrollController,
+                itemCount: pagedData.length + (isLoad ? 1 : 0),
+                itemBuilder: (context, index) {
+                  if (index == pagedData.length && isLoad) {
+                    return const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: CircularProgressIndicator(
+                          valueColor:
+                          AlwaysStoppedAnimation<Color>(Colors.blue),
                         ),
                       ),
-                    ),
-                  ),
-                ],
+                    );
+                  }
+                  return StatementCard(
+                    note: pagedData[index],
+                    serialNumber: currentPage * rowsPerPage + index + 1,
+                    index: index,
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => DisplayDialog(
+                          text: 'Statement Details',
+                          show: StatementDetailsContent(
+                            note: pagedData[index],
+                            serialNumber: currentPage * rowsPerPage + index + 1,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
             ),
           ),
-
           const SizedBox(height: 20),
           _buildPaginationControls(),
           const SizedBox(height: 20),
@@ -327,3 +338,6 @@ class _StatementsState extends State<Statements> {
     );
   }
 }
+
+
+

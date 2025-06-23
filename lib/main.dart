@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
             data: MediaQuery.of(context).copyWith(
               textScaler: TextScaler.noScaling,
             ),
-            child: MaterialApp(
+            child: MaterialApp(s
               title: 'LBEF',
               theme: ThemeData(
                 colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),

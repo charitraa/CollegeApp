@@ -113,9 +113,9 @@ class _DashboardHeadState extends State<DashboardHead> {
               ),
               Positioned(
                 top: 30,
-                left: 5,
+                left: 15,
                 child: SizedBox(
-                  width: 150,
+                  width: 190,
                   height: 120,
                   child: Image.asset('assets/images/lbef.png',
                       fit: BoxFit.contain),
