@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:lbef/constant/base_url.dart';
 import 'package:lbef/resource/colors.dart';
 import 'package:lbef/screen/student/class_routines/class_routines.dart';
 import 'package:lbef/screen/student/notice/notice.dart';
 import 'package:lbef/screen/student/notification/notification.dart';
 import 'package:lbef/utils/navigate_to.dart';
+import 'package:lbef/widgets/custom_shimmer.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -15,9 +18,9 @@ import '../../download_forums/download_forums.dart';
 import 'dashboard_card.dart';
 
 class DashboardHead extends StatefulWidget {
-  final String userName;
-
-  const DashboardHead({super.key, required this.userName});
+  const DashboardHead({
+    super.key,
+  });
 
   @override
   State<DashboardHead> createState() => _DashboardHeadState();
@@ -26,10 +29,7 @@ class DashboardHead extends StatefulWidget {
 class _DashboardHeadState extends State<DashboardHead> {
   late final TextEditingController _controller;
   String searchQuery = '';
-  void fetch() async {
-    await Provider.of<UserDataViewModel>(context, listen: false)
-        .getUser(context);
-  }
+
 
   final List<Map<String, dynamic>> allCards = [
     {
@@ -63,7 +63,7 @@ class _DashboardHeadState extends State<DashboardHead> {
   @override
   void initState() {
     super.initState();
-    fetch();
+
     _controller = TextEditingController();
     filteredCards = List.from(allCards);
   }
@@ -187,13 +187,13 @@ class _DashboardHeadState extends State<DashboardHead> {
                       return twoWords;
                     }
 
-                    String? name = getFirstWordsOrShrink(user.user!.username);
+                    String? name = getFirstWordsOrShrink(user.stuFirstname);
                     return Positioned(
                       bottom: 90,
                       left: 24,
                       child: Text(
-                        'Hi,\n$name!!',
-                        style: const TextStyle(
+                        'Hi, $name!!',
+                        style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 24),
@@ -231,20 +231,50 @@ class _DashboardHeadState extends State<DashboardHead> {
                       size: 32, color: Colors.white),
                 ),
               ),
-              Positioned(
-                bottom: 90,
-                right: 24,
-                child: Container(
-                  width: 60,
-                  height: 60,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/lbef.png'),
-                      fit: BoxFit.cover,
+              Consumer<UserDataViewModel>(
+                builder: (context, userDataViewModel, child) {
+                  final user = userDataViewModel.currentUser;
+
+                  String? image =
+                      "${BaseUrl.imageDisplay}/${user?.stuProfilePath}/${user?.stuPhoto}";
+                  var logger=Logger();
+                  logger.d(image);
+                  return Positioned(
+                    bottom: 90,
+                    right: 24,
+                    child: SizedBox(
+                      height: 60,
+                      child: Image.network(
+                        image,
+                        width: 60,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CustomShimmerLoading(
+                              width: 120.0,
+                              height: 122,
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                            ),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          width: 60,
+                          height: 60,
+                          color: Colors.white,
+                          child: Center(
+                            child: Icon(
+                              Icons.school,
+                              color: AppColors.primary,
+                              size: 40,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
               Positioned(
                 bottom: 0,

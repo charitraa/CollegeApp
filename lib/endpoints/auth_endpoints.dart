@@ -3,6 +3,6 @@
 import '../constant/base_url.dart';
 
 class AuthEndPoints{
-  static var authUrl="${BaseUrl.baseUrl}/auth/login";
-  static var logoutUrl="${BaseUrl.baseUrl}/auth/logout";
+  static var authUrl="${BaseUrl.baseUrl}/login";
+  static var logoutUrl="${BaseUrl.baseUrl}/logout";
 }

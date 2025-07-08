@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AttendanceBar extends StatelessWidget {
-  final int percentage;
+  final double percentage;
 
   const AttendanceBar({super.key, required this.percentage});
 

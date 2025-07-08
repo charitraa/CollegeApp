@@ -47,16 +47,16 @@ class ReportDetail extends StatelessWidget {
                   children: [
                     Text(
                       head,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
 
                       ),
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Text(
                       value,
-                      style: TextStyle( fontSize: 13),
+                      style: const TextStyle( fontSize: 13),
                     ),
 
                   ],

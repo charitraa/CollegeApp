@@ -6,6 +6,7 @@ class CustomButton extends StatefulWidget {
   final VoidCallback onPressed;
   final Color buttonColor;
   final int? width;
+  final double? btnwid;
   final bool? isLoading;
 
   const CustomButton({
@@ -14,7 +15,7 @@ class CustomButton extends StatefulWidget {
     required this.onPressed,
     this.buttonColor = const Color(0xFF1967B5),
     this.width,
-    this.isLoading, // Default color
+    this.isLoading, this.btnwid=double.infinity, // Default color
   });
 
   @override
@@ -38,8 +39,8 @@ class _CustomButtonState extends State<CustomButton> {
       onPressed: widget.onPressed,
       style: ButtonStyle(
         foregroundColor: const MaterialStatePropertyAll(Colors.white),
-        minimumSize: const MaterialStatePropertyAll(
-          Size(double.infinity, 50),
+        minimumSize: MaterialStatePropertyAll(
+          Size(widget.btnwid??double.infinity, 50),
         ),
         backgroundColor: MaterialStatePropertyAll(widget.buttonColor),
         shape: const MaterialStatePropertyAll(

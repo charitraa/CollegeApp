@@ -20,27 +20,25 @@ class AuthNetworkApiService {
     return headers;
   }
 
-  Future getPostResponse(String url, dynamic data) async {
+  Future getPostResponse(String url, dynamic data,
+      {BuildContext? context}) async {
     dynamic responseJson;
     try {
       var logger = Logger();
       final headers = await _getHeaders();
       final response = await http
           .post(
-            Uri.parse(url),
-            body: jsonEncode(data),
-            headers: headers,
-          )
+        Uri.parse(url),
+        body: jsonEncode(data),
+        headers: headers,
+      )
           .timeout(const Duration(seconds: 10));
       final responseBody = jsonDecode(response.body);
       logger.d(responseBody);
-      if (responseBody != null) {
-        UserModel user = UserModel.fromJson(responseBody);
-        await UserViewModel().saveUser(user);
-      } else {
-        throw Exception('Incorrect username or password!!');
-      }
-      responseJson = returnResponse(response);
+      UserModel user = UserModel.fromJson(responseBody);
+      await UserViewModel().saveUser(user);
+      logger.d(user.token);
+      responseJson = returnResponse(response, context: context);
     } on SocketException {
       throw FetchDataException("No Internet Connection");
     }
@@ -53,15 +51,12 @@ class AuthNetworkApiService {
     var logger = Logger();
     logger.d(response.statusCode);
 
-    if (responseBody['email'] is List) {
-      errorMessage = responseBody['email'][0];
-    }
     if (responseBody is Map && responseBody.containsKey('err')) {
       errorMessage = responseBody['err'];
-    } else if (responseBody is Map && responseBody.containsKey('error')) {
-      errorMessage = responseBody['error'];
+    } else if (responseBody is Map && responseBody.containsKey('message')) {
+      errorMessage = responseBody['message'];
     }
-
+    logger.d(errorMessage);
     switch (response.statusCode) {
       case 200:
         return responseBody;
@@ -71,16 +66,14 @@ class AuthNetworkApiService {
         Utils.noInternet(errorMessage);
         throw BadRequestException(errorMessage);
       case 401:
-        Utils.noInternet(errorMessage);
-        return responseBody;
+        throw BadRequestException(errorMessage);
+      case 402:
+        throw UnAuthorizeException(errorMessage);
       case 403:
-        Utils.noInternet(errorMessage);
-        throw FetchDataException("Forbidden: $errorMessage");
+        throw FetchDataException(errorMessage);
       case 404:
-        Utils.noInternet(errorMessage);
         throw FetchDataException("Not Found: $errorMessage");
       case 500:
-        Utils.noInternet(errorMessage);
         throw FetchDataException("Internal Server Error: $errorMessage");
       default:
         if (context != null) {

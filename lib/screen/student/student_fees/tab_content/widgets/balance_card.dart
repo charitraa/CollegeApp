@@ -18,7 +18,7 @@ Widget buildBalanceCard({
         children: [
           Icon(icon, size: 30, color: Colors.black54),
           const SizedBox(height: 10),
-          Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
           Text(amountRs, style: const TextStyle(fontSize: 14)),
           Text(amountPound, style: const TextStyle(fontSize: 14)),

@@ -1,38 +1,29 @@
 import 'package:flutter/material.dart';
 
-class IndividualCardHead extends StatelessWidget {
-  final String session,image, tutor, subject,code;
-  const IndividualCardHead({super.key, required this.image, required this.tutor, required this.subject, required this.code, required this.session});
+class DcrCardImage extends StatelessWidget {
+  final String session, semester,section;
+  const DcrCardImage({super.key, required this.session, required this.semester, required this.section,});
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
     return  Stack(
       children: [
-        Container(
+        SizedBox(
           width: size.width,
           height: 120,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(
-              color: Colors.grey,
-              width: 1.0,
-            ),
-            borderRadius: BorderRadius.circular(8),
-          ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Opacity(
-              opacity: 0.9,
-              child: Image.asset(
-                image,
-                fit: BoxFit.cover,
-              ),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+            child: Image.asset(
+              'assets/images/mountain.jpg',
+              fit: BoxFit.cover,
             ),
           ),
         ),
-         Positioned(
+        Positioned(
           left: 10,
           bottom: 10,
           right: 10,
@@ -44,39 +35,27 @@ class IndividualCardHead extends StatelessWidget {
               Text(
                 session,
                 style: const TextStyle(
-                  fontSize: 15,
+                  fontSize: 18,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 4),
-
-              Text(
-                subject,
-                style: const TextStyle(
-                  fontSize: 15,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 4),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
                     width: 240,
                     child: Text(
-                     "By $tutor",
+                      semester,
                       style: const TextStyle(
-                        fontSize: 12,
+                        fontSize: 14,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                   Text(
-                    code,
+                    "Section : $section",
                     style: const TextStyle(
                       fontSize: 12,
                       color: Colors.white,

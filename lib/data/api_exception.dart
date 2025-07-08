@@ -8,7 +8,7 @@ class AppException implements Exception{
   }
 }
 class FetchDataException extends AppException{
-  FetchDataException([String?message]):super(message,"Error During Communication!!");
+  FetchDataException([String?message]):super(message,"Error During Communication!! ");
 }
 
 class BadRequestException extends AppException{
@@ -16,11 +16,11 @@ class BadRequestException extends AppException{
 }
 
 class UnAuthorizeException extends AppException{
-  UnAuthorizeException([String?message]):super(message,"Unauthorized Request");
+  UnAuthorizeException([String?message]):super(message,"Unauthorized Request ");
 }
 
 class InvalidInputException extends AppException{
-  InvalidInputException([String?message]):super(message,"Unauthorized Request");
+  InvalidInputException([String?message]):super(message,"Unauthorized Request ");
 }
 class StorageException extends AppException {
   StorageException([String? message]) : super(message, "Storage Permission Error: ");

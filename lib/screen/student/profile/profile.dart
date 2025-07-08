@@ -22,15 +22,16 @@ class ProfilePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text(
-          "Profile",
-          style: TextStyle(fontFamily: 'poppins'),
+          "Account Settings",
+          style: TextStyle(fontFamily: 'poppins', fontSize: 20),
         ),
+        automaticallyImplyLeading: false,
         actions: const [
           Image(
             image: AssetImage('assets/images/lbef.png'),
-            width: 56,
+            width: 70,
             height: 50,
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
           ),
           SizedBox(width: 14),
         ],
@@ -47,7 +48,7 @@ class ProfilePage extends StatelessWidget {
                     CircleAvatar(
                       radius: 40,
                       backgroundImage: AssetImage(
-                          'assets/images/profile.png'), // replace with your asset
+                          'assets/images/profile.png'),
                     ),
                     SizedBox(width: 30),
                     Column(

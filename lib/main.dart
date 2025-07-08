@@ -3,8 +3,6 @@ import 'package:lbef/resource/routes.dart';
 import 'package:lbef/resource/routes_name.dart';
 import 'package:lbef/screen/auth/login_page.dart';
 import 'package:lbef/screen/navbar/student_navbar.dart';
-import 'package:lbef/screen/student/class_routines/class_routines.dart';
-import 'package:lbef/screen/student/dashboard/dashboard.dart';
 import 'package:lbef/view_model/application_files/application_view_model.dart';
 import 'package:lbef/view_model/calender/calender.dart';
 import 'package:lbef/view_model/class_routine/class_routine_view_model.dart';
@@ -48,7 +46,7 @@ class MyApp extends StatelessWidget {
             data: MediaQuery.of(context).copyWith(
               textScaler: TextScaler.noScaling,
             ),
-            child: MaterialApp(s
+            child: MaterialApp(
               title: 'LBEF',
               theme: ThemeData(
                 colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
@@ -56,11 +54,8 @@ class MyApp extends StatelessWidget {
                 fontFamily: 'Poppins',
               ),
               debugShowCheckedModeBanner: false,
-              // initialRoute: RoutesName.flash,
-              // onGenerateRoute: Routes.generateRoute,
-              home: const StudentNavbar(
-                index: 0,
-              ),
+              initialRoute: RoutesName.flash,
+              onGenerateRoute: Routes.generateRoute,
             ),
           );
         },

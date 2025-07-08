@@ -1,9 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
-
 import '../../data/api_response.dart';
 import '../../data/network/AuthNetworkService.dart';
 import '../../data/network/BaseApiService.dart';
@@ -12,54 +9,33 @@ import '../../endpoints/auth_endpoints.dart';
 import '../../model/user_model.dart';
 import '../../utils/utils.dart';
 
-
 class AuthRepository {
   final BaseApiServices _apiServices2 = NetworkApiService();
-  var logger=Logger();
+  var logger = Logger();
   final AuthNetworkApiService _apiServices = AuthNetworkApiService();
 
-  Future<dynamic> login(dynamic data, BuildContext context) async {
+  Future<dynamic> login(dynamic data, {BuildContext? context}) async {
     try {
       logger.d(AuthEndPoints.authUrl);
-      dynamic response =
-      await _apiServices.getPostResponse(AuthEndPoints.authUrl, data);
-
-      if (response is Map<String, dynamic> && response.containsKey("err")) {
-        Utils.flushBarErrorMessage(response["err"], context);
-        return false;
-      }
-
+      dynamic response = await _apiServices.getPostResponse(AuthEndPoints.authUrl, data, context: context);
       return ApiResponse.completed(UserModel.fromJson(response));
     } on TimeoutException {
-      Utils.flushBarErrorMessage(
-          "No internet connection. Please try again later.", context);
-      return ApiResponse.error(
-          "No internet connection. Please try again later.");
+      Utils.noInternet("No internet connection. Please try again later.");
+      return ApiResponse.error("No internet connection. Please try again later.");
     } catch (e) {
-      Utils.flushBarErrorMessage(e.toString(), context);
-      return ApiResponse.error(e.toString());
+      return ApiResponse.error(" ${e.toString()}");
     }
   }
-
-
-
-  Future<dynamic> logout(BuildContext context) async {
+  Future<dynamic> logout() async {
     try {
       final response =
       await _apiServices2.getDeleteApiResponse(AuthEndPoints.logoutUrl);
-      if (response != null) {
-        return ApiResponse.completed(response);
-      } else {
-        return ApiResponse.error(response['errorMessage'] ?? "Unknown error");
-      }
+      return ApiResponse.completed(UserModel.fromJson(response));
     } on TimeoutException {
-      Utils.flushBarErrorMessage(
-          "No internet connection. Please try again later.", context);
-      ApiResponse.error("No internet connection. Please try again later.");
-      rethrow;
+      Utils.noInternet("No internet connection. Please try again later.");
+      return ApiResponse.error("No internet connection. Please try again later.");
     } catch (e) {
-      ApiResponse.error(e.toString());
-      rethrow;
+      return ApiResponse.error(e.toString());
     }
   }
 }

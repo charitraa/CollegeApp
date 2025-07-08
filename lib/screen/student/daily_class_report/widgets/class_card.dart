@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'dcr_card_image.dart';
 
 class ClassCard extends StatelessWidget {
-  final String image, text, code;
+  final String text, code,faculty,session,section,semester;
   const ClassCard({
     super.key,
-    required this.image,
     required this.text,
-    required this.code,
+    required this.code, required this.faculty, required this.session, required this.section, required this.semester,
   });
 
   @override
@@ -25,11 +25,7 @@ class ClassCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(
-            width: size.width,
-            height: 140,
-            child: Image.asset(image, fit: BoxFit.cover),
-          ),
+           DcrCardImage(session: session, semester: semester, section: section,),
           const SizedBox(height: 6),
           Container(
             width: size.width,
@@ -50,12 +46,24 @@ class ClassCard extends StatelessWidget {
                         softWrap: true,
                       ),
                       const SizedBox(height: 6),
-                      Text(
-                        "Class Code : $code",
-                        style: const TextStyle(
-                          fontSize: 12,
-                        ),
-                        softWrap: true,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Class Code : $code",
+                            style: const TextStyle(
+                              fontSize: 12,
+                            ),
+                            softWrap: true,
+                          ),
+                          Text(
+                           faculty,
+                            style: const TextStyle(
+                              fontSize: 12,
+                            ),
+                            softWrap: true,
+                          ),
+                        ],
                       ),
                     ],
                   ),

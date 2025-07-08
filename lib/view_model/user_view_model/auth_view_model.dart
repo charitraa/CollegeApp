@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:lbef/model/user_model.dart';
 import 'package:lbef/view_model/user_view_model/user_view_model.dart';
 import 'package:logger/logger.dart';
-
 import '../../data/api_response.dart';
 import '../../data/status.dart';
 import '../../repository/authentication_repo/auth_repository.dart';
@@ -35,52 +34,39 @@ class AuthViewModel with ChangeNotifier {
   Future<void> login(dynamic body, BuildContext context) async {
     setLoading(true);
     try {
-      final response = await _myrepo.login(body, context);
-
+      final response = await _myrepo.login(body, context: context);
       if (response.status == Status.ERROR) {
-        Utils.flushBarErrorMessage(
-          response.message ?? "An error occurred",
-          context,
-        );
-        setLoading(false);
+        setUser(ApiResponse.error(response.message ?? "Unexpected error"));
+        Utils.flushBarErrorMessage(response.message ?? "Unexpected error", context);
         return;
       }
-      Utils.flushBarSuccessMessage("User Logged in successfully!", context);
-      final String userRole = response.data.user.parentTable ?? "Unknown";
-      _role = userRole;
       setUser(ApiResponse.completed(response.data));
-      setLoading(false);
-      switch (userRole) {
-        case 'employee':
-          Navigator.pushReplacementNamed(context, RoutesName.student);
-          break;
-        case 'admin':
-        case 'student':
-          Navigator.pushReplacementNamed(context, RoutesName.student);
-          break;
-        default:
-          Utils.flushBarErrorMessage("Unknown role", context);
-      }
+      Utils.flushBarSuccessMessage(
+          response.message ?? "User Logged in successfully!", context);
+      Navigator.pushReplacementNamed(context, RoutesName.student);
     } catch (error) {
-      logger.e("Login Error", error: error);
+      setUser(ApiResponse.error(error.toString()));
       Utils.flushBarErrorMessage(error.toString(), context);
+    } finally {
       setLoading(false);
     }
   }
   Future<void> logout(BuildContext context) async {
     setLoading(true);
     try {
-      final response = await _myrepo.logout(context);
+      final response = await _myrepo.logout();
       if (response.status == Status.COMPLETED) {
-        Utils.flushBarSuccessMessage("User Logged out Successfully!", context);
+        Utils.flushBarSuccessMessage(
+            response.message ?? "User Logged out Successfully!", context);
         await UserViewModel().remove();
         Navigator.pushReplacementNamed(context, RoutesName.login);
       } else {
         Utils.flushBarErrorMessage(
             response.message ?? "An error occurred", context);
       }
-    } catch (e) {
-      Utils.flushBarErrorMessage("Error: $e", context);
+    } catch (error) {
+      logger.e("Logout Error", error: error);
+      Utils.flushBarErrorMessage(error.toString(), context);
     } finally {
       setLoading(false);
     }

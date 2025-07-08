@@ -7,7 +7,9 @@ import 'package:lbef/screen/student/daily_class_report/daily_class_report.dart';
 import 'package:lbef/screen/student/dashboard/dashboard.dart';
 import 'package:lbef/screen/student/profile/profile.dart';
 import 'package:lbef/screen/student/student_fees/student_fees.dart';
+import 'package:provider/provider.dart';
 
+import '../../view_model/user_view_model/current_user_model.dart';
 import '../student/application/application.dart';
 
 class StudentNavbar extends StatefulWidget {
@@ -25,6 +27,7 @@ class _StudentNavbarState extends State<StudentNavbar> {
   @override
   void initState() {
     super.initState();
+    fetch();
     _selectedIndex = widget.index ?? 0;
     _pageController = PageController(initialPage: _selectedIndex);
   }
@@ -34,7 +37,10 @@ class _StudentNavbarState extends State<StudentNavbar> {
     _pageController.dispose();
     super.dispose();
   }
-
+  void fetch() async {
+    await Provider.of<UserDataViewModel>(context, listen: false)
+        .getUser(context);
+  }
   final List<Widget> _pages = const [
     Dashboard(),
     DailyClassReport(),

@@ -3,8 +3,8 @@ import 'package:lbef/resource/colors.dart';
 
 class ApplicationWidget extends StatelessWidget {
   final Color iconColor, textColor,btnColor;
-  final String status, title, subBody;
-  const ApplicationWidget({super.key, required this.iconColor, required this.textColor, required this.btnColor, required this.status, required this.title, required this.subBody});
+  final String status, title, subBody,endDate,appdate;
+  const ApplicationWidget({super.key, required this.iconColor, required this.textColor, required this.btnColor, required this.status, required this.title, required this.subBody, required this.endDate, required this.appdate});
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +14,8 @@ class ApplicationWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Wednesday, December 7th"),
-          const SizedBox(height: 8),
+           Text(appdate),
+          const SizedBox(height: 4,),
           Container(
             padding: const EdgeInsets.all(8),
             width: size.width,
@@ -39,14 +39,29 @@ class ApplicationWidget extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 10),
                       Text(
-                        subBody,
-                        style: TextStyle(fontSize: 12),
+                        "Start Date :$subBody",
+                        style: const TextStyle(fontSize: 12),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        "End Date : $endDate",
+                        style: const TextStyle(fontSize: 12),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 5),
+
+                      Text(
+                        "Click to view application",
+                        style: TextStyle(fontSize: 11,color:AppColors.primary,fontStyle: FontStyle.italic),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -65,7 +80,7 @@ class ApplicationWidget extends StatelessWidget {
                     status,
                     style: TextStyle(
                       color: textColor,
-                      fontSize: 10,
+                      fontSize: 14,
                     ),
                   ),
                 )

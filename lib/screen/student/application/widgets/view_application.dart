@@ -1,24 +1,100 @@
 import 'package:flutter/material.dart';
+import 'package:lbef/model/application_model.dart';
 import 'package:lbef/screen/student/application/edit_application.dart';
+import 'package:lbef/widgets/form_widget/btn/outlned_btn.dart';
 import 'package:lbef/widgets/form_widget/custom_button.dart';
+import 'package:lbef/widgets/form_widget/custom_outlined.dart';
+import 'package:provider/provider.dart';
 import '../../../../resource/colors.dart';
 import '../../../../utils/navigate_to.dart';
+import '../../../../utils/utils.dart';
+import '../../../../view_model/application_files/application_view_model.dart';
 
-class ViewApplicationPage extends StatelessWidget {
-  final Map<String, String> applicationData;
+class ViewApplicationPage extends StatefulWidget {
+  final ApplicationModel applicationData;
 
   const ViewApplicationPage({super.key, required this.applicationData});
 
   @override
+  State<ViewApplicationPage> createState() => _ViewApplicationPageState();
+}
+
+class _ViewApplicationPageState extends State<ViewApplicationPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      fetch();
+    });
+  }
+
+  void fetch() async {
+    final id = widget.applicationData.applicationId?.toString();
+    if (id == null || id.isEmpty) {
+      if (context.mounted) {
+        Utils.flushBarErrorMessage("Invalid application ID", context);
+      }
+      return;
+    }
+    await Provider.of<ApplicationViewModel>(context, listen: false)
+        .getApplicationDetails(id, context);
+  }
+
+  Future<bool?> showDeleteConfirmationDialog(BuildContext context) async {
+    final deviceWidth = MediaQuery.of(context).size.width;
+    final deviceHeight = MediaQuery.of(context).size.height;
+
+    return showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: const Row(
+          children: [
+            Icon(Icons.delete, color: Colors.redAccent),
+            SizedBox(width: 10),
+            Text('Delete Application'),
+          ],
+        ),
+        content: const Text(
+          'Are you sure you want to delete this application?',
+          style: TextStyle(fontSize: 16),
+        ),
+        actionsPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        actions: [
+          CustomOutlineButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            labelText: 'Cancel',
+            width: deviceWidth * 0.2,
+            height: deviceHeight * 0.05,
+            buttonColor: Colors.red,
+            textColor: Colors.red,
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final attachment = applicationData['attachment'] ?? '';
-    final title = applicationData['title'] ?? 'Application';
-    final subject = applicationData['subject'] ?? 'No Subject';
-    final email = applicationData['email'] ?? 'No Email';
-    final department = applicationData['department'] ?? 'No Department';
-    final status = applicationData['status'] ?? 'Unknown';
-    final description =
-        applicationData['description'] ?? 'No description provided.';
+    final title = widget.applicationData.applicationType ?? '';
+    final status = widget.applicationData.applicationStatus ?? '';
+    final startDate = widget.applicationData.appStartDate ?? '';
+    final endDate = widget.applicationData.appEndDate ?? '';
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
@@ -56,84 +132,138 @@ class ViewApplicationPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            Text(
-              "Subject : $subject",
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.black87,
-              ),
-            ),
-            const SizedBox(height: 20),
-            _buildDetailRow(Icons.email, "Email", email),
-            _buildDetailRow(Icons.apartment, "Department", department),
+            _buildDetailRow(Icons.date_range, "Start Date", startDate,
+                valueColor: Colors.black),
+            _buildDetailRow(Icons.date_range_sharp, "End Date", endDate,
+                valueColor: Colors.black),
             _buildDetailRow(Icons.label, "Status", status,
                 valueColor: _getStatusColor(status)),
             const Divider(height: 32),
             const Text(
-              "Description",
+              "Application Request",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 8),
-            Text(
-              description,
-              style: const TextStyle(fontSize: 15, height: 1.5),
-            ),
-            const SizedBox(height: 28),
-            if (attachment.isNotEmpty) ...[
-              const Text(
-                "Attachment",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                width: double.infinity,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.shade300),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.insert_drive_file, color: Colors.grey),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        attachment,
-                        style: const TextStyle(fontSize: 14),
-                        overflow: TextOverflow.ellipsis,
+            Consumer<ApplicationViewModel>(
+              builder: (context, provider, child) {
+                if (provider.isLoading) {
+                  // Show shimmer loading while data is loading
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 60,
+                        width: double.infinity,
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width / 2.5,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade300,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Container(
+                            width: MediaQuery.of(context).size.width / 2.5,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade300,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  );
+                }
+
+                return Column(
+                  children: [
+                    Text(
+                      provider.currentDetails?.applicationRequest ?? '',
+                      style: const TextStyle(fontSize: 15, height: 1.5),
                     ),
-                    const Icon(Icons.download_rounded, color: Colors.blue),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomButton(
+                          text: 'Edit',
+                          isLoading: false,
+                          btnwid: size.width / 2.5,
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              SlideRightRoute(
+                                page: EditApplication(
+                                  id: provider.currentDetails?.applicationId.toString() ?? '',
+                                  applicationType: provider.currentDetails?.applicationType ?? '',
+                                  startDate: provider.currentDetails?.appStartDate ?? '',
+                                  endDate: provider.currentDetails?.appEndDate ?? '',
+                                  reason: provider.currentDetails?.applicationRequest ?? '',
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(width: 4),
+                        CustomButton(
+                          text: 'Delete',
+                          isLoading: false,
+                          btnwid: size.width / 2.5,
+                          buttonColor: Colors.red,
+                          onPressed: () async {
+                            final confirmDelete = await showDeleteConfirmationDialog(context);
+                            if (confirmDelete != true || !context.mounted) return;
+
+                            final id = provider.currentDetails?.applicationId?.toString();
+                            if (id == null || id.isEmpty) {
+                              if (context.mounted) {
+                                Utils.flushBarErrorMessage("Invalid application ID", context);
+                              }
+                              return;
+                            }
+
+                            try {
+                              // final success = await Provider.of<ApplicationViewModel>(context, listen: false)
+                              //     .deleteApplication(id, context);\
+                              bool success=true;
+                              if (success && context.mounted) {
+                                await Provider.of<ApplicationViewModel>(context, listen: false).fetch(context);
+                                Utils.flushBarSuccessMessage("Application deleted successfully!", context);
+                                Navigator.pop(context);
+                              } else if (context.mounted) {
+                                Utils.flushBarErrorMessage("Failed to delete application", context);
+                              }
+                            } catch (e) {
+                              if (context.mounted) {
+                                Utils.flushBarErrorMessage("Error: $e", context);
+                              }
+                            }
+                          },
+                        ),
+                      ],
+                    ),
                   ],
-                ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              CustomButton(
-                  text: 'Edit Application',
-                  isLoading: false,
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      SlideRightRoute(
-                          page: EditApplication(
-                              subject: subject,
-                              department: department,
-                              description: description,
-                          )),
-                    );
-                  })
-            ],
+                );
+              },
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDetailRow(IconData icon, String label, String value,
-      {Color? valueColor}) {
+  Widget _buildDetailRow(IconData icon, String label, String value, {Color? valueColor}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(
@@ -167,7 +297,7 @@ class ViewApplicationPage extends StatelessWidget {
     switch (status.toLowerCase()) {
       case 'approved':
         return Colors.blue;
-      case 'pending':
+      case 'new':
         return Colors.orange;
       case 'rejected':
         return Colors.red;

@@ -51,8 +51,9 @@ class _DashboardState extends State<Dashboard> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+
             const DashboardHead(
-              userName: 'Charitra Shrestha',
+
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),

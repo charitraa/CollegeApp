@@ -1,11 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lbef/data/status.dart';
 import 'package:lbef/resource/colors.dart';
 import 'package:lbef/screen/student/application/file_application.dart';
+import 'package:lbef/screen/student/application/widgets/application_shimmer.dart';
 import 'package:lbef/screen/student/application/widgets/view_application.dart';
 import 'package:lbef/screen/student/daily_class_report/shimmer/class_card_shimmer.dart';
 import 'package:lbef/screen/student/application/widgets/application_widget.dart';
+import 'package:lbef/utils/parse_date.dart';
 import 'package:lbef/view_model/application_files/application_view_model.dart';
+import 'package:lbef/widgets/no_data/no_data_widget.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
@@ -20,121 +24,17 @@ class Application extends StatefulWidget {
 }
 
 class _ApplicationState extends State<Application> {
-  late ScrollController _scrollController;
-  var logger=Logger();
-  bool isLoad = false;
-
-
-  void _scrollListener() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent &&
-        !isLoad) {
-      loadMore();
-    }
-  }
+  var logger = Logger();
 
   void fetch() async {
     await Provider.of<ApplicationViewModel>(context, listen: false)
         .fetch(context);
   }
 
-  Future<void> loadMore() async {
-    if (isLoad) return;
-    setState(() => isLoad = true);
-    try {
-      await Provider.of<ApplicationViewModel>(context, listen: false)
-          .loadMore(context);
-    } catch (e) {
-      if (kDebugMode) logger.d("Error loading more: $e");
-    } finally {
-      setState(() => isLoad = false);
-    }
-  }
-  bool _isLoading = true;
-  List<Map<String, String>> applications = [];
-
   @override
   void initState() {
-    _scrollController = ScrollController()..addListener(_scrollListener);
     super.initState();
-    // fetch();
-    _loadDummyData();
-  }
-
-  void _loadDummyData() async {
-    applications = [
-      {
-        'title': 'Leave Application',
-        'subBody': 'Request for 3 days of medical leave.',
-        'status': 'Pending',
-        'email': 'john.doe@student.edu',
-        'subject': 'Medical Leave - Fever',
-        'department': 'Academic Department',
-        'description':
-            'I am suffering from a high fever and have been advised bed rest. I would like to apply for leave from 10th to 12th May.',
-        'attachment': 'leave_certificate.pdf',
-      },
-      {
-        'title': 'Exam Retake Request',
-        'subBody': 'Applied to retake the missed exam due to illness.',
-        'status': 'Approved',
-        'email': 'sara.lee@student.edu',
-        'subject': 'Missed Midterm - Request Retake',
-        'department': 'Examination Cell',
-        'description':
-            'Due to severe flu, I missed my midterm on Data Structures. Kindly approve my request for a retake next week.',
-        'attachment': 'medical_report.jpg',
-      },
-      {
-        'title': 'Fee Concession',
-        'subBody': 'Seeking concession due to financial difficulty.',
-        'status': 'Rejected',
-        'email': 'mohit.kumar@student.edu',
-        'subject': 'Fee Waiver Request',
-        'department': 'Finance Department',
-        'description':
-            'I am facing financial hardship at home. I humbly request a 30% concession on this semester\'s fees.',
-        'attachment': 'income_certificate.pdf',
-      },
-      {
-        'title': 'Hostel Transfer',
-        'subBody': 'Request to transfer to North Block due to better internet.',
-        'status': 'Pending',
-        'email': 'anish.thapa@student.edu',
-        'subject': 'Hostel Change Request',
-        'department': 'Student Affairs',
-        'description':
-            'I am currently staying in South Block, but due to poor internet, I’m requesting a transfer to North Block.',
-        'attachment': 'speed_test_results.png',
-      },
-      {
-        'title': 'ID Card Reissue',
-        'subBody': 'Lost ID card, requesting reissue.',
-        'status': 'Approved',
-        'email': 'rina.sharma@student.edu',
-        'subject': 'Lost ID Card - Reissue Request',
-        'department': 'Admin Office',
-        'description':
-            'I lost my student ID card while commuting. Please issue a new one at the earliest.',
-        'attachment': 'fir_report.pdf',
-      },
-    ];
-
-    setState(() {
-      _isLoading = false;
-    });
-  }
-
-  Color _getIconColor(String status) {
-    switch (status) {
-      case 'Approved':
-        return Colors.blue;
-      case 'Rejected':
-        return Colors.red;
-      case 'Pending':
-      default:
-        return Colors.green;
-    }
+    fetch();
   }
 
   @override
@@ -174,9 +74,7 @@ class _ApplicationState extends State<Application> {
                   ),
                   SizedBox(width: 5),
                   InkWell(
-                    onTap: () {
-
-                    },
+                    onTap: () {},
                     child: Icon(
                       Icons.add_box_outlined,
                       color: Colors.white,
@@ -191,27 +89,51 @@ class _ApplicationState extends State<Application> {
         ],
       ),
       body: Container(
-        width: size.width,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-        child: _isLoading
-            ? ListView.builder(
-                itemCount: 3,
-                itemBuilder: (context, index) => const Padding(
-                  padding: EdgeInsets.only(bottom: 14),
-                  child: ClassCardShimmer(),
-                ),
-              )
-            : ListView.separated(
+          width: size.width,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          child: Consumer<ApplicationViewModel>(
+            builder: (context, viewModel, child) {
+              if (viewModel.isLoading) {
+                return ListView.builder(
+                  itemCount: 3,
+                  itemBuilder: (context, index) => const Padding(
+                    padding: EdgeInsets.only(bottom: 14),
+                    child: ApplicationShimmer(),
+                  ),
+                );
+              }
+              if (viewModel.applications!.isEmpty) {
+                return BuildNoData(
+                    size, 'No data available', Icons.disabled_visible_rounded);
+              }
+
+              return ListView.separated(
                 physics: const BouncingScrollPhysics(),
-                itemCount: applications.length,
+                itemCount: viewModel.applications!.length,
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 14),
                 itemBuilder: (context, index) {
-                  final application = applications[index];
-                  final iconColor = _getIconColor(application['status']!);
+                  final application = viewModel.applications![index];
+                  Color getIconColor(String status) {
+                    switch (status) {
+                      case 'approved':
+                        return Colors.blue;
+                      case 'rejected':
+                        return Colors.red;
+                      case 'new':
+                      default:
+                        return Colors.green;
+                    }
+                  }
 
+                  final startDate = application.appStartDate != null
+                      ? parseDate(application.appStartDate.toString())
+                      : "";
+                  final endDate = application.appEndDate != null
+                      ? parseDate(application.appEndDate.toString())
+                      : "";
                   return InkWell(
-                    onTap: () {
+                    onTap: (){
                       Navigator.of(context).push(
                         SlideRightRoute(
                           page: ViewApplicationPage(
@@ -221,17 +143,22 @@ class _ApplicationState extends State<Application> {
                       );
                     },
                     child: ApplicationWidget(
-                      iconColor: iconColor,
+                      iconColor:
+                          getIconColor(application.applicationStatus ?? ''),
                       textColor: Colors.white,
-                      btnColor: iconColor,
-                      status: application['status']!,
-                      title: application['title']!,
-                      subBody: application['subBody']!,
+                      btnColor: getIconColor(application.applicationStatus ?? ''),
+                      status: application.applicationStatus ?? '',
+                      title: application.applicationType ?? '',
+                      subBody: startDate,
+                      endDate: endDate, appdate:  application.applicationDate != null
+                        ? parseDate(application.applicationDate.toString())
+                        : "",
                     ),
                   );
                 },
-              ),
-      ),
+              );
+            },
+          )),
     );
   }
 }

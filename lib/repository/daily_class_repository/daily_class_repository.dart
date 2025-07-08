@@ -1,28 +1,29 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:lbef/data/network/NetworkApiService.dart';
 import 'package:lbef/endpoints/class_report_endpoints.dart';
-import 'package:lbef/endpoints/notice_board_endpoints.dart';
-import 'package:lbef/model/user_model.dart';
+import 'package:lbef/model/dcr_detail_model.dart';
+import 'package:lbef/model/dcr_model.dart';
 import 'package:logger/logger.dart';
 import '../../utils/utils.dart';
 
 class DailyClassRepository {
   final NetworkApiService _apiServices = NetworkApiService();
   var logger = Logger();
+
   Future<Map<String, dynamic>> fetchDailyClassReport(
-      int page, int limit, BuildContext context) async {
+      BuildContext context) async {
     if (kDebugMode) {
-      logger.d("${ClassReportEndpoints.getReports}?page=$page&size=$limit");
+      logger.d(ClassReportEndpoints.getDcr);
     }
     try {
-      dynamic response = await _apiServices.getApiResponse(
-          "${ClassReportEndpoints.getReports}?page=$page&pp=$limit");
+      dynamic response =
+          await _apiServices.getApiResponse(ClassReportEndpoints.getDcr);
       if (response is List) {
-        //todo change the model over herr
-        List<UserModel> classReport =
-            response.map((e) => UserModel.fromJson(e)).toList();
+        List<DCRModel> classReport =
+            response.map((e) => DCRModel.fromJson(e)).toList();
         logger.d("daily class report List $classReport");
         return {"classReport": classReport};
       } else {
@@ -37,30 +38,31 @@ class DailyClassRepository {
     }
   }
 
-  Future<Map<String, dynamic>> reportDetails(
-      String id, int page, int limit, BuildContext context) async {
-    if (kDebugMode) {
-      logger.d(
-          "${ClassReportEndpoints.getReports}?userId=$id&page=$page&size=$limit");
-    }
+
+  Future<DCRDetailModel> reportDetails(
+      String subjectId, String facultyId, BuildContext context) async {
+
     try {
-      dynamic response = await _apiServices.getApiResponse(
-          "${ClassReportEndpoints.getReports}?page=$page&pp=$limit");
-      if (response is List) {
-        //todo change the model over herr
-        List<UserModel> dcr =
-            response.map((e) => UserModel.fromJson(e)).toList();
-        logger.d("class detail List $dcr");
-        return {"dcr": dcr};
-      } else {
-        throw Exception("Unexpected response format: $response");
+      final params = {"p1": subjectId, "p2": facultyId};
+      final encodedParams = base64Encode(utf8.encode(jsonEncode(params)));
+      final endpoint = "${ClassReportEndpoints.getDcr}/$encodedParams";
+      if (kDebugMode) {
+        logger.d(endpoint);
       }
+      dynamic response = await _apiServices.getApiResponse(endpoint);
+        DCRDetailModel reportDetails = DCRDetailModel.fromJson(response);
+        logger.d("Report details: $reportDetails");
+        return  reportDetails;
+
     } on TimeoutException {
-      return Utils.noInternet(
-          "No internet connection. Please try again later.");
+      Utils.noInternet("No internet connection. Please try again later.");
+      throw Exception("No internet connection");
+
     } catch (error) {
       logger.w(error);
-      return Utils.flushBarErrorMessage("$error", context);
+      Utils.flushBarErrorMessage("$error", context);
+      throw Exception("Error : $error ");
+
     }
   }
 }

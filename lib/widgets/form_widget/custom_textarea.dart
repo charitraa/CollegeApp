@@ -54,6 +54,7 @@ class _CustomTextAreaState extends State<CustomTextArea> {
             maxLines: widget.maxLines,
             style: const TextStyle(fontFamily: 'Poppins', fontSize: 15),
             decoration: InputDecoration(
+              filled: true,
               helperText: widget.helperText,
               hintText: widget.hintText,
               hintStyle: const TextStyle(

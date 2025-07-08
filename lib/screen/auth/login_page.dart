@@ -18,7 +18,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _studentIdController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   bool isLoading = false;
@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _studentIdController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                               fontSize: 18,
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          SizedBox(height: 10),
                           Text(
                             "Hi there! Nice to see you again.",
                             style: TextStyle(
@@ -101,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomLabelTextfield(
-                              textController: _emailController,
+                              textController: _studentIdController,
                               hintText: "Student Id",
                               outlinedColor: Colors.grey,
                               focusedColor: AppColors.primary,
@@ -154,12 +154,12 @@ class _LoginPageState extends State<LoginPage> {
                                   setState(() {
                                     isLoading = true;
                                   });
-                                  if (_emailController.text.isEmpty) {
+                                  if (_studentIdController.text.isEmpty) {
                                     setState(() {
                                       isLoading = false;
                                     });
                                     return Utils.flushBarErrorMessage(
-                                        "Email Address is required.", context);
+                                        "Student Id is required.", context);
                                   }
                                   if (_passwordController.text.isEmpty) {
                                     setState(() {
@@ -172,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
                                   await Provider.of<AuthViewModel>(context,
                                       listen: false)
                                       .login({
-                                    "email": _emailController.text,
+                                    "username": _studentIdController.text,
                                     "password": _passwordController.text
                                   }, context);
                                   setState(() {

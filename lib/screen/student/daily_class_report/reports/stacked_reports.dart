@@ -12,6 +12,7 @@ class StackedReports extends StatefulWidget {
       assignment,
       activity,
       task,
+  teacher,
       attendenceScore,
       attendence;
   const StackedReports(
@@ -27,7 +28,7 @@ class StackedReports extends StatefulWidget {
       required this.activity,
       required this.task,
       required this.attendenceScore,
-      required this.attendence});
+      required this.attendence, required this.teacher});
 
   @override
   State<StackedReports> createState() => _StackedReportsState();
@@ -75,12 +76,20 @@ class _StackedReportsState extends State<StackedReports> {
             head: widget.taught,
             value: widget.taughtInClass,
             icon: Icons.chrome_reader_mode_outlined),
+        if(widget.assignmentInClass!='')...[
+          ReportDetail(
+              head: widget.assignment,
+              value: widget.assignmentInClass,
+              icon: Icons.assignment),
+        ],
+        if(widget.task!='')...[
+          ReportDetail(
+              head: widget.activity, value: widget.task, icon: Icons.read_more),
+        ],
         ReportDetail(
-            head: widget.assignment,
-            value: widget.assignmentInClass,
-            icon: Icons.assignment),
-        ReportDetail(
-            head: widget.activity, value: widget.task, icon: Icons.read_more),
+            head: "Taught By",
+            value: widget.teacher,
+            icon: Icons.school),
         ReportDetail(
             head: widget.attendence,
             value: widget.attendenceScore,

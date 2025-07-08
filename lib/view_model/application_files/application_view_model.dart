@@ -1,23 +1,30 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:lbef/model/user_model.dart';
+import 'package:lbef/model/application_model.dart';
 import 'package:lbef/repository/application_repository/application_repository.dart';
+import 'package:logger/logger.dart';
 import '../../data/api_response.dart';
 import '../../utils/utils.dart';
 
 class ApplicationViewModel with ChangeNotifier {
   final ApplicationRepository _myrepo = ApplicationRepository();
-  //todo: Change model name based on that u wanna display
-  final List<UserModel> _applications = [];
-  int _currentPage = 1;
-  int _limit = 10;
-  ApiResponse<UserModel> userData = ApiResponse.loading();
-  UserModel? get currentUser => userData.data;
+  final List<ApplicationModel> _applications = [];
+  List<ApplicationModel>? get applications => _applications;
+  ApiResponse<ApplicationModel> userData = ApiResponse.loading();
+
+  ApiResponse<ApplicationModel> appDetails = ApiResponse.loading();
+  ApplicationModel? get currentDetails => appDetails.data;
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
-  List<UserModel> get applications => _applications;
 
-  int get currentPage => _currentPage;
+  void setDetails(ApiResponse<ApplicationModel> response) {
+    _logger.i('Setting DCR details: ${response.status}');
+    appDetails = response;
+    notifyListeners();
+  }
+
+  final _logger = Logger();
   void setLoading(bool value) {
     _isLoading = value;
     Future.microtask(() => notifyListeners());
@@ -27,40 +34,38 @@ class ApplicationViewModel with ChangeNotifier {
     if (_isLoading) return;
     setLoading(true);
     try {
-      _currentPage = 1;
-      _applications.clear();
       final Map<String, dynamic> response =
-          await _myrepo.fetchApplications(1, _limit, context);
+          await _myrepo.fetchApplications(context);
       _applications.addAll(response['applications']);
-      if (response['applications'] != []) {
-        _currentPage++;
-      }
+
       notifyListeners();
     } catch (error) {
-      Utils.flushBarErrorMessage("Error fetching data: $error", context);
+      userData = ApiResponse.error("Unexpected error: $error");
+
     } finally {
       setLoading(false);
     }
   }
 
-  Future<void> loadMore( BuildContext context) async {
+  Future<bool> createApplication(dynamic data, BuildContext context) async {
     try {
-      final Map<String, dynamic> response =
-          await _myrepo.fetchApplications(_currentPage, _limit, context);
-      if (response['applications'] != []) {
-        _applications.addAll(response['applications']);
-        _currentPage++;
+      _logger.d(data);
+      final response = await _myrepo.createApplication(data, context);
+      if (response != null) {
+        notifyListeners();
+        return true;
+      } else {
+        return false;
       }
-      notifyListeners();
     } catch (error) {
-      Utils.flushBarErrorMessage("Error fetching data: $error", context);
+      return false;
     }
   }
 
-  Future<bool> createApplication(
-      dynamic data, File file, BuildContext context) async {
+  Future<bool> updateApplication(
+      dynamic data, BuildContext context) async {
     try {
-      final response = await _myrepo.createApplication(data, file, context);
+      final response = await _myrepo.updateApplication(data, context);
       if (response != null) {
         notifyListeners();
         return true;
@@ -68,23 +73,33 @@ class ApplicationViewModel with ChangeNotifier {
         return false;
       }
     } catch (error) {
-      Utils.flushBarErrorMessage("Error fetching data: $error", context);
       return false;
     }
   }
-  Future<bool> updateApplication(
-      dynamic data, File file, BuildContext context) async {
+
+  Future<void> getApplicationDetails(
+      String applicationId, BuildContext context) async {
+    if (_isLoading) {
+      _logger.w('Fetch already in progress. Ignoring duplicate call.');
+      return;
+    }
+    setLoading(true);
     try {
-      final response = await _myrepo.updateApplication(data, file, context);
-      if (response != null) {
-        notifyListeners();
-        return true;
+      final ApplicationModel dcr =
+          await _myrepo.applicationDetails(applicationId, context);
+      if (dcr != null) {
+        _logger.i('DCR details fetched successfully');
+        setDetails(ApiResponse.completed(dcr));
       } else {
-        return false;
+        _logger.w('No DCR data available');
+        setDetails(ApiResponse.error('No data available'));
       }
-    } catch (error) {
-      Utils.flushBarErrorMessage("Error fetching data: $error", context);
-      return false;
+    } catch (error, stackTrace) {
+      _logger.e('Error fetching DCR details',
+          error: error, stackTrace: stackTrace);
+      setDetails(ApiResponse.error('Error fetching data: $error'));
+    } finally {
+      setLoading(false);
     }
   }
 }

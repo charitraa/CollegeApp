@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lbef/screen/auth/login_page.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,32 +33,34 @@ class _FlashScreenState extends State<FlashScreen> {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     final prefs = await SharedPreferences.getInstance();
     final bool hasSeenIntro = prefs.getBool('isIntro') ?? false;
-    final String? session = sp.getString('session');
+    final String? session = sp.getString('token');
     if (!hasSeenIntro) {
       await prefs.setBool('hasSeenIntro', false);
     }
-    if(hasSeenIntro==false){
-      Navigator.of(context).push(
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-          const LoginPage(),
-          transitionsBuilder:
-              (context, animation, secondaryAnimation, child) {
-            const begin = Offset(1.0, 0.0);
-            const end = Offset.zero;
-            const curve = Curves.easeInOut;
-            var tween =
-            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-            var offsetAnimation = animation.drive(tween);
-            return SlideTransition(
-              position: offsetAnimation,
-              child: child,
-            );
-          },
-        ),
-      );
-      return;
-    }
+    var logger= Logger();
+    logger.d(session);
+    // if(hasSeenIntro==false){
+    //   Navigator.of(context).push(
+    //     PageRouteBuilder(
+    //       pageBuilder: (context, animation, secondaryAnimation) =>
+    //       const LoginPage(),
+    //       transitionsBuilder:
+    //           (context, animation, secondaryAnimation, child) {
+    //         const begin = Offset(1.0, 0.0);
+    //         const end = Offset.zero;
+    //         const curve = Curves.easeInOut;
+    //         var tween =
+    //         Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+    //         var offsetAnimation = animation.drive(tween);
+    //         return SlideTransition(
+    //           position: offsetAnimation,
+    //           child: child,
+    //         );
+    //       },
+    //     ),
+    //   );
+    //   return;
+    // }
     if (session != null) {
       final userDataViewModel =
       Provider.of<UserDataViewModel>(context, listen: false);
@@ -65,24 +68,16 @@ class _FlashScreenState extends State<FlashScreen> {
       final user = userDataViewModel.currentUser;
 
       if (userDataViewModel.userData.status == Status.ERROR || user == null) {
-        _navigateTo(RoutesName.intro);
+        _navigateTo(RoutesName.login);
       } else {
-        _navigateBasedOnRole(user.user!.parentTable);
+        _navigateTo(RoutesName.student);
       }
-    } else {
-      _navigateTo(RoutesName.intro);
-    }
-  }
-
-  void _navigateBasedOnRole(String? role) {
-    if (role == 'SuperAdmin' || role == 'Admin'|| role == 'employee') {
-      _navigateTo(RoutesName.student);
-    } else if (role == 'student') {
-      _navigateTo(RoutesName.student);
     } else {
       _navigateTo(RoutesName.login);
     }
   }
+
+
 
   void _navigateTo(String route) {
     Future.microtask(() {
