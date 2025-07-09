@@ -77,9 +77,9 @@ class _ReportsState extends State<Reports> {
         actions: const [
           Image(
             image: AssetImage('assets/images/lbef.png'),
-            width: 56,
+            width: 70,
             height: 50,
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
           ),
           SizedBox(width: 14),
         ],
@@ -93,9 +93,9 @@ class _ReportsState extends State<Reports> {
             IndividualCardHead(
               image: widget.image,
               tutor: widget.facultyName,
-              subject: widget.subject,
+              subject:"${widget.code} - ${widget.subject}" ,
               code: widget.code,
-              session: widget.session,
+              session: widget.session, section: 'section - ${widget.section}',
             ),
             const SizedBox(height: 10),
             Text(
@@ -106,11 +106,7 @@ class _ReportsState extends State<Reports> {
                 color: AppColors.primary,
               ),
             ),
-            const SizedBox(height: 10),
-            Text(
-              'Section - ${widget.section}',
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-            ),
+
             const SizedBox(height: 10),
             Expanded(
               child: Consumer<DcrDetailViewModel>(

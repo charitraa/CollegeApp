@@ -11,7 +11,7 @@ class DcrCardImage extends StatelessWidget {
       children: [
         SizedBox(
           width: size.width,
-          height: 120,
+          height: 140,
           child: ClipRRect(
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(8),

@@ -168,7 +168,7 @@ class _DashboardHeadState extends State<DashboardHead> {
                       bottom: 90,
                       left: 20,
                       child: Text(
-                        'Hi,\n $name!!',
+                        'Hi,\n $name !!',
                         style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -192,11 +192,11 @@ class _DashboardHeadState extends State<DashboardHead> {
                       bottom: 90,
                       left: 24,
                       child: Text(
-                        'Hi, $name!!',
-                        style: TextStyle(
+                        'Hi, $name !!',
+                        style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: 24),
+                            fontSize: 26),
                       ),
                     );
                   }
@@ -243,10 +243,10 @@ class _DashboardHeadState extends State<DashboardHead> {
                     bottom: 90,
                     right: 24,
                     child: SizedBox(
-                      height: 60,
+                      height: 70,
                       child: Image.network(
                         image,
-                        width: 60,
+                        width: 70,
                         fit: BoxFit.cover,
                         loadingBuilder: (context, child, loadingProgress) {
                           if (loadingProgress == null) return child;
@@ -260,8 +260,8 @@ class _DashboardHeadState extends State<DashboardHead> {
                           );
                         },
                         errorBuilder: (context, error, stackTrace) => Container(
-                          width: 60,
-                          height: 60,
+                          width: 70,
+                          height: 70,
                           color: Colors.white,
                           child: Center(
                             child: Icon(

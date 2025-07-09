@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class IndividualCardHead extends StatelessWidget {
-  final String session,image, tutor, subject,code;
-  const IndividualCardHead({super.key, required this.image, required this.tutor, required this.subject, required this.code, required this.session});
+  final String session,image,section, tutor, subject,code;
+  const IndividualCardHead({super.key, required this.image, required this.tutor, required this.subject, required this.code, required this.session, required this.section});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class IndividualCardHead extends StatelessWidget {
       children: [
         Container(
           width: size.width,
-          height: 120,
+          height: 140,
           decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(
@@ -21,14 +21,14 @@ class IndividualCardHead extends StatelessWidget {
             ),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Opacity(
-              opacity: 0.9,
-              child: Image.asset(
-                image,
-                fit: BoxFit.cover,
-              ),
+          child:ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+            child: Image.asset(
+              'assets/images/mountain.jpg',
+              fit: BoxFit.cover,
             ),
           ),
         ),
@@ -69,14 +69,14 @@ class IndividualCardHead extends StatelessWidget {
                     child: Text(
                      "By $tutor",
                       style: const TextStyle(
-                        fontSize: 12,
+                        fontSize: 14,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                   Text(
-                    code,
+                    section,
                     style: const TextStyle(
                       fontSize: 12,
                       color: Colors.white,

@@ -91,10 +91,6 @@ class _ViewApplicationPageState extends State<ViewApplicationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final title = widget.applicationData.applicationType ?? '';
-    final status = widget.applicationData.applicationStatus ?? '';
-    final startDate = widget.applicationData.appStartDate ?? '';
-    final endDate = widget.applicationData.appEndDate ?? '';
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -112,9 +108,9 @@ class _ViewApplicationPageState extends State<ViewApplicationPage> {
         actions: const [
           Image(
             image: AssetImage('assets/images/lbef.png'),
-            width: 56,
+            width: 70,
             height: 50,
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
           ),
           SizedBox(width: 14),
         ],
@@ -198,7 +194,7 @@ class _ViewApplicationPageState extends State<ViewApplicationPage> {
                   provider.currentDetails?.applicationRequest ?? '',
                   style: const TextStyle(fontSize: 15, height: 1.5),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -228,7 +224,7 @@ class _ViewApplicationPageState extends State<ViewApplicationPage> {
                         );
                       },
                     ),
-                    const SizedBox(width: 4),
+                    const SizedBox(width: 10),
                     CustomButton(
                       text: 'Delete',
                       isLoading: false,
