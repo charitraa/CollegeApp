@@ -62,7 +62,8 @@ class _ViewApplicationPageState extends State<ViewApplicationPage> {
           'Are you sure you want to delete this application?',
           style: TextStyle(fontSize: 16),
         ),
-        actionsPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        actionsPadding:
+            const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         actions: [
           CustomOutlineButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -120,150 +121,168 @@ class _ViewApplicationPageState extends State<ViewApplicationPage> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'poppins',
-              ),
-            ),
-            const SizedBox(height: 12),
-            _buildDetailRow(Icons.date_range, "Start Date", startDate,
-                valueColor: Colors.black),
-            _buildDetailRow(Icons.date_range_sharp, "End Date", endDate,
-                valueColor: Colors.black),
-            _buildDetailRow(Icons.label, "Status", status,
-                valueColor: _getStatusColor(status)),
-            const Divider(height: 32),
-            const Text(
-              "Application Request",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 8),
-            Consumer<ApplicationViewModel>(
-              builder: (context, provider, child) {
-                if (provider.isLoading) {
-                  // Show shimmer loading while data is loading
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        child: Consumer<ApplicationViewModel>(
+          builder: (context, provider, child) {
+            if (provider.isLoading) {
+              // Show shimmer loading while data is loading
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 60,
+                    width: double.infinity,
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        height: 60,
-                        width: double.infinity,
-                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        width: MediaQuery.of(context).size.width / 2.5,
+                        height: 40,
                         decoration: BoxDecoration(
                           color: Colors.grey.shade300,
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width / 2.5,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade300,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Container(
-                            width: MediaQuery.of(context).size.width / 2.5,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade300,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ],
-                      )
+                      const SizedBox(width: 4),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2.5,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
                     ],
-                  );
-                }
+                  )
+                ],
+              );
+            }
 
-                return Column(
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  provider.currentDetails?.applicationType ?? '',
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'poppins',
+                  ),
+                ),
+                const SizedBox(height: 12),
+                _buildDetailRow(Icons.date_range, "Start Date",
+                    provider.currentDetails?.appStartDate ?? '',
+                    valueColor: Colors.black),
+                _buildDetailRow(Icons.date_range_sharp, "End Date",
+                    provider.currentDetails?.appEndDate ?? '',
+                    valueColor: Colors.black),
+                _buildDetailRow(Icons.label, "Status",
+                    provider.currentDetails?.applicationStatus ?? '',
+                    valueColor: _getStatusColor(
+                        provider.currentDetails?.applicationStatus ?? '')),
+                const Divider(height: 32),
+                const Text(
+                  "Application Request",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  provider.currentDetails?.applicationRequest ?? '',
+                  style: const TextStyle(fontSize: 15, height: 1.5),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      provider.currentDetails?.applicationRequest ?? '',
-                      style: const TextStyle(fontSize: 15, height: 1.5),
+                    CustomButton(
+                      text: 'Edit',
+                      isLoading: false,
+                      btnwid: size.width / 2.5,
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          SlideRightRoute(
+                            page: EditApplication(
+                              id: provider.currentDetails?.applicationId
+                                      .toString() ??
+                                  '',
+                              applicationType:
+                                  provider.currentDetails?.applicationType ??
+                                      '',
+                              startDate:
+                                  provider.currentDetails?.appStartDate ?? '',
+                              endDate:
+                                  provider.currentDetails?.appEndDate ?? '',
+                              reason:
+                                  provider.currentDetails?.applicationRequest ??
+                                      '',
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomButton(
-                          text: 'Edit',
-                          isLoading: false,
-                          btnwid: size.width / 2.5,
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              SlideRightRoute(
-                                page: EditApplication(
-                                  id: provider.currentDetails?.applicationId.toString() ?? '',
-                                  applicationType: provider.currentDetails?.applicationType ?? '',
-                                  startDate: provider.currentDetails?.appStartDate ?? '',
-                                  endDate: provider.currentDetails?.appEndDate ?? '',
-                                  reason: provider.currentDetails?.applicationRequest ?? '',
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(width: 4),
-                        CustomButton(
-                          text: 'Delete',
-                          isLoading: false,
-                          btnwid: size.width / 2.5,
-                          buttonColor: Colors.red,
-                          onPressed: () async {
-                            final confirmDelete = await showDeleteConfirmationDialog(context);
-                            if (confirmDelete != true || !context.mounted) return;
+                    const SizedBox(width: 4),
+                    CustomButton(
+                      text: 'Delete',
+                      isLoading: false,
+                      btnwid: size.width / 2.5,
+                      buttonColor: Colors.red,
+                      onPressed: () async {
+                        final confirmDelete =
+                            await showDeleteConfirmationDialog(context);
+                        if (confirmDelete != true || !context.mounted) return;
 
-                            final id = provider.currentDetails?.applicationId?.toString();
-                            if (id == null || id.isEmpty) {
-                              if (context.mounted) {
-                                Utils.flushBarErrorMessage("Invalid application ID", context);
-                              }
-                              return;
-                            }
+                        final id =
+                            provider.currentDetails?.applicationId?.toString();
+                        if (id == null || id.isEmpty) {
+                          if (context.mounted) {
+                            Utils.flushBarErrorMessage(
+                                "Invalid application ID", context);
+                          }
+                          return;
+                        }
 
-                            try {
-                              // final success = await Provider.of<ApplicationViewModel>(context, listen: false)
-                              //     .deleteApplication(id, context);\
-                              bool success=true;
-                              if (success && context.mounted) {
-                                await Provider.of<ApplicationViewModel>(context, listen: false).fetch(context);
-                                Utils.flushBarSuccessMessage("Application deleted successfully!", context);
-                                Navigator.pop(context);
-                              } else if (context.mounted) {
-                                Utils.flushBarErrorMessage("Failed to delete application", context);
-                              }
-                            } catch (e) {
-                              if (context.mounted) {
-                                Utils.flushBarErrorMessage("Error: $e", context);
-                              }
-                            }
-                          },
-                        ),
-                      ],
+                        try {
+                          // final success = await Provider.of<ApplicationViewModel>(context, listen: false)
+                          //     .deleteApplication(id, context);\
+                          bool success = true;
+                          if (success && context.mounted) {
+                            await Provider.of<ApplicationViewModel>(context,
+                                    listen: false)
+                                .fetch(context);
+                            Utils.flushBarSuccessMessage(
+                                "Application deleted successfully!", context);
+                            Navigator.pop(context);
+                          } else if (context.mounted) {
+                            Utils.flushBarErrorMessage(
+                                "Failed to delete application", context);
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            Utils.flushBarErrorMessage("Error: $e", context);
+                          }
+                        }
+                      },
                     ),
                   ],
-                );
-              },
-            ),
-          ],
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget _buildDetailRow(IconData icon, String label, String value, {Color? valueColor}) {
+  Widget _buildDetailRow(IconData icon, String label, String value,
+      {Color? valueColor}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(

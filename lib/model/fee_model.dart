@@ -3,7 +3,7 @@ class FeeModel {
   List<Currency>? currency;
   List<Receipts>? receipts;
   List<CreditNotes>? creditNotes;
-  List<CreditNotes>? creditNotesRefund;
+  List<CreditSettlementModel>? creditNotesRefund;
 
   FeeModel(
       {this.dues,
@@ -38,9 +38,9 @@ class FeeModel {
       });
     }
     if (json['credit_notes_refund'] != null) {
-      creditNotesRefund = <CreditNotes>[];
+      creditNotesRefund = <CreditSettlementModel>[];
       json['credit_notes_refund'].forEach((v) {
-        creditNotesRefund!.add(new CreditNotes.fromJson(v));
+        creditNotesRefund!.add(new CreditSettlementModel.fromJson(v));
       });
     }
   }
@@ -63,6 +63,38 @@ class FeeModel {
       data['credit_notes_refund'] =
           this.creditNotesRefund!.map((v) => v.toJson()).toList();
     }
+    return data;
+  }
+}
+class CreditSettlementModel {
+  String? settlementDate;
+  String? fiscalYearName;
+  String? settleType;
+  String? creditNoteNo;
+  String? amount;
+
+  CreditSettlementModel(
+      {this.settlementDate,
+        this.fiscalYearName,
+        this.settleType,
+        this.creditNoteNo,
+        this.amount});
+
+  CreditSettlementModel.fromJson(Map<String, dynamic> json) {
+    settlementDate = json['settlement_date'];
+    fiscalYearName = json['fiscal_year_name'];
+    settleType = json['settle_type'];
+    creditNoteNo = json['credit_note_no'];
+    amount = json['amount'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['settlement_date'] = this.settlementDate;
+    data['fiscal_year_name'] = this.fiscalYearName;
+    data['settle_type'] = this.settleType;
+    data['credit_note_no'] = this.creditNoteNo;
+    data['amount'] = this.amount;
     return data;
   }
 }

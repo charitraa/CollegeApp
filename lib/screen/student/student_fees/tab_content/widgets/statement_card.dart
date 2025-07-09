@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../model/fee_model.dart';
+import '../../../../../utils/parse_date.dart';
+
 class StatementCard extends StatelessWidget {
-  final Map<String, dynamic> note;
-  final int serialNumber;
+  final Dues note;
   final int index;
   final VoidCallback onTap;
 
   const StatementCard({
     super.key,
     required this.note,
-    required this.serialNumber,
     required this.index,
     required this.onTap,
   });
@@ -48,7 +49,7 @@ class StatementCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'SN: $serialNumber',
+                        'SN: $index',
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -59,24 +60,25 @@ class StatementCard extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: note['paid'] == true
+                          color: note.status == 'paid'
                               ? Colors.green.withOpacity(0.2)
                               : Colors.red.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: note['paid'] == true
+                            color: note.status == 'paid'
                                 ? Colors.green
                                 : Colors.red,
                             width: 1,
                           ),
                         ),
                         child: Text(
-                          note['paid'] == true ? 'Paid' : 'Unpaid',
+                          note.status == 'paid' ? 'Paid' : 'Unpaid',
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
-                            color:
-                            note['paid'] == true ? Colors.green : Colors.red,
+                            color: note.status == 'paid'
+                                ? Colors.green
+                                : Colors.red,
                           ),
                         ),
                       ),
@@ -84,7 +86,7 @@ class StatementCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    note['particular'] ?? '',
+                    "${note.particular} ${note.description}" ?? '',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -94,7 +96,7 @@ class StatementCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    note['date'] ?? '',
+                    parseDate(note.paymentDate.toString()) ?? '',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey.shade600,
@@ -104,14 +106,24 @@ class StatementCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildInfoColumn('Debit', note['dr'] ?? ''),
-                      _buildInfoColumn('Credit', note['cr'] ?? ''),
-                      _buildInfoColumn('Balance', note['bal'] ?? ''),
+                      _buildInfoColumn(
+                          'Debit',
+                          "${note.currencySymbol == "&#163;" ? decodeHtmlCurrencySymbol(note.currencySymbol ?? '') : note.currencySymbol} ${note.amount != null ? double.parse(note.amount ?? '').toInt() : "N/A"}" ??
+                              ''),
+                      _buildInfoColumn(
+                          'Credit',
+                          "${note.currencySymbol == "&#163;" ? decodeHtmlCurrencySymbol(note.currencySymbol ?? '') : note.currencySymbol} ${note.amountPaid != null ? double.parse(note.amountPaid ?? '').toInt() : "N/A"}" ??
+                              ''),
+                      _buildInfoColumn(
+                          'Balance',
+                          "${note.currencySymbol == "&#163;" ? decodeHtmlCurrencySymbol(note.currencySymbol ?? '') : note.currencySymbol} ${note.amount != null ? double.parse(note.amount ?? '0').toInt() - double.parse(note.amountPaid ?? '0').toInt() : "N/A"}" ??
+                              '' ??
+                              ''),
                     ],
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Remarks: ${note['remarks'] ?? ''}',
+                    'Remarks: ${note.remarks ?? ''} ${note.creditRemarks ?? ''}',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey.shade600,

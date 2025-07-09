@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/utils.dart';
@@ -72,7 +73,8 @@ class NetworkApiService extends BaseApiServices {
       final response = await http
           .get(Uri.parse(url), headers: headers)
           .timeout(const Duration(seconds: 10));
-
+var logger=Logger();
+// logger.d(jsonDecode(response.body));
       responseJson = returnResponse(response);
     } on SocketException {
       throw FetchDataException("No internet Connection");

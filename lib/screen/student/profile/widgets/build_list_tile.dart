@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 
 Widget buildListTile(IconData icon, String title, Function() onPressed) {
-  return Column(
-    children: [
-      ListTile(
-        leading: Icon(icon, color: const Color(0xFF4B88C5)),
-        title: Text(title,
-            style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.black)),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-        onTap: () {
-          onPressed();
-        },
+  return ListTile(
+    leading: Icon(icon, color: Colors.black, size: 24),
+    title: Text(
+      title,
+      style: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        color: Colors.black,
       ),
-      const Divider(height: 1),
-    ],
+    ),
+    trailing: const Icon(Icons.chevron_right, color: Colors.grey, size: 24),
+    onTap: onPressed,
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    tileColor: Colors.grey[50],
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
   );
 }

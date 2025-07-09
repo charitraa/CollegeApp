@@ -35,7 +35,7 @@ class DcrCardImage extends StatelessWidget {
               Text(
                 session,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),

@@ -54,8 +54,8 @@ class _DashboardHeadState extends State<DashboardHead> {
       'icon': Icons.assignment,
       'className': DocumentListPage()
     },
-    {'text': 'Evision', 'icon': Icons.laptop},
-    {'text': 'E-Library', 'icon': Icons.menu_book},
+    {'text': 'E-vision', 'icon': Icons.laptop},
+    {'text': 'Change Password', 'icon': Icons.lock},
   ];
 
   List<Map<String, dynamic>> filteredCards = [];
@@ -236,7 +236,7 @@ class _DashboardHeadState extends State<DashboardHead> {
                   final user = userDataViewModel.currentUser;
 
                   String? image =
-                      "${BaseUrl.imageDisplay}/${user?.stuProfilePath}/${user?.stuPhoto}";
+                      "${BaseUrl.imageDisplay}/html/profiles/students/${user?.stuProfilePath}/${user?.stuPhoto}";
                   var logger=Logger();
                   logger.d(image);
                   return Positioned(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-Widget buildReceiptCard(Map<String, String> note) {
+import '../../../../../model/fee_model.dart';
+
+Widget buildReceiptCard(Receipts note) {
   return Card(
     color: Colors.white,
     margin: const EdgeInsets.only(bottom: 10),
@@ -11,15 +13,15 @@ Widget buildReceiptCard(Map<String, String> note) {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(note['date']!, style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(note.receiptDate??'', style: const TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 5),
-          Text(note['receiptNo']!, style: const TextStyle(fontWeight: FontWeight.w500)),
+          Text("${note.fiscalYearName}/${note.receiptNo.toString()}"??'', style: const TextStyle(fontWeight: FontWeight.w500)),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Amount: ${note['amount']!}", style: const TextStyle(fontSize: 14)),
-              Text("Tax: ${note['tax']!}", style: const TextStyle(fontSize: 14)),
+              Text("Amount: Rs. ${ double.parse(note.totalAmount ?? '0').toInt()}", style: const TextStyle(fontSize: 14)),
+              Text("Tax: Rs. ${ double.parse(note.taxAmount ?? '0').toInt()}", style: const TextStyle(fontSize: 14)),
             ],
           ),
         ],

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:lbef/model/fee_model.dart';
 import 'package:lbef/screen/student/student_fees/pay_khalti.dart';
 import 'package:lbef/screen/student/student_fees/tab_content/widgets/balance_card.dart';
+import 'package:lbef/screen/student/student_fees/tab_content/widgets/buildCreditSettlement.dart';
 import 'package:lbef/screen/student/student_fees/tab_content/widgets/credit_notes.dart';
 import 'package:lbef/widgets/no_data/no_data_widget.dart';
 
 class Balance extends StatefulWidget {
-  const Balance({super.key});
+  final List<CreditNotes>? credit;
+  final List<CreditSettlementModel>? refund;
+
+  const Balance({super.key, this.credit, this.refund});
 
   @override
   State<Balance> createState() => _BalanceState();
@@ -66,7 +71,12 @@ class _BalanceState extends State<Balance> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
-          buildCreditNotesSection(context),
+          if (widget.credit!.isEmpty||widget.credit == null ) ...[
+            BuildNoData(
+                size, "No credit notes available!", Icons.do_not_disturb)
+          ] else ...[
+            buildCreditNotesSection(widget.credit ?? [], context),
+          ],
           const SizedBox(height: 20),
           const Text(
             'Your Credit Settlements',
@@ -74,12 +84,15 @@ class _BalanceState extends State<Balance> {
           ),
           const SizedBox(height: 8),
 
-         BuildNoData(size, "No settlements available!", Icons.do_not_disturb),
+          if (widget.refund!.isEmpty||widget.refund == null ) ...[
+            BuildNoData(
+                size, "No credit settlement available!", Icons.do_not_disturb)
+          ] else ...[
+            buildCreditSettlement(widget.refund ?? [], context),
+          ],
           const SizedBox(height: 30),
         ],
       ),
     );
   }
-
-
 }

@@ -41,6 +41,7 @@ dependencies:
   url_launcher: ^6.3.1
   http: ^1.2.2
   provider: ^6.1.2
+  html_unescape: ^2.0.0
   fluttertoast: ^8.2.10
   another_flushbar: ^1.12.30
   shared_preferences: 2.3.5

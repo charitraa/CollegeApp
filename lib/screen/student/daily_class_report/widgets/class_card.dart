@@ -25,7 +25,7 @@ class ClassCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-           DcrCardImage(session: session, semester: semester, section: section,),
+           DcrCardImage(session: text, semester: semester, section: section,),
           const SizedBox(height: 6),
           Container(
             width: size.width,
@@ -38,7 +38,7 @@ class ClassCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        text,
+                        session,
                         style: const TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
