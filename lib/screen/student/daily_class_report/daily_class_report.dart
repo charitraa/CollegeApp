@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lbef/screen/student/daily_class_report/reports/reports.dart';
 import 'package:lbef/screen/student/daily_class_report/shimmer/class_card_shimmer.dart';
+import 'package:lbef/view_model/class_routine/class_routine_view_model.dart';
 import 'package:lbef/view_model/daily_class_report/dcr_view_model.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -23,10 +24,12 @@ class _DailyClassReportState extends State<DailyClassReport> {
   @override
   void initState() {
     super.initState();
-    // Fetch data after the first frame to ensure context is available
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DcrViewModel>(context, listen: false).fetch(context);
-    });
+    fetch();
+  }
+
+  void fetch() async {
+    await Provider.of<ClassRoutineViewModel>(context, listen: false)
+        .fetch(context);
   }
 
   @override
@@ -67,8 +70,8 @@ class _DailyClassReportState extends State<DailyClassReport> {
             }
 
             if (viewModel.dcrList.isEmpty) {
-              return BuildNoData(size, 'No dcr available',
-                  Icons.disabled_visible_rounded);
+              return BuildNoData(
+                  size, 'No dcr available', Icons.disabled_visible_rounded);
             }
 
             return ListView.separated(
@@ -99,9 +102,9 @@ class _DailyClassReportState extends State<DailyClassReport> {
                     text: report.subjectName ?? '',
                     code: report.subjectCode ?? '',
                     faculty: report.facultyName ?? '',
-                    session:  report.sessionName ?? '',
-                    section:  report.sectionId ?? '',
-                    semester:  report.semesterName ?? '',
+                    session: report.sessionName ?? '',
+                    section: report.sectionId ?? '',
+                    semester: report.semesterName ?? '',
                   ),
                 );
               },

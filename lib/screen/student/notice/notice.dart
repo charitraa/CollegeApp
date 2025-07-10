@@ -1,10 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lbef/resource/colors.dart';
-import 'package:lbef/screen/student/application/file_application.dart';
-import 'package:lbef/screen/student/application/widgets/view_application.dart';
 import 'package:lbef/screen/student/daily_class_report/shimmer/class_card_shimmer.dart';
-import 'package:lbef/screen/student/application/widgets/application_widget.dart';
 import 'package:lbef/screen/student/notice/view_notice_board.dart';
 import 'package:lbef/screen/student/notice/widgets/notice_widget.dart';
 import 'package:lbef/view_model/notice_board/notice_board_view_model.dart';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lbef/resource/colors.dart';
+import 'package:lbef/utils/parse_date.dart';
 
 class NoticeWidget extends StatelessWidget {
   final String published, body, subBody;
@@ -45,44 +46,57 @@ class NoticeWidget extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 2),
-                    Text.rich(
-                      TextSpan(
-                        text: _shortenText(body, 40),
-                        style: const TextStyle(fontSize: 12),
-                        children: [
-                          if (body.length > 40)
-                            TextSpan(
-                              text: '... View more',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                        ],
+                    Container(
+                      margin: const EdgeInsets.only(top: 4),
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(4),
                       ),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
+                      child: Text.rich(
+                        TextSpan(
+                          text: _shortenText(body, 12),
+                          style: const TextStyle(fontSize: 12),
+                          children: [
+                            if (body.length > 150)
+                              TextSpan(
+                                text: '... View more',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                          ],
+                        ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(height: 5,),
+                    Text(
+                      parseDate(published),
+                      style: const TextStyle(color: Colors.grey, fontSize: 11),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(color: Colors.transparent),
-                ),
-                child: Text(
-                  published,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                  ),
-                ),
-              ),
+              // const SizedBox(width: 8),
+              // Container(
+              //   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+              //   decoration: BoxDecoration(
+              //     color: AppColors.primary,
+              //     borderRadius: BorderRadius.circular(5),
+              //     border: Border.all(color: Colors.transparent),
+              //   ),
+              //   child: Text(
+              //     published,
+              //     style: const TextStyle(
+              //       color: Colors.white,
+              //       fontSize: 10,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         )

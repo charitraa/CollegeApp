@@ -137,7 +137,8 @@ class StatementCard extends StatelessWidget {
                     child: Text(
                       'Tap to view details',
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
                         color: Colors.blue.shade700,
                         fontStyle: FontStyle.italic,
                       ),
