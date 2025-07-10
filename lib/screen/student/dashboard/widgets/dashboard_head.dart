@@ -37,7 +37,7 @@ class _DashboardHeadState extends State<DashboardHead> {
       'icon': Icons.schedule,
       'className': const ClassRoutines()
     },
-    {'text': 'Results', 'icon': Icons.grade, 'className': const AdmitCard()},
+    {'text': 'Admit Card', 'icon': Icons.badge, 'className': const AdmitCard()},
     {
       'text': 'Notice',
       'icon': Icons.notifications,

@@ -30,6 +30,7 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
     fetch();
   }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -37,10 +38,7 @@ class _DashboardState extends State<Dashboard> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-
-            const DashboardHead(
-
-            ),
+            const DashboardHead(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
@@ -74,10 +72,10 @@ class _DashboardState extends State<Dashboard> {
             ),
             Padding(
               padding: const EdgeInsets.all(16),
-              child: BuildNoData(size,
+              child: BuildNoData(
+                  size,
                   "No upcoming events at the moment. Stay tuned for future updates!",
-                  Icons.event_busy
-              ),
+                  Icons.event_busy),
             ),
             const SizedBox(
               height: 10,
@@ -119,53 +117,55 @@ class _DashboardState extends State<Dashboard> {
                   const SizedBox(
                     height: 20,
                   ),
-                  // Consumer<NoticeBoardViewModel>(
-                  //   builder: (context, viewModel, child) {
-                  //     if (viewModel.isLoading) {
-                  //       return ListView.builder(
-                  //         itemCount: 3,
-                  //         itemBuilder: (context, index) => const Padding(
-                  //           padding: EdgeInsets.only(bottom: 14),
-                  //           child: ApplicationShimmer(),
-                  //         ),
-                  //       );
-                  //     }
-                  //
-                  //     final notices = viewModel.notices;
-                  //
-                  //     if (notices == null || notices.isEmpty) {
-                  //       return BuildNoData(
-                  //         size,
-                  //         'No notices available',
-                  //         Icons.disabled_visible_rounded,
-                  //       );
-                  //     }
-                  //
-                  //     final displayedNotices =
-                  //     notices.length > 3 ? notices.take(3).toList() : notices;
-                  //
-                  //     return Wrap(
-                  //       spacing: 0,
-                  //       runSpacing: 14,
-                  //       children: displayedNotices.map((application) {
-                  //         return InkWell(
-                  //           onTap: () {
-                  //             Navigator.of(context).push(
-                  //               SlideRightRoute(
-                  //                 page: ViewNoticeBoard(noticeData: application),
-                  //               ),
-                  //             );
-                  //           },
-                  //           child: NoticeWidget(
-                  //             published: application.noticeDate ?? '',
-                  //             body: application.subject ?? '',
-                  //             subBody: application.subject ?? '',
-                  //           ),
-                  //         );
-                  //       }).toList(),
-                  //     );
-                  //   },
-                  // )
+                  Consumer<NoticeBoardViewModel>(
+                    builder: (context, viewModel, child) {
+                      if (viewModel.isLoading) {
+                        return ListView.builder(
+                          itemCount: 3,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) => const Padding(
+                            padding: EdgeInsets.only(bottom: 14),
+                            child: ApplicationShimmer(),
+                          ),
+                        );
+                      }
+
+                      final notices = viewModel.notices;
+
+                      if (notices == null || notices.isEmpty) {
+                        return BuildNoData(
+                          size,
+                          'No notices available',
+                          Icons.disabled_visible_rounded,
+                        );
+                      }
+
+                      final displayedNotices =
+                      notices.length > 3 ? notices.take(3).toList() : notices;
+
+                      return Wrap(
+                        spacing: 0,
+                        runSpacing: 14,
+                        children: displayedNotices.map((application) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                SlideRightRoute(
+                                  page: ViewNoticeBoard(noticeData: application),
+                                ),
+                              );
+                            },
+                            child: NoticeWidget(
+                              published: application.noticeDate ?? '',
+                              body: application.subject ?? '',
+                              subBody: application.subject ?? '',
+                            ),
+                          );
+                        }).toList(),
+                      );
+                    },
+                  ),
                   const SizedBox(
                     height: 25,
                   ),
