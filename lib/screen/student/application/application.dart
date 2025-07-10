@@ -1,20 +1,15 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:lbef/data/status.dart';
 import 'package:lbef/resource/colors.dart';
 import 'package:lbef/screen/student/application/file_application.dart';
 import 'package:lbef/screen/student/application/widgets/application_shimmer.dart';
 import 'package:lbef/screen/student/application/widgets/view_application.dart';
-import 'package:lbef/screen/student/daily_class_report/shimmer/class_card_shimmer.dart';
 import 'package:lbef/screen/student/application/widgets/application_widget.dart';
 import 'package:lbef/utils/parse_date.dart';
 import 'package:lbef/view_model/application_files/application_view_model.dart';
 import 'package:lbef/widgets/no_data/no_data_widget.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-
 import '../../../utils/navigate_to.dart';
-import '../daily_class_report/reports/reports.dart';
 
 class Application extends StatefulWidget {
   const Application({super.key});
@@ -65,7 +60,7 @@ class _ApplicationState extends State<Application> {
               ),
               child: Row(
                 children: [
-                  Text(
+                  const Text(
                     "Create",
                     style: TextStyle(
                       color: Colors.white,

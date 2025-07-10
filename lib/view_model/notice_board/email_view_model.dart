@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:lbef/model/email_notice_model.dart';
 import 'package:lbef/model/notice_model.dart';
 import 'package:lbef/repository/notice_board/notice_board_repository.dart';
 import 'package:logger/logger.dart';
 import '../../data/api_response.dart';
 
-class NoticeBoardViewModel with ChangeNotifier {
+class EmailViewModel with ChangeNotifier {
   final NoticeBoardRepository _myrepo = NoticeBoardRepository();
-  final List<NoticeModel> _notices = [];
-  List<NoticeModel>? get notices => _notices;
-  ApiResponse<NoticeModel> userData = ApiResponse.loading();
-  ApiResponse<NoticeModel> appDetails = ApiResponse.loading();
-  NoticeModel? get currentDetails => appDetails.data;
+  final List<EmailNoticeModel> _notices = [];
+  List<EmailNoticeModel>? get notices => _notices;
+  ApiResponse<EmailNoticeModel> userData = ApiResponse.loading();
+  ApiResponse<EmailNoticeModel> appDetails = ApiResponse.loading();
+  EmailNoticeModel? get currentDetails => appDetails.data;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  void setDetails(ApiResponse<NoticeModel> response) {
+  void setDetails(ApiResponse<EmailNoticeModel> response) {
     _logger.i('Setting : ${response.status}');
     appDetails = response;
     notifyListeners();
@@ -32,7 +33,7 @@ class NoticeBoardViewModel with ChangeNotifier {
     setLoading(true);
     try {
       final Map<String, dynamic> response =
-      await _myrepo.fetchnotices(context);
+      await _myrepo.fetchEmails(context);
       _notices.addAll(response['notices']);
       notifyListeners();
     } catch (error) {
@@ -50,8 +51,8 @@ class NoticeBoardViewModel with ChangeNotifier {
     }
     setLoading(true);
     try {
-      final NoticeModel dcr =
-      await _myrepo.applicationDetails(applicationId, context);
+      final EmailNoticeModel dcr =
+      await _myrepo.emailDetails(applicationId, context);
       if (dcr != null) {
         _logger.i('DCR details fetched successfully');
         setDetails(ApiResponse.completed(dcr));

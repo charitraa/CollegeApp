@@ -62,7 +62,7 @@ class _StudentFeesState extends State<StudentFees> {
         body: Consumer<CollegeFeeViewModel>(
           builder: (context, viewModel, child) {
             if (viewModel.isLoading) {
-              return StatementsShimmer();
+              return const StatementsShimmer();
             }
             if (viewModel.currentDetails == null) {
               return TabBarView(
@@ -91,6 +91,7 @@ class _StudentFeesState extends State<StudentFees> {
               children: [
                 Statements(dues: viewModel.currentDetails?.dues ?? []),
                 Balance(
+                  dues: viewModel.currentDetails?.dues ?? [],
                   credit: viewModel.currentDetails?.creditNotes ?? [],
                   refund: viewModel.currentDetails?.creditNotesRefund ?? [],
                 ),

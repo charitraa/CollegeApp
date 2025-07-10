@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:lbef/screen/student/calender/calender.dart';
+import 'package:lbef/screen/student/class_routines/class_routines.dart';
+import 'package:lbef/screen/student/notice/notice.dart';
 import 'package:lbef/screen/student/profile/changePassword/change_password.dart';
 import 'package:lbef/screen/student/profile/event/event.dart';
 import 'package:lbef/screen/student/profile/teachers/teachers.dart';
 import 'package:lbef/screen/student/profile/widgets/build_list_tile.dart';
+import 'package:lbef/screen/student/view_my_profile/view_my_profile.dart';
 import 'package:lbef/widgets/form_widget/btn/outlned_btn.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -75,17 +79,17 @@ class ProfilePage extends StatelessWidget {
                           },
                           errorBuilder: (context, error, stackTrace) =>
                               Container(
-                                width: 100,
-                                height: 100,
-                                color: AppColors.primary,
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.school,
-                                    color: Colors.white,
-                                    size: 40,
-                                  ),
-                                ),
+                            width: 100,
+                            height: 100,
+                            color: AppColors.primary,
+                            child: const Center(
+                              child: Icon(
+                                Icons.school,
+                                color: Colors.white,
+                                size: 40,
                               ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -128,19 +132,110 @@ class ProfilePage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
                   children: [
-                    buildListTile(Icons.people_alt_outlined, 'View Profile', () {
-                      Navigator.of(context).push(_buildSlideRoute(const Event()));
-                    }),
-                    buildListTile(Icons.event, 'Events', () {
-                      Navigator.of(context).push(_buildSlideRoute(const Event()));
+                    const Row(
+                      children: [
+                        Text(
+                          'Settings',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    buildListTile(Icons.people_alt_outlined, 'View Profile',
+                        () {
+                      Navigator.of(context)
+                          .push(_buildSlideRoute(const ViewProfilePage()));
                     }),
                     buildListTile(Icons.lock, 'Change Password', () {
-                      Navigator.of(context).push(_buildSlideRoute(const ChangePassword()));
+                      Navigator.of(context)
+                          .push(_buildSlideRoute(const ChangePassword()));
                     }),
-                    buildListTile(Icons.picture_as_pdf, 'Print Admit Card', () {}),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Row(
+                      children: [
+                        Text(
+                          'Academics',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    buildListTile(
+                        Icons.picture_as_pdf, 'Print Admit Card', () {}),
+                    buildListTile(Icons.schedule, 'Class Routine', () {
+                      Navigator.of(context)
+                          .push(_buildSlideRoute(const ClassRoutines()));
+                    }),
+                    buildListTile(Icons.laptop, 'E-vision access', () {
+                      Navigator.of(context)
+                          .push(_buildSlideRoute(const ClassRoutines()));
+                    }),
+                    buildListTile(Icons.web, 'Breo access', () {
+                      Navigator.of(context)
+                          .push(_buildSlideRoute(const ClassRoutines()));
+                    }),
+                    buildListTile(Icons.event, 'Events', () {
+                      Navigator.of(context)
+                          .push(_buildSlideRoute(const Event()));
+                    }),
                     buildListTile(Icons.people, 'Teachers', () {
-                      Navigator.of(context).push(_buildSlideRoute(const TeachersPage()));
+                      Navigator.of(context)
+                          .push(_buildSlideRoute(const TeachersPage()));
                     }),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Row(
+                      children: [
+                        Text(
+                          'Notice Board',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    buildListTile(Icons.newspaper, 'Notice Board', () {
+                      Navigator.of(context)
+                          .push(_buildSlideRoute(const NoticeBoard()));
+                    }),
+                    buildListTile(Icons.calendar_month, 'Calender', () {
+                      Navigator.of(context)
+                          .push(_buildSlideRoute(const AcademicCalender()));
+                    }),
+                    buildListTile(Icons.event, 'Event', () {
+                      Navigator.of(context)
+                          .push(_buildSlideRoute(const AcademicCalender()));
+                    }),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Row(
+                      children: [
+                        Text(
+                          'Support',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     buildListTile(Icons.info, 'About', () {}),
                     buildListTile(Icons.help_outline, 'Help', () {}),
                     buildListTile(Icons.call, 'Contact', () {}),
@@ -194,7 +289,7 @@ class ProfilePage extends StatelessWidget {
                             .logout(context);
                       }
                     }),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),
@@ -212,8 +307,8 @@ class ProfilePage extends StatelessWidget {
         const begin = Offset(1.0, 0.0);
         const end = Offset.zero;
         const curve = Curves.easeInOut;
-        var tween = Tween(begin: begin, end: end)
-            .chain(CurveTween(curve: curve));
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
         var offsetAnimation = animation.drive(tween);
         return SlideTransition(position: offsetAnimation, child: child);
       },

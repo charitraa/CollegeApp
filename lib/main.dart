@@ -10,7 +10,9 @@ import 'package:lbef/view_model/college_fees/college_fee_view_model.dart';
 import 'package:lbef/view_model/daily_class_report/dcr_detail_view_model.dart';
 import 'package:lbef/view_model/daily_class_report/dcr_view_model.dart';
 import 'package:lbef/view_model/download_forms/download_forms_view_model.dart';
+import 'package:lbef/view_model/notice_board/email_view_model.dart';
 import 'package:lbef/view_model/notice_board/notice_board_view_model.dart';
+import 'package:lbef/view_model/notice_board/sms_view_model.dart';
 import 'package:lbef/view_model/user_view_model/auth_view_model.dart';
 import 'package:lbef/view_model/user_view_model/current_user_model.dart';
 import 'package:lbef/view_model/user_view_model/user_view_model.dart';
@@ -32,6 +34,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ClassRoutineViewModel()),
         ChangeNotifierProvider(create: (_) => DcrViewModel()),
         ChangeNotifierProvider(create: (_) => DcrDetailViewModel()),
+        ChangeNotifierProvider(create: (_) => EmailViewModel()),
+        ChangeNotifierProvider(create: (_) => SmsViewModel()),
+
         ChangeNotifierProvider(create: (_) => CalenderViewModel()),
         ChangeNotifierProvider(create: (_) => DownloadFormViewModel()),
         ChangeNotifierProvider(create: (_) => NoticeBoardViewModel()),

@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:lbef/model/notice_model.dart';
+import 'package:lbef/model/email_notice_model.dart';
 import 'package:lbef/utils/parse_date.dart';
-import 'package:lbef/view_model/notice_board/notice_board_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../../resource/colors.dart';
 import '../../../utils/format_time.dart';
 import '../../../utils/utils.dart';
+import '../../../view_model/notice_board/email_view_model.dart';
 
-class ViewNoticeBoard extends StatefulWidget {
-  final NoticeModel noticeData;
+class ViewEmail extends StatefulWidget {
+  final EmailNoticeModel emailData;
 
-  const ViewNoticeBoard({super.key, required this.noticeData});
+  const ViewEmail({super.key, required this.emailData});
 
   @override
-  State<ViewNoticeBoard> createState() => _ViewNoticeBoardState();
+  State<ViewEmail> createState() => _ViewEmailState();
 }
 
-class _ViewNoticeBoardState extends State<ViewNoticeBoard> {
+class _ViewEmailState extends State<ViewEmail> {
   @override
   void initState() {
     super.initState();
@@ -25,26 +25,26 @@ class _ViewNoticeBoardState extends State<ViewNoticeBoard> {
   }
 
   void fetch() async {
-    final id = widget.noticeData.noticeId?.toString();
+    final id = widget.emailData.mailId?.toString();
     if (id == null || id.isEmpty) {
       if (context.mounted) {
-        Utils.flushBarErrorMessage("Invalid notice ID", context);
+        Utils.flushBarErrorMessage("Invalid email ID", context);
       }
       return;
     }
-    await Provider.of<NoticeBoardViewModel>(context, listen: false)
+    await Provider.of<EmailViewModel>(context, listen: false)
         .getNoticeDetails(id, context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:Colors.white,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
 
         title: const Text(
-          "Notice Details",
+          "Email Details",
           style: TextStyle(fontFamily: 'poppins'),
         ),
         leading: IconButton(
@@ -66,10 +66,18 @@ class _ViewNoticeBoardState extends State<ViewNoticeBoard> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10),
-        child: Consumer<NoticeBoardViewModel>(
+        child: Consumer<EmailViewModel>(
           builder: (context, provider, child) {
             final isLoading = provider.isLoading;
-            final notice = provider.currentDetails ?? widget.noticeData;
+            final email = provider.currentDetails ?? widget.emailData;
+
+            String date = 'N/A';
+            String time = 'N/A';
+            if (email.sentOn != null && email.sentOn!.contains(' ')) {
+              final parts = email.sentOn!.split(' ');
+              date = parseDate(parts[0]);
+              time = formatTimeTo12Hour(parts[1]);
+            }
 
             return Container(
               padding: const EdgeInsets.all(10),
@@ -89,7 +97,7 @@ class _ViewNoticeBoardState extends State<ViewNoticeBoard> {
                 children: [
                   Center(
                     child: Text(
-                      notice.subject ?? 'No Title',
+                      email.subject ?? 'No Subject',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 22,
@@ -101,11 +109,29 @@ class _ViewNoticeBoardState extends State<ViewNoticeBoard> {
                   const SizedBox(height: 8),
                   Center(
                     child: Text(
-                      'Published on ${notice.noticeDate!=null? parseDate(notice.noticeDate??''): 'N/A'}',
+                      'Sent on $date at $time',
                       style: TextStyle(
                         fontSize: 13,
                         color: Colors.grey[600],
                       ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'From: ${email.mailFromname ?? 'Unknown'} <${email.mailFrom ?? ''}>',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[800],
+                      fontFamily: 'poppins',
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'To: ${email.mailToname ?? 'Unknown'} <${email.mailTo ?? ''}>',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[800],
+                      fontFamily: 'poppins',
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -113,7 +139,7 @@ class _ViewNoticeBoardState extends State<ViewNoticeBoard> {
                     _buildLoadingSkeleton()
                   else
                     Text(
-                      stripHtmlTags(notice.noticeText??'No content available.') ,
+                      stripHtmlTags(email.emailText ?? 'No content available.'),
                       style: const TextStyle(
                         fontSize: 16,
                         height: 1.6,

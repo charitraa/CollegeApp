@@ -1,149 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:lbef/model/routine_model.dart';
+import 'package:lbef/screen/student/class_routines/widgets/no_class_routine.dart';
 import 'package:lbef/widgets/no_data/no_data_widget.dart';
 import 'table_row.dart';
 
 class DayDetails extends StatelessWidget {
   final String day;
   final List<Times> times;
-  final List<DayItem> days; // Add days list
+  final List<DayItem> days;
   final Map<String, dynamic> detail;
 
   const DayDetails({
     super.key,
     required this.day,
     required this.times,
-    required this.days, // Add days parameter
+    required this.days,
     required this.detail,
   });
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     // Check if the day is not in the days list
     if (!days.any((dayItem) => dayItem.day == day)) {
-      return Column(
-        children: [
-          const Row(
-            children: [
-              SizedBox(
-                width: 80,
-                child: Center(
-                  child: Text(
-                    "Time",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Center(
-                  child: Text(
-                    "Courses",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          SizedBox(
-            height: 100,
-            child: BuildNoData(
-              MediaQuery.of(context).size,
-              "No Routine available",
-              Icons.calendar_month,
-            ),
-          ),
-        ],
-      );
+      return _buildNoDataView(size);
     }
 
     // Check if detail for the day exists and is not empty
     final dayDetails = detail[day] as Map<String, dynamic>?;
     if (times.isEmpty || dayDetails == null || dayDetails.isEmpty) {
-      return Column(
-        children: [
-          const Row(
-            children: [
-              SizedBox(
-                width: 80,
-                child: Center(
-                  child: Text(
-                    "Time",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Center(
-                  child: Text(
-                    "Courses",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          SizedBox(
-            height: 100,
-            child: BuildNoData(
-              MediaQuery.of(context).size,
-              "No Routine available",
-              Icons.calendar_month,
-            ),
-          ),
-        ],
-      );
+      return _buildNoDataView(size);
     }
 
     return Column(
       children: [
-        const Row(
-          children: [
-            SizedBox(
-              width: 80,
-              child: Center(
-                child: Text(
-                  "Time",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Center(
-                child: Text(
-                  "Courses",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        _buildTableHeader(),
         const SizedBox(height: 20),
-        ...times.map((time) {
+        ...times.asMap().entries.map((entry) {
+          final index = entry.key;
+          final time = entry.value;
           final timeKey = "${time.startTime}-${time.endTime}";
           final detailString = dayDetails[timeKey] as String?;
 
           if (detailString == null || detailString.isEmpty) {
-            return Container();
+            return NoClassesCard(
+              timeStart: time.startTime,
+              timeEnd: time.endTime,
+            );
           }
 
           final parts = detailString.split('<br>');
@@ -162,6 +66,53 @@ class DayDetails extends StatelessWidget {
             textColor: Colors.black,
           );
         }),
+      ],
+    );
+  }
+
+  Widget _buildTableHeader() {
+    return const Row(
+      children: [
+        SizedBox(
+          width: 80,
+          child: Center(
+            child: Text(
+              "Time",
+              style: TextStyle(
+                color: Colors.grey,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: Center(
+            child: Text(
+              "Courses",
+              style: TextStyle(
+                color: Colors.grey,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNoDataView(Size size) {
+    return Column(
+      children: [
+        _buildTableHeader(),
+        const SizedBox(height: 20),
+        SizedBox(
+          height: 100,
+          child: BuildNoData(
+            size,
+            "No Routine available",
+            Icons.calendar_month,
+          ),
+        ),
       ],
     );
   }

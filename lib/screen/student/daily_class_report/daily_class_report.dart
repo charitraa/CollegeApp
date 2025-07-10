@@ -28,7 +28,7 @@ class _DailyClassReportState extends State<DailyClassReport> {
   }
 
   void fetch() async {
-    await Provider.of<ClassRoutineViewModel>(context, listen: false)
+    await Provider.of<DcrViewModel>(context, listen: false)
         .fetch(context);
   }
 

@@ -1,9 +1,7 @@
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
-// import 'package:lbef/screen/auth/unauthorised.dart';
 import 'package:lbef/screen/student/daily_class_report/daily_class_report.dart';
-// import 'package:lbef/screen/student/daily_class_report/reports/reports.dart';
 import 'package:lbef/screen/student/dashboard/dashboard.dart';
 import 'package:lbef/screen/student/profile/profile.dart';
 import 'package:lbef/screen/student/student_fees/student_fees.dart';

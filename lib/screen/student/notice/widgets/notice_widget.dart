@@ -39,44 +39,25 @@ class NoticeWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      subBody,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 2),
                     Container(
+                      width:double.infinity,
                       margin: const EdgeInsets.only(top: 4),
-                      padding: EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: Colors.grey.shade200,
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: Text.rich(
-                        TextSpan(
-                          text: _shortenText(body, 12),
-                          style: const TextStyle(fontSize: 12),
-                          children: [
-                            if (body.length > 150)
-                              TextSpan(
-                                text: '... View more',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                          ],
-                        ),
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
+                      child: Text(
+                        subBody,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
-                    const SizedBox(height: 5,),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     Text(
-                      parseDate(published),
-                      style: const TextStyle(color: Colors.grey, fontSize: 11),
+                      "Published on : ${published!=null||published!=''?parseDate(published):""}",
+                      style: TextStyle(color: AppColors.primary, fontSize: 11),
                     ),
                   ],
                 ),

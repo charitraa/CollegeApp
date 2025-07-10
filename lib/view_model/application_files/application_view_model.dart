@@ -1,10 +1,8 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:lbef/model/application_model.dart';
 import 'package:lbef/repository/application_repository/application_repository.dart';
 import 'package:logger/logger.dart';
 import '../../data/api_response.dart';
-import '../../utils/utils.dart';
 
 class ApplicationViewModel with ChangeNotifier {
   final ApplicationRepository _myrepo = ApplicationRepository();

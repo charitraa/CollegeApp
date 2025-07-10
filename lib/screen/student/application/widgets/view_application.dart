@@ -3,7 +3,6 @@ import 'package:lbef/model/application_model.dart';
 import 'package:lbef/screen/student/application/edit_application.dart';
 import 'package:lbef/widgets/form_widget/btn/outlned_btn.dart';
 import 'package:lbef/widgets/form_widget/custom_button.dart';
-import 'package:lbef/widgets/form_widget/custom_outlined.dart';
 import 'package:provider/provider.dart';
 import '../../../../resource/colors.dart';
 import '../../../../utils/navigate_to.dart';

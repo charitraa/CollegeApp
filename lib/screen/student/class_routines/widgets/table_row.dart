@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../utils/format_time.dart';
+
 class TableData extends StatelessWidget {
   final String timeStart, timeEnd, title, lecture, room, teacher;
   final Color color, textColor;
@@ -27,9 +29,9 @@ class TableData extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(timeStart),
+                  Text(timeStart!=''||timeStart!=null?formatTimeTo12HourSimple(timeStart):''),
                   const SizedBox(height: 5),
-                  Text(timeEnd),
+                  Text(timeStart!=''||timeStart!=null?formatTimeTo12HourSimple(timeEnd):''),
                 ],
               ),
             ),
@@ -40,7 +42,7 @@ class TableData extends StatelessWidget {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(left: 20.0),
+              padding: const EdgeInsets.only(top:10,left: 20.0),
               child: Container(
                 decoration: BoxDecoration(
                   color: color,
@@ -54,11 +56,10 @@ class TableData extends StatelessWidget {
                       title,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 15,
+                        fontSize: 18,
                         color: textColor,
                       ),
                     ),
-                    const SizedBox(height: 5),
                     Text(
                       lecture,
                       style: TextStyle(color: textColor, fontSize: 13),
@@ -87,7 +88,7 @@ class TableData extends StatelessWidget {
                             ),
                           ],
                         ),
-                         Icon(Icons.notifications_none, size: 26,color: textColor,),
+                         Icon(Icons.notification_add, size: 26,color: textColor,),
                       ],
                     ),
                   ],

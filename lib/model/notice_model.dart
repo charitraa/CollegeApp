@@ -3,14 +3,21 @@ class NoticeModel {
   String? subject;
   String? noticeDate;
   String? publishedOn;
+  String? noticeText;
 
-  NoticeModel({this.noticeId, this.subject, this.noticeDate, this.publishedOn});
+  NoticeModel(
+      {this.noticeId,
+        this.subject,
+        this.noticeDate,
+        this.publishedOn,
+        this.noticeText});
 
   NoticeModel.fromJson(Map<String, dynamic> json) {
     noticeId = json['notice_id'];
     subject = json['subject'];
     noticeDate = json['notice_date'];
     publishedOn = json['published_on'];
+    noticeText = json['notice_text'];
   }
 
   Map<String, dynamic> toJson() {
@@ -19,6 +26,7 @@ class NoticeModel {
     data['subject'] = this.subject;
     data['notice_date'] = this.noticeDate;
     data['published_on'] = this.publishedOn;
+    data['notice_text'] = this.noticeText;
     return data;
   }
 }

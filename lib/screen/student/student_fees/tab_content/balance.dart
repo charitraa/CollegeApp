@@ -9,17 +9,52 @@ import 'package:lbef/widgets/no_data/no_data_widget.dart';
 class Balance extends StatefulWidget {
   final List<CreditNotes>? credit;
   final List<CreditSettlementModel>? refund;
+  final List<Dues>? dues;
 
-  const Balance({super.key, this.credit, this.refund});
+  const Balance({super.key, this.credit, this.refund, this.dues});
 
   @override
   State<Balance> createState() => _BalanceState();
 }
 
 class _BalanceState extends State<Balance> {
+  // Calculate totals based on dues data
+  Map<String, double> calculateTotals() {
+    double totalDueNPR = 0.0;
+    double totalPaidNPR = 0.0;
+    double totalDueGBP = 0.0;
+    double totalPaidGBP = 0.0;
+
+    if (widget.dues != null) {
+      for (var due in widget.dues!) {
+        double amount = double.tryParse(due.amount ?? '0.0') ?? 0.0;
+        double amountPaid = double.tryParse(due.amountPaid ?? '0.0') ?? 0.0;
+
+        if (due.currency == 'NPR') {
+          totalDueNPR += amount;
+          totalPaidNPR += amountPaid;
+        } else if (due.currency == 'GBP') {
+          totalDueGBP += amount;
+          totalPaidGBP += amountPaid;
+        }
+      }
+    }
+
+    return {
+      'totalDueNPR': totalDueNPR,
+      'totalPaidNPR': totalPaidNPR,
+      'totalDueGBP': totalDueGBP,
+      'totalPaidGBP': totalPaidGBP,
+      'balanceNPR': totalDueNPR - totalPaidNPR,
+      'balanceGBP': totalDueGBP - totalPaidGBP,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final totals = calculateTotals();
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(15),
       child: Column(
@@ -38,28 +73,28 @@ class _BalanceState extends State<Balance> {
                 child: buildBalanceCard(
                   icon: Icons.account_balance_wallet,
                   title: 'Total Due',
-                  amountRs: 'Rs. 1138500',
-                  amountPound: '£ 1225',
+                  amountRs: 'Rs. ${totals['totalDueNPR']!.toStringAsFixed(0)}',
+                  amountPound: '£ ${totals['totalDueGBP']!.toStringAsFixed(0)}',
                   color: Colors.red[100],
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 6),
               Expanded(
                 child: buildBalanceCard(
                   icon: Icons.payment,
                   title: 'Total Paid',
-                  amountRs: 'Rs. 1113500',
-                  amountPound: '£ 1225',
+                  amountRs: 'Rs. ${totals['totalPaidNPR']!.toStringAsFixed(0)}',
+                  amountPound: '£ ${totals['totalPaidGBP']!.toStringAsFixed(0)}',
                   color: Colors.green[100],
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 6),
               Expanded(
                 child: buildBalanceCard(
                   icon: Icons.account_balance,
                   title: 'Balance',
-                  amountRs: 'Rs. 25000',
-                  amountPound: '£ 0',
+                  amountRs: 'Rs. ${totals['balanceNPR']!.toStringAsFixed(0)}',
+                  amountPound: '£ ${totals['balanceGBP']!.toStringAsFixed(0)}',
                   color: Colors.blue[100],
                 ),
               ),
@@ -71,7 +106,7 @@ class _BalanceState extends State<Balance> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
-          if (widget.credit!.isEmpty||widget.credit == null ) ...[
+          if (widget.credit == null || widget.credit!.isEmpty) ...[
             BuildNoData(
                 size, "No credit notes available!", Icons.do_not_disturb)
           ] else ...[
@@ -83,8 +118,7 @@ class _BalanceState extends State<Balance> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
-
-          if (widget.refund!.isEmpty||widget.refund == null ) ...[
+          if (widget.refund == null || widget.refund!.isEmpty) ...[
             BuildNoData(
                 size, "No credit settlement available!", Icons.do_not_disturb)
           ] else ...[
