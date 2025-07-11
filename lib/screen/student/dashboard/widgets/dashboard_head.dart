@@ -117,7 +117,7 @@ class _DashboardHeadState extends State<DashboardHead> {
                 child: SizedBox(
                   width: 190,
                   height: 120,
-                  child: Image.asset('assets/images/pcpsLogo.png',
+                  child: Image.asset('assets/images/pcps_bg.png',
                       fit: BoxFit.contain),
                 ),
               ),

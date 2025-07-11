@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lbef/screen/student/calender/calender_view_details.dart';
 import 'package:lbef/utils/parse_date.dart';
 import 'package:lbef/widgets/no_data/no_data_widget.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import '../../../data/status.dart';
 import '../../../model/event_model.dart';
 import '../../../view_model/calender/event_calender_view_model.dart';
 import 'calender_widget.dart';
+import 'display_dialog_calender.dart';
 import 'shimmer_widget.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -188,17 +190,31 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                 itemCount: selectedDayEvents.length,
                                 itemBuilder: (context, index) {
                                   final event = selectedDayEvents[index];
-                                  return CalenderWidget(
-                                    title: event.eventName ?? 'Untitled Event',
-                                    name: event.organizerName ??
-                                        'Unknown Organizer',
-                                    date: event.eventType ?? 'No Type',
-                                    color:
-                                        _parseColor(event.colorCode ?? 'grey'),
-                                    dateTime: event.startDate != null ||
-                                            event.startDate != ''
-                                        ? parseDate(event.startDate ?? '')
-                                        : "",
+                                  return InkWell(
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) =>
+                                            DisplayDialogCalender(
+                                                id: event.eventId.toString() ??
+                                                    '',
+                                                text: 'Event Details',
+                                                show: CalenderViewDetails()),
+                                      );
+                                    },
+                                    child: CalenderWidget(
+                                      title:
+                                          event.eventName ?? 'Untitled Event',
+                                      name: event.organizerName ??
+                                          'Unknown Organizer',
+                                      date: event.eventType ?? 'No Type',
+                                      color: _parseColor(
+                                          event.colorCode ?? 'grey'),
+                                      dateTime: event.startDate != null ||
+                                              event.startDate != ''
+                                          ? parseDate(event.startDate ?? '')
+                                          : "",
+                                    ),
                                   );
                                 },
                               ),
