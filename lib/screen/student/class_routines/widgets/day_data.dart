@@ -24,13 +24,12 @@ class DayDetails extends StatelessWidget {
 
     // Check if the day is not in the days list
     if (!days.any((dayItem) => dayItem.day == day)) {
-      return const SizedBox();
+      return BuildNoData(size, "No class routine available for this day", Icons.calendar_month);
     }
 
-    // Check if detail for the day exists and is not empty
     final dayDetails = detail[day] as Map<String, dynamic>?;
     if (times.isEmpty || dayDetails == null || dayDetails.isEmpty) {
-      return const SizedBox();
+      return _buildNoDataView(size, day == 'Saturday' ? "No class routine for today!" : "No Routine available");
     }
 
     return Column(
@@ -44,10 +43,7 @@ class DayDetails extends StatelessWidget {
           final detailString = dayDetails[timeKey] as String?;
 
           if (detailString == null || detailString.isEmpty) {
-            return NoClassesCard(
-              timeStart: time.startTime,
-              timeEnd: time.endTime,
-            );
+            return const SizedBox();
           }
 
           final parts = detailString.split('<br>');
@@ -100,20 +96,7 @@ class DayDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildNoDataView(Size size) {
-    return Column(
-      children: [
-        _buildTableHeader(),
-        const SizedBox(height: 20),
-        SizedBox(
-          height: 100,
-          child: BuildNoData(
-            size,
-            "No Routine available",
-            Icons.calendar_month,
-          ),
-        ),
-      ],
-    );
+  Widget _buildNoDataView(Size size, String message) {
+    return SizedBox();
   }
 }

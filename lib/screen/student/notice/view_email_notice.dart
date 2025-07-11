@@ -142,7 +142,7 @@ class _ViewEmailState extends State<ViewEmail> {
                   if (isLoading)
                     _buildLoadingSkeleton()
                   else
-                    _parseTextWithLinks(email.emailText ?? 'No content available.'),
+                    _parseTextWithLinks(stripHtmlTags(email.emailText ?? 'No content available.')),
                 ],
               ),
             );

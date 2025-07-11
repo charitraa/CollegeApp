@@ -39,47 +39,45 @@ class _DashboardState extends State<Dashboard> {
         child: Column(
           children: [
             const DashboardHead(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Upcoming Events',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 5),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: const Text(
-                            "View All",
-                            style: TextStyle(color: Colors.white, fontSize: 13),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: BuildNoData(
-                  size,
-                  "No upcoming events at the moment. Stay tuned for future updates!",
-                  Icons.event_busy),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            //   child: Column(
+            //     children: [
+            //       Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [
+            //           const Text(
+            //             'Upcoming Events',
+            //             style: TextStyle(fontWeight: FontWeight.bold),
+            //           ),
+            //           InkWell(
+            //             onTap: () {},
+            //             child: Container(
+            //               padding: const EdgeInsets.symmetric(
+            //                   horizontal: 8, vertical: 5),
+            //               decoration: BoxDecoration(
+            //                 color: AppColors.primary,
+            //                 borderRadius: BorderRadius.circular(5),
+            //               ),
+            //               child: const Text(
+            //                 "View All",
+            //                 style: TextStyle(color: Colors.white, fontSize: 13),
+            //               ),
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.all(16),
+            //   child: BuildNoData(
+            //       size,
+            //       "No upcoming events at the moment. Stay tuned for future updates!",
+            //       Icons.event_busy),
+            // ),
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(

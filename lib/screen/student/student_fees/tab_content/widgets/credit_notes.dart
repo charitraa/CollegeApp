@@ -20,7 +20,7 @@ Widget buildCreditNotesSection(List<CreditNotes> note, BuildContext context) {
               show: CreditNoteContent(
                 date: parseDate(note.issueDate.toString()),
                 noteNo: note.creditNoteNo.toString(),
-                description: "${note.particular} ${note.description}",
+                description: "${note.particular} ",
                 amount: "Rs. ${note.amount}" ?? '',
                 status: note.status!,
               ),
@@ -43,7 +43,7 @@ Widget buildCreditNotesSection(List<CreditNotes> note, BuildContext context) {
                 Text('${note.fiscalYearName}/${note.creditNoteNo.toString()}',
                     style: const TextStyle(fontWeight: FontWeight.w500)),
                 const SizedBox(height: 5),
-                Text("${note.particular} ${note.description}"),
+                Text("${note.particular}"),
                 const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

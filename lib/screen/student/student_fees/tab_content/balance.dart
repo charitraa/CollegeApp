@@ -18,7 +18,6 @@ class Balance extends StatefulWidget {
 }
 
 class _BalanceState extends State<Balance> {
-  // Calculate totals based on dues data
   Map<String, double> calculateTotals() {
     double totalDueNPR = 0.0;
     double totalPaidNPR = 0.0;

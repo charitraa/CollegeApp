@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lbef/utils/parse_date.dart';
 import 'package:lbef/widgets/no_data/no_data_widget.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import '../../../data/status.dart';
 import '../../../model/event_model.dart';
@@ -32,6 +32,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   void _fetchMonthlyEvents(EventCalenderViewModel viewModel, String date) {
+    print('Fetching events for month: $date'); // Debug log
     viewModel.fetchMonthly(
       'monthly',
       date,
@@ -47,8 +48,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
         final selectedDateStr = DateFormat('yyyy-MM-dd').format(_selectedDay);
         final selectedDayEvents = viewModel.events
             .where((event) =>
-                event.startDate != null && event.startDate == selectedDateStr)
+                event.startDate != null &&
+                DateFormat('yyyy-MM-dd')
+                        .format(DateTime.parse(event.startDate!)) ==
+                    selectedDateStr)
             .toList();
+
+        print(
+            'Selected day: $selectedDateStr, Events: ${selectedDayEvents.length}'); // Debug log
 
         return Scaffold(
           appBar: AppBar(
@@ -67,6 +74,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     _selectedDay = selectedDay;
                     _focusedDay = focusedDay;
                   });
+                  // Fetch events for the selected date's month if not already loaded
+                  final selectedMonth =
+                      DateFormat('yyyy-MM').format(selectedDay);
+                  if (selectedMonth !=
+                      DateFormat('yyyy-MM').format(_focusedDay)) {
+                    _fetchMonthlyEvents(viewModel, selectedMonth);
+                  }
                 },
                 onPageChanged: (focusedDay) {
                   _focusedDay = focusedDay;
@@ -76,11 +90,17 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   );
                 },
                 eventLoader: (day) {
-                  return viewModel.events
+                  final dayStr = DateFormat('yyyy-MM-dd').format(day);
+                  final events = viewModel.events
                       .where((event) =>
                           event.startDate != null &&
-                          isSameDay(DateTime.parse(event.startDate!), day))
+                          DateFormat('yyyy-MM-dd')
+                                  .format(DateTime.parse(event.startDate!)) ==
+                              dayStr)
                       .toList();
+                  print(
+                      'EventLoader for $dayStr: ${events.length} events'); // Debug log
+                  return events;
                 },
                 calendarBuilders: CalendarBuilders(
                   markerBuilder: (context, date, events) {
@@ -116,42 +136,72 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              Container(
+              Expanded(
+                // Use Expanded to prevent overflow
                 child: viewModel.isLoading
                     ? const ShimmerWidget()
-                    : selectedDayEvents.isEmpty
+                    : viewModel.userData.status == Status.ERROR
                         ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 8),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 8),
                                 child: Row(
                                   children: [
                                     const Icon(Icons.calendar_month_outlined),
-                                    Text(parseDate(_selectedDay.toString()))
+                                    Text(parseDate(_selectedDay.toString())),
                                   ],
                                 ),
                               ),
-                              SizedBox(
-                                  height: 100,
-                                  child: BuildNoData(
-                                      MediaQuery.of(context).size,
-                                      "No event on the selected date!",
-                                      Icons.calendar_month_outlined)),
+                              BuildNoData(
+                                MediaQuery.of(context).size,
+                                "Error loading events",
+                                Icons.error_outline,
+                              ),
                             ],
                           )
-                        : ListView.builder(
-                            itemCount: selectedDayEvents.length,
-                            itemBuilder: (context, index) {
-                              final event = selectedDayEvents[index];
-                              return CalenderWidget(
-                                title: event.eventName ?? 'Untitled Event',
-                                name:
-                                    event.organizerName ?? 'Unknown Organizer',
-                                date: event.startDate ?? 'No Date',
-                                color: _parseColor(event.colorCode ?? 'grey'),
-                              );
-                            },
-                          ),
+                        : selectedDayEvents.isEmpty
+                            ? Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 8),
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                            Icons.calendar_month_outlined),
+                                        Text(
+                                            parseDate(_selectedDay.toString())),
+                                      ],
+                                    ),
+                                  ),
+                                  BuildNoData(
+                                    MediaQuery.of(context).size,
+                                    "No event on the selected date!",
+                                    Icons.calendar_month_outlined,
+                                  ),
+                                ],
+                              )
+                            : ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: selectedDayEvents.length,
+                                itemBuilder: (context, index) {
+                                  final event = selectedDayEvents[index];
+                                  return CalenderWidget(
+                                    title: event.eventName ?? 'Untitled Event',
+                                    name: event.organizerName ??
+                                        'Unknown Organizer',
+                                    date: event.eventType ?? 'No Type',
+                                    color:
+                                        _parseColor(event.colorCode ?? 'grey'),
+                                    dateTime: event.startDate != null ||
+                                            event.startDate != ''
+                                        ? parseDate(event.startDate ?? '')
+                                        : "",
+                                  );
+                                },
+                              ),
               ),
             ],
           ),

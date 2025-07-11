@@ -49,13 +49,13 @@ class _DashboardHeadState extends State<DashboardHead> {
       'className': const CalendarScreen()
     },
     {'text': 'Breo', 'icon': Icons.web},
-    {
-      'text': "Download forms",
-      'icon': Icons.assignment,
-      'className': DocumentListPage()
-    },
+    // {
+    //   'text': "Download forms",
+    //   'icon': Icons.assignment,
+    //   'className': DocumentListPage()
+    // },
     {'text': 'E-vision', 'icon': Icons.laptop},
-    {'text': 'Change Password', 'icon': Icons.lock},
+    // {'text': 'Change Password', 'icon': Icons.lock},
   ];
 
   List<Map<String, dynamic>> filteredCards = [];
@@ -117,7 +117,7 @@ class _DashboardHeadState extends State<DashboardHead> {
                 child: SizedBox(
                   width: 190,
                   height: 120,
-                  child: Image.asset('assets/images/lbef.png',
+                  child: Image.asset('assets/images/pcpsLogo.png',
                       fit: BoxFit.contain),
                 ),
               ),
@@ -210,7 +210,7 @@ class _DashboardHeadState extends State<DashboardHead> {
                     Navigator.of(context).push(
                       PageRouteBuilder(
                         pageBuilder: (context, animation, secondaryAnimation) =>
-                            const NotificationScreen(),
+                            const NoticeBoard(),
                         transitionsBuilder:
                             (context, animation, secondaryAnimation, child) {
                           const begin = Offset(1.0, 0.0);
@@ -243,35 +243,39 @@ class _DashboardHeadState extends State<DashboardHead> {
                     bottom: 90,
                     right: 24,
                     child: SizedBox(
-                      height: 70,
-                      child: Image.network(
-                        image,
-                        width: 70,
-                        fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(
-                            child: CustomShimmerLoading(
-                              width: 120.0,
-                              height: 122,
-                              baseColor: Colors.grey[300]!,
-                              highlightColor: Colors.grey[100]!,
-                            ),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) => Container(
-                          width: 70,
-                          height: 70,
-                          color: Colors.white,
-                          child: Center(
-                            child: Icon(
-                              Icons.school,
-                              color: AppColors.primary,
-                              size: 40,
+                      height: 100,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          image,
+                          width: 90,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CustomShimmerLoading(
+                                width: 90,
+                                height: 100,
+                                baseColor: Colors.grey[300]!,
+                                highlightColor: Colors.grey[100]!,
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) => Container(
+                            width: 70,
+                            height: 70,
+                            color: Colors.white,
+                            child: Center(
+                              child: Icon(
+                                Icons.school,
+                                color: AppColors.primary,
+                                size: 40,
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                      )
+                      ,
                     ),
                   );
                 },
