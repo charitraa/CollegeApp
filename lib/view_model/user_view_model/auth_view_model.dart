@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:lbef/model/user_model.dart';
+import 'package:lbef/screen/auth/login_page.dart';
+import 'package:lbef/screen/navbar/student_navbar.dart';
 import 'package:lbef/view_model/user_view_model/user_view_model.dart';
+import 'package:lbef/widgets/no_internet_wrapper.dart';
 import 'package:logger/logger.dart';
 import '../../data/api_response.dart';
 import '../../data/status.dart';
@@ -37,13 +40,32 @@ class AuthViewModel with ChangeNotifier {
       final response = await _myrepo.login(body, context: context);
       if (response.status == Status.ERROR) {
         setUser(ApiResponse.error(response.message ?? "Unexpected error"));
-        Utils.flushBarErrorMessage(response.message ?? "Unexpected error", context);
+        Utils.flushBarErrorMessage(
+            response.message ?? "Unexpected error", context);
         return;
       }
       setUser(ApiResponse.completed(response.data));
       Utils.flushBarSuccessMessage(
           response.message ?? "User Logged in successfully!", context);
-      Navigator.pushReplacementNamed(context, RoutesName.student);
+      Navigator.of(context).pushAndRemoveUntil(
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const NoInternetWrapper(child: StudentNavbar()),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.easeInOut;
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          },
+        ),
+        (route) => false, // Remove all previous routes
+      );
     } catch (error) {
       setUser(ApiResponse.error(error.toString()));
       Utils.flushBarErrorMessage(error.toString(), context);
@@ -51,6 +73,7 @@ class AuthViewModel with ChangeNotifier {
       setLoading(false);
     }
   }
+
   Future<void> logout(BuildContext context) async {
     setLoading(true);
     try {
@@ -58,8 +81,28 @@ class AuthViewModel with ChangeNotifier {
       if (response.status == Status.COMPLETED) {
         Utils.flushBarSuccessMessage(
             response.message ?? "User Logged out Successfully!", context);
-        await UserViewModel().remove();
-        Navigator.pushReplacementNamed(context, RoutesName.login);
+        await UserViewModel().remove(context);
+        //clear all perivous routes and navigate to login page
+        Navigator.of(context).pushAndRemoveUntil(
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const LoginPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              const begin = Offset(1.0, 0.0);
+              const end = Offset.zero;
+              const curve = Curves.easeInOut;
+              var tween =
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+              var offsetAnimation = animation.drive(tween);
+              return SlideTransition(
+                position: offsetAnimation,
+                child: child,
+              );
+            },
+          ),
+          (route) => false, // Remove all previous routes
+        );
       } else {
         Utils.flushBarErrorMessage(
             response.message ?? "An error occurred", context);
