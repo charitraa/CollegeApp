@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:lbef/screen/auth/login_page.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../data/status.dart';
 import '../resource/routes_name.dart';
 import '../view_model/user_view_model/current_user_model.dart';
-
 
 class FlashScreen extends StatefulWidget {
   const FlashScreen({super.key});
@@ -37,7 +35,7 @@ class _FlashScreenState extends State<FlashScreen> {
     if (!hasSeenIntro) {
       await prefs.setBool('hasSeenIntro', false);
     }
-    var logger= Logger();
+    var logger = Logger();
     logger.d(session);
     // if(hasSeenIntro==false){
     //   Navigator.of(context).push(
@@ -63,7 +61,7 @@ class _FlashScreenState extends State<FlashScreen> {
     // }
     if (session != null) {
       final userDataViewModel =
-      Provider.of<UserDataViewModel>(context, listen: false);
+          Provider.of<UserDataViewModel>(context, listen: false);
       await userDataViewModel.getUser(context);
       final user = userDataViewModel.currentUser;
 
@@ -76,8 +74,6 @@ class _FlashScreenState extends State<FlashScreen> {
       _navigateTo(RoutesName.login);
     }
   }
-
-
 
   void _navigateTo(String route) {
     Future.microtask(() {

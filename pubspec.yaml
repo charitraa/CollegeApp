@@ -54,12 +54,14 @@ dependencies:
   pdf: ^3.11.3
   http_parser: ^4.0.0
   printing: ^5.14.2
+  connectivity_plus: ^5.0.2
+  internet_connection_checker: ^1.0.0+1
 #  khalti_flutter: ^3.0.0
   loading_indicator: ^3.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  flutter_launcher_icons: ^0.14.2
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -69,7 +71,15 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/images/applogo.png"
+  adaptive_icon_foreground: "assets/images/applogo.png"
+  adaptive_icon_background: "assets/images/applogo.png"
 
+  min_sdk_android: 21
 # The following section is specific to Flutter packages.
 flutter:
 
