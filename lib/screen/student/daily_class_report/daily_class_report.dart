@@ -28,8 +28,7 @@ class _DailyClassReportState extends State<DailyClassReport> {
   }
 
   void fetch() async {
-    await Provider.of<DcrViewModel>(context, listen: false)
-        .fetch(context);
+    await Provider.of<DcrViewModel>(context, listen: false).fetch(context);
   }
 
   @override
@@ -46,7 +45,7 @@ class _DailyClassReportState extends State<DailyClassReport> {
         automaticallyImplyLeading: false,
         actions: const [
           Image(
-            image: AssetImage('assets/images/lbef.png'),
+            image: AssetImage('assets/images/pcpsLogo.png'),
             width: 70,
             height: 50,
             fit: BoxFit.contain,

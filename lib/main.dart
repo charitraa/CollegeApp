@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lbef/resource/routes.dart';
 import 'package:lbef/resource/routes_name.dart';
-import 'package:lbef/screen/auth/login_page.dart';
-import 'package:lbef/screen/navbar/student_navbar.dart';
 import 'package:lbef/view_model/application_files/application_view_model.dart';
 import 'package:lbef/view_model/calender/event_calender_view_model.dart';
 import 'package:lbef/view_model/class_routine/class_routine_view_model.dart';
@@ -42,7 +40,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserViewModel()),
         ChangeNotifierProvider(create: (_) => UserDataViewModel()),
         ChangeNotifierProvider(create: (_) => CollegeFeeViewModel()),
-
       ],
       child: Builder(
         builder: (context) {

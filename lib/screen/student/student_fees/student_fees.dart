@@ -22,9 +22,10 @@ class _StudentFeesState extends State<StudentFees> {
     super.initState();
     fetch();
   }
-  fetch()async{
-    await Provider.of<CollegeFeeViewModel>(context, listen: false).fetch(context);
 
+  fetch() async {
+    await Provider.of<CollegeFeeViewModel>(context, listen: false)
+        .fetch(context);
   }
 
   @override
@@ -43,7 +44,7 @@ class _StudentFeesState extends State<StudentFees> {
           ),
           actions: const [
             Image(
-              image: AssetImage('assets/images/lbef.png'),
+              image: AssetImage('assets/images/pcpsLogo.png'),
               width: 70,
               height: 50,
               fit: BoxFit.contain,
@@ -69,18 +70,16 @@ class _StudentFeesState extends State<StudentFees> {
                 children: [
                   SizedBox(
                     height: 100,
-                    child: BuildNoData(
-                        size, "No settlements available!", Icons.do_not_disturb),
+                    child: BuildNoData(size, "No settlements available!",
+                        Icons.do_not_disturb),
                   ),
                   SizedBox(
                     height: 100,
-
                     child: BuildNoData(
                         size, "No balance available!", Icons.do_not_disturb),
                   ),
                   SizedBox(
                     height: 100,
-
                     child: BuildNoData(
                         size, "No receipts available!", Icons.do_not_disturb),
                   ),

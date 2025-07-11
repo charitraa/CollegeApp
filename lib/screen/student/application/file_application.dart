@@ -56,14 +56,18 @@ class _FileApplicationState extends State<FileApplication> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("File Application", style: TextStyle(fontFamily: 'poppins')),
+        title: const Text("File Application",
+            style: TextStyle(fontFamily: 'poppins')),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: AppColors.primary),
           onPressed: () => Navigator.pop(context),
           iconSize: 18,
         ),
         actions: const [
-          Image(image: AssetImage('assets/images/lbef.png'), width: 70, height: 50),
+          Image(
+              image: AssetImage('assets/images/pcpsLogo.png'),
+              width: 70,
+              height: 50),
           SizedBox(width: 14),
         ],
       ),
@@ -79,7 +83,7 @@ class _FileApplicationState extends State<FileApplication> {
             ),
             const SizedBox(height: 10),
             const Text(
-          "Start Date",
+              "Start Date",
               style: TextStyle(
                 fontSize: 14,
                 fontFamily: 'poppins',
@@ -90,7 +94,7 @@ class _FileApplicationState extends State<FileApplication> {
             const SizedBox(height: 4),
             const Text(
               'Note: Please select the date when your leave begins',
-              style:  TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
@@ -103,19 +107,19 @@ class _FileApplicationState extends State<FileApplication> {
                 border: Border.all(color: Colors.black, width: 1),
                 borderRadius: BorderRadius.circular(4),
               ),
-
               child: ListTile(
-                title: Text(startDate != null ? formatDate(startDate) : 'Select when your leave starts'),
+                title: Text(startDate != null
+                    ? formatDate(startDate)
+                    : 'Select when your leave starts'),
                 trailing: const Icon(Icons.calendar_month),
                 onTap: () => pickStartDate(context),
               ),
             ),
 
-
             const SizedBox(height: 10),
             const Text(
-             "End Date",
-              style:  TextStyle(
+              "End Date",
+              style: TextStyle(
                 fontSize: 14,
                 fontFamily: 'poppins',
                 fontWeight: FontWeight.bold,
@@ -125,7 +129,7 @@ class _FileApplicationState extends State<FileApplication> {
             const SizedBox(height: 4),
             const Text(
               'Note: Please select the date when your leave ends (optional)',
-              style:  TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
@@ -139,7 +143,9 @@ class _FileApplicationState extends State<FileApplication> {
                 borderRadius: BorderRadius.circular(4),
               ),
               child: ListTile(
-                title: Text(endDate != null ? formatDate(endDate) : 'Select when your leave ends'),
+                title: Text(endDate != null
+                    ? formatDate(endDate)
+                    : 'Select when your leave ends'),
                 trailing: const Icon(Icons.calendar_today),
                 onTap: () => pickEndDate(context),
               ),
@@ -156,7 +162,9 @@ class _FileApplicationState extends State<FileApplication> {
             ),
             const SizedBox(height: 10),
 
-            if (error.isNotEmpty) Text(error, style: const TextStyle(color: Colors.red, fontSize: 12)),
+            if (error.isNotEmpty)
+              Text(error,
+                  style: const TextStyle(color: Colors.red, fontSize: 12)),
 
             const SizedBox(height: 20),
             CustomButton(
@@ -168,14 +176,14 @@ class _FileApplicationState extends State<FileApplication> {
                 final end = formatDate(endDate);
 
                 if (applicationType == null) {
-                  Utils.flushBarErrorMessage("Select an application type", context);
+                  Utils.flushBarErrorMessage(
+                      "Select an application type", context);
                   return;
                 }
                 if (start.isEmpty) {
                   Utils.flushBarErrorMessage("Start date required", context);
                   return;
                 }
-
 
                 if (reason.isEmpty) {
                   Utils.flushBarErrorMessage("Reason cannot be empty", context);
@@ -189,16 +197,16 @@ class _FileApplicationState extends State<FileApplication> {
                   "application_request": reason,
                 };
 
-              final check= await  Provider.of<ApplicationViewModel>(context, listen: false)
-                    .createApplication(payload,context);
-              if(check){
-                await  Provider.of<ApplicationViewModel>(context, listen: false)
-                    .fetch(context);
-                reasonController.text='';
-                setState(() {
-
-                });
-              }
+                final check = await Provider.of<ApplicationViewModel>(context,
+                        listen: false)
+                    .createApplication(payload, context);
+                if (check) {
+                  await Provider.of<ApplicationViewModel>(context,
+                          listen: false)
+                      .fetch(context);
+                  reasonController.text = '';
+                  setState(() {});
+                }
               },
             ),
           ],

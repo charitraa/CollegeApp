@@ -7,13 +7,15 @@ import 'package:lbef/screen/student/profile/event/event.dart';
 import 'package:lbef/screen/student/profile/teachers/teachers.dart';
 import 'package:lbef/screen/student/profile/widgets/build_list_tile.dart';
 import 'package:lbef/screen/student/view_my_profile/view_my_profile.dart';
+import 'package:lbef/view_model/user_view_model/user_view_model.dart';
+import 'package:lbef/widgets/Dialog/alert.dart';
 import 'package:lbef/widgets/form_widget/btn/outlned_btn.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constant/base_url.dart';
 import '../../../resource/colors.dart';
-import '../../../view_model/user_view_model/auth_view_model.dart';
 import '../../../view_model/user_view_model/current_user_model.dart';
 import '../../../widgets/custom_shimmer.dart';
 
@@ -23,6 +25,17 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
+    Future<void> _launchUrl(String url) async {
+      final Uri uri = Uri.parse(url);
+
+      if (!await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication, 
+      )) {
+        throw Exception('Could not launch $url');
+      }
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -35,7 +48,7 @@ class ProfilePage extends StatelessWidget {
         automaticallyImplyLeading: false,
         actions: const [
           Image(
-            image: AssetImage('assets/images/lbef.png'),
+            image: AssetImage('assets/images/pcpsLogo.png'),
             width: 70,
             height: 50,
             fit: BoxFit.contain,
@@ -151,13 +164,13 @@ class ProfilePage extends StatelessWidget {
                       Navigator.of(context)
                           .push(_buildSlideRoute(const ViewProfilePage()));
                     }),
-                    buildListTile(Icons.lock, 'Change Password', () {
-                      Navigator.of(context)
-                          .push(_buildSlideRoute(const ChangePassword()));
-                    }),
-                    const SizedBox(
-                      height: 15,
-                    ),
+                    // buildListTile(Icons.lock, 'Change Password', () {
+                    //   Navigator.of(context)
+                    //       .push(_buildSlideRoute(const ChangePassword()));
+                    // }),
+                    // const SizedBox(
+                    //   height: 15,
+                    // ),
                     const Row(
                       children: [
                         Text(
@@ -171,31 +184,54 @@ class ProfilePage extends StatelessWidget {
                     const SizedBox(
                       height: 5,
                     ),
-                    buildListTile(
-                        Icons.picture_as_pdf, 'Print Admit Card', () {}),
+                    // buildListTile(
+                    //     Icons.picture_as_pdf, 'Print Admit Card', () {}),
                     buildListTile(Icons.schedule, 'Class Routine', () {
                       Navigator.of(context)
                           .push(_buildSlideRoute(const ClassRoutines()));
                     }),
-                    buildListTile(Icons.laptop, 'E-vision access', () {
-                      Navigator.of(context)
-                          .push(_buildSlideRoute(const ClassRoutines()));
+
+                    buildListTile(Icons.laptop, 'E-vision access', () async {
+                      final shouldExit = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => Alert(
+                          icon: Icons.web,
+                          iconColor: AppColors.primary,
+                          title: 'E-vision Access',
+                          content: 'Are you sure you want to open E-vision?',
+                          buttonText: 'Yes',
+                        ),
+                      );
+                      if (shouldExit ?? false) {
+                        _launchUrl('https://evision.beds.ac.uk/');
+                      }
                     }),
-                    buildListTile(Icons.web, 'Breo access', () {
-                      Navigator.of(context)
-                          .push(_buildSlideRoute(const ClassRoutines()));
+                    buildListTile(Icons.web, 'Breo access', () async {
+                      final shouldExit = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => Alert(
+                          icon: Icons.web,
+                          iconColor: AppColors.primary,
+                          title: 'Breo Access',
+                          content: 'Are you sure you want to open Breo?',
+                          buttonText: 'Yes',
+                        ),
+                      );
+                      if (shouldExit == true) {
+                        _launchUrl('https://breo.beds.ac.uk/');
+                      }
                     }),
-                    buildListTile(Icons.event, 'Events', () {
-                      Navigator.of(context)
-                          .push(_buildSlideRoute(const Event()));
-                    }),
-                    buildListTile(Icons.people, 'Teachers', () {
-                      Navigator.of(context)
-                          .push(_buildSlideRoute(const TeachersPage()));
-                    }),
-                    const SizedBox(
-                      height: 15,
-                    ),
+                    // buildListTile(Icons.event, 'Events', () {
+                    //   Navigator.of(context)
+                    //       .push(_buildSlideRoute(const Event()));
+                    // }),
+                    // buildListTile(Icons.people, 'Teachers', () {
+                    //   Navigator.of(context)
+                    //       .push(_buildSlideRoute(const TeachersPage()));
+                    // }),
+                    // const SizedBox(
+                    //   height: 15,
+                    // ),
                     const Row(
                       children: [
                         Text(
@@ -217,10 +253,10 @@ class ProfilePage extends StatelessWidget {
                       Navigator.of(context)
                           .push(_buildSlideRoute(const CalendarScreen()));
                     }),
-                    buildListTile(Icons.event, 'Event', () {
-                      Navigator.of(context)
-                          .push(_buildSlideRoute(const CalendarScreen()));
-                    }),
+                    // buildListTile(Icons.event, 'Event', () {
+                    //   Navigator.of(context)
+                    //       .push(_buildSlideRoute(const AcademicCalender()));
+                    // }),
                     const SizedBox(
                       height: 15,
                     ),
@@ -237,9 +273,9 @@ class ProfilePage extends StatelessWidget {
                     const SizedBox(
                       height: 5,
                     ),
-                    buildListTile(Icons.info, 'About', () {}),
-                    buildListTile(Icons.help_outline, 'Help', () {}),
-                    buildListTile(Icons.call, 'Contact', () {}),
+                    // buildListTile(Icons.info, 'About', () {}),
+                    // buildListTile(Icons.help_outline, 'Help', () {}),
+                    // buildListTile(Icons.call, 'Contact', () {}),
                     buildListTile(Icons.logout, 'Sign Out', () async {
                       bool? shouldLogout = await showDialog<bool>(
                         context: context,
@@ -286,8 +322,8 @@ class ProfilePage extends StatelessWidget {
                       );
 
                       if (shouldLogout == true) {
-                        await Provider.of<AuthViewModel>(context, listen: false)
-                            .logout(context);
+                        await Provider.of<UserViewModel>(context, listen: false)
+                            .remove(context);
                       }
                     }),
                     const SizedBox(height: 30),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../resource/colors.dart';
 
-
 class UnauthorisedPage extends StatefulWidget {
   const UnauthorisedPage({super.key});
 
@@ -29,7 +28,7 @@ class _UnauthorisedPageState extends State<UnauthorisedPage> {
         ),
         actions: const [
           Image(
-            image: AssetImage('assets/images/lbef.png'),
+            image: AssetImage('assets/images/pcpsLogo.png'),
             width: 56,
             height: 24,
             fit: BoxFit.cover,
@@ -79,11 +78,7 @@ class _UnauthorisedPageState extends State<UnauthorisedPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                    Icons.error,
-                    color: AppColors.primary,
-                    size:100
-                ),
+                Icon(Icons.error, color: AppColors.primary, size: 100),
               ],
             ),
             const SizedBox(

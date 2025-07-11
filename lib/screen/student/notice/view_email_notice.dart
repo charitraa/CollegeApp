@@ -60,7 +60,7 @@ class _ViewEmailState extends State<ViewEmail> {
           Padding(
             padding: EdgeInsets.only(right: 16),
             child: Image(
-              image: AssetImage('assets/images/lbef.png'),
+              image: AssetImage('assets/images/pcpsLogo.png'),
               width: 70,
               height: 50,
               fit: BoxFit.contain,
@@ -142,7 +142,8 @@ class _ViewEmailState extends State<ViewEmail> {
                   if (isLoading)
                     _buildLoadingSkeleton()
                   else
-                    _parseTextWithLinks(stripHtmlTags(email.emailText ?? 'No content available.')),
+                    _parseTextWithLinks(stripHtmlTags(
+                        email.emailText ?? 'No content available.')),
                 ],
               ),
             );
@@ -215,7 +216,8 @@ class _ViewEmailState extends State<ViewEmail> {
               }
             },
         ));
-      } else if (node.hasChildNodes()) { // Fixed: Added parentheses
+      } else if (node.hasChildNodes()) {
+        // Fixed: Added parentheses
         // Recursively process child nodes
         for (var child in node.nodes) {
           parseNode(child);
