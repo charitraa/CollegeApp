@@ -14,7 +14,6 @@ class ViewProfilePage extends StatefulWidget {
 }
 
 class _ViewProfilePageState extends State<ViewProfilePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +30,7 @@ class _ViewProfilePageState extends State<ViewProfilePage> {
           Padding(
             padding: EdgeInsets.only(right: 16),
             child: Image(
-              image: AssetImage('assets/images/lbef.png'),
+              image: AssetImage('assets/images/pcpsLogo.png'),
               width: 70,
               height: 50,
               fit: BoxFit.contain,
@@ -90,17 +89,17 @@ class _ViewProfilePageState extends State<ViewProfilePage> {
                             },
                             errorBuilder: (context, error, stackTrace) =>
                                 Container(
-                                  width: 120,
-                                  height: 120,
-                                  color: AppColors.primary,
-                                  child: const Center(
-                                    child: Icon(
-                                      Icons.school,
-                                      color: Colors.white,
-                                      size: 50,
-                                    ),
-                                  ),
+                              width: 120,
+                              height: 120,
+                              color: AppColors.primary,
+                              child: const Center(
+                                child: Icon(
+                                  Icons.school,
+                                  color: Colors.white,
+                                  size: 50,
                                 ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -111,7 +110,6 @@ class _ViewProfilePageState extends State<ViewProfilePage> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-
                               Text(
                                 '${user.stuFirstname ?? ''} ${user.stuLastname ?? ''}',
                                 style: const TextStyle(
@@ -124,16 +122,12 @@ class _ViewProfilePageState extends State<ViewProfilePage> {
                               const SizedBox(height: 5),
                               Text(
                                 '${user.courseShortName} ${user.semesterName ?? ''}',
-                                style: const TextStyle(
-                                    fontSize: 18),
+                                style: const TextStyle(fontSize: 18),
                               ),
                               Text(
                                 user.stuRollNo ?? '',
-                                style: const TextStyle(
-                                fontSize: 18),
-
+                                style: const TextStyle(fontSize: 18),
                               ),
-
                             ],
                           ),
                         ],
@@ -149,14 +143,16 @@ class _ViewProfilePageState extends State<ViewProfilePage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
                 const SizedBox(height: 10),
-                _buildInfoRow(Icons.person, 'Full Name:', '${user.stuFirstname ?? ''} ${user.stuMiddlename ?? ''} ${user.stuLastname ?? ''}'),
+                _buildInfoRow(Icons.person, 'Full Name:',
+                    '${user.stuFirstname ?? ''} ${user.stuMiddlename ?? ''} ${user.stuLastname ?? ''}'),
                 _buildInfoRow(Icons.male, 'Gender:', user.stuGender ?? ''),
                 _buildInfoRow(Icons.phone, 'Mobile:', user.stuMobile ?? ''),
                 _buildInfoRow(Icons.email, 'Email:', user.stuEmail ?? ''),
-                _buildInfoRow(Icons.location_city, 'City:', user.stuResCity ?? ''),
-                _buildInfoRow(Icons.location_on, 'Country:', user.stuResCountry ?? ''),
+                _buildInfoRow(
+                    Icons.location_city, 'City:', user.stuResCity ?? ''),
+                _buildInfoRow(
+                    Icons.location_on, 'Country:', user.stuResCountry ?? ''),
                 _buildInfoRow(Icons.tag, 'Status:', user.studentStatus ?? ''),
                 const SizedBox(height: 20),
                 const Text(
@@ -167,11 +163,16 @@ class _ViewProfilePageState extends State<ViewProfilePage> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                _buildInfoRow(Icons.person, 'Father Name:', user.stuFatherName ?? ''),
-                _buildInfoRow(Icons.person, 'Mother Name:', user.stuMotherName ?? ''),
-                _buildInfoRow(Icons.person, 'Guardian Name:', user.stuGurName ?? ''),
-                _buildInfoRow(Icons.phone, 'Guardian Mobile:', user.stuGurMobile ?? ''),
-                _buildInfoRow(Icons.email, 'Guardian Email:', user.stuGurEmail ?? ''),
+                _buildInfoRow(
+                    Icons.person, 'Father Name:', user.stuFatherName ?? ''),
+                _buildInfoRow(
+                    Icons.person, 'Mother Name:', user.stuMotherName ?? ''),
+                _buildInfoRow(
+                    Icons.person, 'Guardian Name:', user.stuGurName ?? ''),
+                _buildInfoRow(
+                    Icons.phone, 'Guardian Mobile:', user.stuGurMobile ?? ''),
+                _buildInfoRow(
+                    Icons.email, 'Guardian Email:', user.stuGurEmail ?? ''),
                 const SizedBox(height: 20),
                 const Text(
                   'ACADEMIC INFORMATION',
@@ -182,11 +183,15 @@ class _ViewProfilePageState extends State<ViewProfilePage> {
                 ),
                 const SizedBox(height: 10),
                 _buildInfoRow(Icons.school, 'Course:', user.courseName ?? ''),
-                _buildInfoRow(Icons.badge, 'College ID:', user.stuRollNo?.toString() ?? ''),
-                _buildInfoRow(Icons.calendar_today, 'Session:', user.sessionName ?? ''),
-                _buildInfoRow(Icons.confirmation_number, 'Univ Roll No:', user.stuUnivRollNo ?? ''),
+                _buildInfoRow(Icons.badge, 'College ID:',
+                    user.stuRollNo?.toString() ?? ''),
+                _buildInfoRow(
+                    Icons.calendar_today, 'Session:', user.sessionName ?? ''),
+                _buildInfoRow(Icons.confirmation_number, 'Univ Roll No:',
+                    user.stuUnivRollNo ?? ''),
                 _buildInfoRow(Icons.book, 'Semester:', user.semesterName ?? ''),
-                _buildInfoRow(Icons.wifi, 'Wi-Fi Access:', user.stuWifiAccess ?? 'Not provided'),
+                _buildInfoRow(Icons.wifi, 'Wi-Fi Access:',
+                    user.stuWifiAccess ?? 'Not provided'),
                 const SizedBox(height: 20),
                 const Text(
                   'SUBJECTS',
@@ -197,12 +202,13 @@ class _ViewProfilePageState extends State<ViewProfilePage> {
                 ),
                 const SizedBox(height: 10),
                 ...user.subjects?.map((subject) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    '⦿ ${subject.subjectName} (${subject.subjectCode})',
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                )) ?? [const Text('No subjects available')],
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Text(
+                            '⦿ ${subject.subjectName} (${subject.subjectCode})',
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        )) ??
+                    [const Text('No subjects available')],
               ],
             );
           },

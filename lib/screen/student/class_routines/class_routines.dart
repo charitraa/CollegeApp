@@ -31,7 +31,8 @@ class _ClassRoutinesState extends State<ClassRoutines> {
   final List<GlobalKey> _tabKeys = List.generate(7, (_) => GlobalKey());
 
   void fetch() async {
-    await Provider.of<ClassRoutineViewModel>(context, listen: false).fetch(context);
+    await Provider.of<ClassRoutineViewModel>(context, listen: false)
+        .fetch(context);
   }
 
   @override
@@ -39,7 +40,8 @@ class _ClassRoutinesState extends State<ClassRoutines> {
     super.initState();
     fetch();
 
-    final today = DateTime.now().weekday; // 1 = Mon, 2 = Tue, ..., 5 = Fri, 6 = Sat, 7 = Sun
+    final today = DateTime.now()
+        .weekday; // 1 = Mon, 2 = Tue, ..., 5 = Fri, 6 = Sat, 7 = Sun
 
     // Map Flutter weekday to days list index
     switch (today) {
@@ -77,7 +79,8 @@ class _ClassRoutinesState extends State<ClassRoutines> {
     Future.delayed(Duration(milliseconds: 100), () {
       final keyContext = _tabKeys[tabIndex].currentContext;
       if (keyContext == null) {
-        print('Error: Tab context for index $tabIndex (${days[tabIndex]}) is null');
+        print(
+            'Error: Tab context for index $tabIndex (${days[tabIndex]}) is null');
         // Retry after another frame if context is null
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _scrollToCenter(tabIndex);
@@ -87,17 +90,20 @@ class _ClassRoutinesState extends State<ClassRoutines> {
 
       final box = keyContext.findRenderObject() as RenderBox?;
       if (box == null) {
-        print('Error: RenderBox for index $tabIndex (${days[tabIndex]}) is null');
+        print(
+            'Error: RenderBox for index $tabIndex (${days[tabIndex]}) is null');
         return;
       }
 
-      final position = box.localToGlobal(Offset.zero, ancestor: context.findRenderObject());
+      final position =
+          box.localToGlobal(Offset.zero, ancestor: context.findRenderObject());
       final size = box.size;
 
       final screenWidth = MediaQuery.of(context).size.width;
       final offset = position.dx + size.width / 2 - screenWidth / 2;
 
-      print('Scrolling to ${days[tabIndex]}: offset=$offset, position.dx=${position.dx}, size.width=${size.width}, screenWidth=$screenWidth');
+      print(
+          'Scrolling to ${days[tabIndex]}: offset=$offset, position.dx=${position.dx}, size.width=${size.width}, screenWidth=$screenWidth');
 
       _scrollController.animateTo(
         offset.clamp(0.0, _scrollController.position.maxScrollExtent),
@@ -124,7 +130,7 @@ class _ClassRoutinesState extends State<ClassRoutines> {
         ),
         actions: const [
           Image(
-            image: AssetImage('assets/images/lbef.png'),
+            image: AssetImage('assets/images/pcpsLogo.png'),
             width: 70,
             height: 50,
             fit: BoxFit.contain,
@@ -139,14 +145,18 @@ class _ClassRoutinesState extends State<ClassRoutines> {
             Consumer<ClassRoutineViewModel>(
               builder: (context, viewModel, child) {
                 final List<Times>? times = viewModel.currentDetails?.times;
-                final Map<String, dynamic>? detail = viewModel.currentDetails?.detail;
+                final Map<String, dynamic>? detail =
+                    viewModel.currentDetails?.detail;
                 final List<DayItem>? days = viewModel.currentDetails?.days;
 
                 if (viewModel.isLoading) {
                   return const SkeletonLoader();
                 }
 
-                if (viewModel.currentDetails == null || times == null || detail == null || days == null) {
+                if (viewModel.currentDetails == null ||
+                    times == null ||
+                    detail == null ||
+                    days == null) {
                   return Column(
                     children: [
                       _buildDayTabs(),
@@ -201,7 +211,8 @@ class _ClassRoutinesState extends State<ClassRoutines> {
                 _scrollToCenter(i);
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: index == i ? AppColors.primary : Colors.white,
                   borderRadius: BorderRadius.circular(5),
@@ -255,8 +266,11 @@ class SkeletonLoader extends StatelessWidget {
         const SizedBox(height: 10),
         const Row(
           children: [
-            SizedBox(width: 80, child: Center(child: ShimmerEffect(width: 60, height: 16))),
-            Expanded(child: Center(child: ShimmerEffect(width: 80, height: 16))),
+            SizedBox(
+                width: 80,
+                child: Center(child: ShimmerEffect(width: 60, height: 16))),
+            Expanded(
+                child: Center(child: ShimmerEffect(width: 80, height: 16))),
           ],
         ),
         const SizedBox(height: 20),
@@ -265,7 +279,8 @@ class SkeletonLoader extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 8.0),
             child: Row(
               children: [
-                SizedBox(width: 80, child: ShimmerEffect(width: 60, height: 16)),
+                SizedBox(
+                    width: 80, child: ShimmerEffect(width: 60, height: 16)),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

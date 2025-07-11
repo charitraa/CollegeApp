@@ -8,7 +8,6 @@ import '../../widgets/form_widget/custom_button.dart';
 import '../../widgets/form_widget/custom_label_password.dart';
 import '../../widgets/form_widget/custom_label_textfield.dart';
 
-
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -51,14 +50,14 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 30),
                 Container(
                   child: const Image(
-                    image: AssetImage('assets/images/lbef.png'),
-                    fit: BoxFit.cover,
+                    image: AssetImage('assets/images/pcpsLogo.png'),
+                    fit: BoxFit.contain,
                     width: 280,
                     height: 180,
                   ),
                 ),
                 const SizedBox(height: 18),
-                if(isLoading)  const LinearProgressIndicator(),
+                if (isLoading) const LinearProgressIndicator(),
                 const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Row(
@@ -89,12 +88,13 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 RoleSelectionWidget(),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 Form(
                   key: _formKey,
                   child: Column(
                     children: [
-
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Column(
@@ -106,7 +106,6 @@ class _LoginPageState extends State<LoginPage> {
                               outlinedColor: Colors.grey,
                               focusedColor: AppColors.primary,
                               width: size.width,
-
                               helperStyle: const TextStyle(
                                 color: Colors.red,
                                 fontFamily: 'poppins',
@@ -122,7 +121,6 @@ class _LoginPageState extends State<LoginPage> {
                               outlinedColor: Colors.grey,
                               focusedColor: AppColors.primary,
                               width: size.width,
-
                               helperStyle: const TextStyle(
                                 color: Colors.red,
                                 fontFamily: 'poppins',
@@ -137,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                                 Text(
                                   "Forgot Password?",
                                   style: TextStyle(
-                                    color:Colors.grey,
+                                    color: Colors.grey,
                                     fontFamily: 'poppins',
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
@@ -145,8 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 26
-                            ),
+                            const SizedBox(height: 26),
                             CustomButton(
                                 isLoading: isLoading,
                                 text: "Sign in",
@@ -170,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                                   }
 
                                   await Provider.of<AuthViewModel>(context,
-                                      listen: false)
+                                          listen: false)
                                       .login({
                                     "username": _studentIdController.text,
                                     "password": _passwordController.text
@@ -188,7 +185,6 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 10,
                 ),
-
               ],
             ),
           ),

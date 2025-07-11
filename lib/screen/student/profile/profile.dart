@@ -16,7 +16,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constant/base_url.dart';
 import '../../../resource/colors.dart';
-import '../../../view_model/user_view_model/auth_view_model.dart';
 import '../../../view_model/user_view_model/current_user_model.dart';
 import '../../../widgets/custom_shimmer.dart';
 
@@ -32,7 +31,7 @@ class ProfilePage extends StatelessWidget {
 
       if (!await launchUrl(
         uri,
-        mode: LaunchMode.externalApplication, // 👈 Forces system browser
+        mode: LaunchMode.externalApplication, 
       )) {
         throw Exception('Could not launch $url');
       }
@@ -49,7 +48,7 @@ class ProfilePage extends StatelessWidget {
         automaticallyImplyLeading: false,
         actions: const [
           Image(
-            image: AssetImage('assets/images/lbef.png'),
+            image: AssetImage('assets/images/pcpsLogo.png'),
             width: 70,
             height: 50,
             fit: BoxFit.contain,

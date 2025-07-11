@@ -9,6 +9,7 @@ import 'package:lbef/widgets/custom_shimmer.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../data/status.dart';
 import '../../../../view_model/user_view_model/current_user_model.dart';
@@ -30,6 +31,16 @@ class _DashboardHeadState extends State<DashboardHead> {
   late final TextEditingController _controller;
   String searchQuery = '';
 
+  Future<void> _launchUrl(String url) async {
+    final Uri uri = Uri.parse(url);
+
+    if (!await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication, // 👈 Forces system browser
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
 
   final List<Map<String, dynamic>> allCards = [
     {
@@ -48,13 +59,13 @@ class _DashboardHeadState extends State<DashboardHead> {
       'icon': Icons.calendar_month,
       'className': const CalendarScreen()
     },
-    {'text': 'Breo', 'icon': Icons.web},
+    {'text': 'Breo', 'icon': Icons.web, 'link': 'https://breo.beds.ac.uk/'},
     // {
     //   'text': "Download forms",
     //   'icon': Icons.assignment,
     //   'className': DocumentListPage()
     // },
-    {'text': 'E-vision', 'icon': Icons.laptop},
+    {'text': 'E-vision', 'icon': Icons.laptop, 'link': 'https://evision.beds.ac.uk/'},
     // {'text': 'Change Password', 'icon': Icons.lock},
   ];
 
@@ -237,7 +248,7 @@ class _DashboardHeadState extends State<DashboardHead> {
 
                   String? image =
                       "${BaseUrl.imageDisplay}/html/profiles/students/${user?.stuProfilePath}/${user?.stuPhoto}";
-                  var logger=Logger();
+                  var logger = Logger();
                   logger.d(image);
                   return Positioned(
                     bottom: 90,
@@ -261,7 +272,8 @@ class _DashboardHeadState extends State<DashboardHead> {
                               ),
                             );
                           },
-                          errorBuilder: (context, error, stackTrace) => Container(
+                          errorBuilder: (context, error, stackTrace) =>
+                              Container(
                             width: 70,
                             height: 70,
                             color: Colors.white,
@@ -274,8 +286,7 @@ class _DashboardHeadState extends State<DashboardHead> {
                             ),
                           ),
                         ),
-                      )
-                      ,
+                      ),
                     ),
                   );
                 },
@@ -369,6 +380,8 @@ class _DashboardHeadState extends State<DashboardHead> {
                           Navigator.of(context).push(
                             SlideRightRoute(page: card['className']),
                           );
+                        } else if (card.containsKey('link')) {
+                          _launchUrl(card['link']);
                         }
                       },
                       child: DashboardCard(

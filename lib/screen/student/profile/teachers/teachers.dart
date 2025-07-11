@@ -65,7 +65,7 @@ class _TeachersPageState extends State<TeachersPage> {
         ),
         actions: const [
           Image(
-            image: AssetImage('assets/images/lbef.png'),
+            image: AssetImage('assets/images/pcpsLogo.png'),
             width: 56,
             height: 50,
             fit: BoxFit.cover,

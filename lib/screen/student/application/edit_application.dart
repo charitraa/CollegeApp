@@ -109,7 +109,8 @@ class _EditApplicationState extends State<EditApplication> {
           'Are you sure you want to update this application?',
           style: TextStyle(fontSize: 16),
         ),
-        actionsPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        actionsPadding:
+            const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         actions: [
           CustomOutlineButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -141,14 +142,15 @@ class _EditApplicationState extends State<EditApplication> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit Application", style: TextStyle(fontFamily: 'poppins')),
+        title: const Text("Edit Application",
+            style: TextStyle(fontFamily: 'poppins')),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: AppColors.primary),
           onPressed: () => Navigator.pop(context),
         ),
         actions: const [
           Image(
-              image: AssetImage('assets/images/lbef.png'),
+              image: AssetImage('assets/images/pcpsLogo.png'),
               width: 70,
               height: 50),
           SizedBox(width: 14),
@@ -168,14 +170,23 @@ class _EditApplicationState extends State<EditApplication> {
             const SizedBox(height: 10),
 
             // Start Date
-            const Text("Start Date", style: TextStyle(fontSize: 14, fontFamily: 'poppins', fontWeight: FontWeight.bold)),
+            const Text("Start Date",
+                style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'poppins',
+                    fontWeight: FontWeight.bold)),
             const SizedBox(height: 4),
-            const Text('Note: Please select the date when your leave begins', style: TextStyle(fontSize: 12)),
+            const Text('Note: Please select the date when your leave begins',
+                style: TextStyle(fontSize: 12)),
             const SizedBox(height: 4),
             Container(
-              decoration: BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(4)),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(4)),
               child: ListTile(
-                title: Text(startDate != null ? formatDate(startDate) : 'Select when your leave starts'),
+                title: Text(startDate != null
+                    ? formatDate(startDate)
+                    : 'Select when your leave starts'),
                 trailing: const Icon(Icons.calendar_month),
                 onTap: () => pickStartDate(context),
               ),
@@ -184,14 +195,24 @@ class _EditApplicationState extends State<EditApplication> {
             const SizedBox(height: 10),
 
             // End Date
-            const Text("End Date", style: TextStyle(fontSize: 14, fontFamily: 'poppins', fontWeight: FontWeight.bold)),
+            const Text("End Date",
+                style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'poppins',
+                    fontWeight: FontWeight.bold)),
             const SizedBox(height: 4),
-            const Text('Note: Please select the date when your leave ends (optional)', style: TextStyle(fontSize: 12)),
+            const Text(
+                'Note: Please select the date when your leave ends (optional)',
+                style: TextStyle(fontSize: 12)),
             const SizedBox(height: 4),
             Container(
-              decoration: BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(4)),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(4)),
               child: ListTile(
-                title: Text(endDate != null ? formatDate(endDate) : 'Select when your leave ends'),
+                title: Text(endDate != null
+                    ? formatDate(endDate)
+                    : 'Select when your leave ends'),
                 trailing: const Icon(Icons.calendar_today),
                 onTap: () => pickEndDate(context),
               ),
@@ -212,7 +233,8 @@ class _EditApplicationState extends State<EditApplication> {
             if (error.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: 10),
-                child: Text(error, style: const TextStyle(color: Colors.red, fontSize: 12)),
+                child: Text(error,
+                    style: const TextStyle(color: Colors.red, fontSize: 12)),
               ),
 
             const SizedBox(height: 20),
@@ -227,7 +249,8 @@ class _EditApplicationState extends State<EditApplication> {
 
                 if (applicationType == null) {
                   setState(() => error = "Select an application type");
-                  Utils.flushBarErrorMessage("Select an application type", context);
+                  Utils.flushBarErrorMessage(
+                      "Select an application type", context);
                   return;
                 }
                 if (start.isEmpty) {
@@ -241,7 +264,8 @@ class _EditApplicationState extends State<EditApplication> {
                   return;
                 }
 
-                final confirmUpdate = await showUpdateConfirmationDialog(context);
+                final confirmUpdate =
+                    await showUpdateConfirmationDialog(context);
                 if (confirmUpdate != true || !context.mounted) return;
 
                 final payload = {
@@ -252,12 +276,17 @@ class _EditApplicationState extends State<EditApplication> {
                   "application_request": reason,
                 };
 
-                final success = await Provider.of<ApplicationViewModel>(context, listen: false)
+                final success = await Provider.of<ApplicationViewModel>(context,
+                        listen: false)
                     .updateApplication(payload, context);
 
                 if (success) {
-                  await Provider.of<ApplicationViewModel>(context, listen: false).fetch(context);
-                  await Provider.of<ApplicationViewModel>(context, listen: false).getApplicationDetails(widget.id, context);
+                  await Provider.of<ApplicationViewModel>(context,
+                          listen: false)
+                      .fetch(context);
+                  await Provider.of<ApplicationViewModel>(context,
+                          listen: false)
+                      .getApplicationDetails(widget.id, context);
                 }
               },
             ),

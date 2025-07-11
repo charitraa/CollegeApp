@@ -30,7 +30,6 @@ class _NoticeBoardState extends State<NoticeBoard>
         .fetch(context);
     await Provider.of<EmailViewModel>(context, listen: false).fetch(context);
     await Provider.of<SmsViewModel>(context, listen: false).fetch(context);
-
   }
 
   @override
@@ -66,7 +65,7 @@ class _NoticeBoardState extends State<NoticeBoard>
         ),
         actions: const [
           Image(
-            image: AssetImage('assets/images/lbef.png'),
+            image: AssetImage('assets/images/pcpsLogo.png'),
             width: 70,
             height: 50,
             fit: BoxFit.contain,
@@ -135,7 +134,7 @@ class _NoticeBoardState extends State<NoticeBoard>
               },
             ),
           ),
-        const  Center(
+          const Center(
             child: Text("No SMS notice available."),
           ),
           Padding(

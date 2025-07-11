@@ -87,7 +87,7 @@ class _FlashScreenState extends State<FlashScreen> {
     return Scaffold(
       body: Center(
         child: Image.asset(
-          'assets/images/lbef.png',
+          'assets/images/pcpsLogo.png',
           height: 300,
         ),
       ),

@@ -60,7 +60,7 @@ class _ViewNoticeBoardState extends State<ViewNoticeBoard> {
           Padding(
             padding: EdgeInsets.only(right: 16),
             child: Image(
-              image: AssetImage('assets/images/lbef.png'),
+              image: AssetImage('assets/images/pcpsLogo.png'),
               width: 70,
               height: 50,
               fit: BoxFit.contain,
@@ -116,7 +116,8 @@ class _ViewNoticeBoardState extends State<ViewNoticeBoard> {
                   if (isLoading)
                     _buildLoadingSkeleton()
                   else
-                    _parseTextWithLinks(stripHtmlTags(notice.noticeText??  'No content available.')),
+                    _parseTextWithLinks(stripHtmlTags(
+                        notice.noticeText ?? 'No content available.')),
                 ],
               ),
             );
