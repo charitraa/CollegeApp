@@ -46,7 +46,7 @@ class _DashboardHeadState extends State<DashboardHead> {
     {
       'text': 'Calendar',
       'icon': Icons.calendar_month,
-      'className': const AcademicCalender()
+      'className': const CalendarScreen()
     },
     {'text': 'Breo', 'icon': Icons.web},
     {

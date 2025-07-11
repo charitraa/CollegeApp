@@ -34,6 +34,8 @@ class ApplicationViewModel with ChangeNotifier {
     try {
       final Map<String, dynamic> response =
           await _myrepo.fetchApplications(context);
+      _applications.clear();
+
       _applications.addAll(response['applications']);
 
       notifyListeners();

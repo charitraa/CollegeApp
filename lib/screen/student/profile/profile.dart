@@ -41,6 +41,7 @@ class ProfilePage extends StatelessWidget {
             fit: BoxFit.contain,
           ),
           SizedBox(width: 14),
+          SizedBox(width: 14),
         ],
       ),
       body: Column(
@@ -214,11 +215,11 @@ class ProfilePage extends StatelessWidget {
                     }),
                     buildListTile(Icons.calendar_month, 'Calender', () {
                       Navigator.of(context)
-                          .push(_buildSlideRoute(const AcademicCalender()));
+                          .push(_buildSlideRoute(const CalendarScreen()));
                     }),
                     buildListTile(Icons.event, 'Event', () {
                       Navigator.of(context)
-                          .push(_buildSlideRoute(const AcademicCalender()));
+                          .push(_buildSlideRoute(const CalendarScreen()));
                     }),
                     const SizedBox(
                       height: 15,

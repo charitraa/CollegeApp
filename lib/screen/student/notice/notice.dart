@@ -5,15 +5,12 @@ import 'package:lbef/screen/student/notice/skeleton/notice_skeleton.dart';
 import 'package:lbef/screen/student/notice/view_email_notice.dart';
 import 'package:lbef/screen/student/notice/view_notice_board.dart';
 import 'package:lbef/screen/student/notice/widgets/notice_widget.dart';
-import 'package:lbef/utils/parse_date.dart';
 import 'package:lbef/view_model/notice_board/email_view_model.dart';
 import 'package:lbef/view_model/notice_board/notice_board_view_model.dart';
-import 'package:lbef/widgets/no_data/no_data_widget.dart';
+import 'package:lbef/view_model/notice_board/sms_view_model.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-import '../../../utils/format_time.dart';
 import '../../../utils/navigate_to.dart';
-import '../application/widgets/application_shimmer.dart';
 import 'email_notice.dart';
 
 class NoticeBoard extends StatefulWidget {
@@ -32,6 +29,8 @@ class _NoticeBoardState extends State<NoticeBoard>
     await Provider.of<NoticeBoardViewModel>(context, listen: false)
         .fetch(context);
     await Provider.of<EmailViewModel>(context, listen: false).fetch(context);
+    await Provider.of<SmsViewModel>(context, listen: false).fetch(context);
+
   }
 
   @override

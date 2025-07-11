@@ -25,7 +25,7 @@ class SmsViewModel with ChangeNotifier {
     setLoading(true);
     try {
       final Map<String, dynamic> response =
-      await _myrepo.fetchEmails(context);
+      await _myrepo.fetchSms(context);
       _notices.addAll(response['notices']);
       notifyListeners();
     } catch (error) {

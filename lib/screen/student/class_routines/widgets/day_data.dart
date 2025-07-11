@@ -24,13 +24,13 @@ class DayDetails extends StatelessWidget {
 
     // Check if the day is not in the days list
     if (!days.any((dayItem) => dayItem.day == day)) {
-      return _buildNoDataView(size);
+      return const SizedBox();
     }
 
     // Check if detail for the day exists and is not empty
     final dayDetails = detail[day] as Map<String, dynamic>?;
     if (times.isEmpty || dayDetails == null || dayDetails.isEmpty) {
-      return _buildNoDataView(size);
+      return const SizedBox();
     }
 
     return Column(

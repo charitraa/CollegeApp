@@ -31,6 +31,7 @@ class NoticeBoardViewModel with ChangeNotifier {
     if (_isLoading) return;
     setLoading(true);
     try {
+      _notices.clear();
       final Map<String, dynamic> response =
       await _myrepo.fetchnotices(context);
       _notices.addAll(response['notices']);
