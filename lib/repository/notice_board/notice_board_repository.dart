@@ -6,6 +6,7 @@ import 'package:lbef/data/network/NetworkApiService.dart';
 import 'package:lbef/endpoints/notice_board_endpoints.dart';
 import 'package:lbef/model/email_notice_model.dart';
 import 'package:lbef/model/notice_model.dart';
+import 'package:lbef/model/sms_model.dart';
 import 'package:logger/logger.dart';
 import '../../utils/utils.dart';
 
@@ -116,8 +117,8 @@ class NoticeBoardRepository {
       await _apiServices.getApiResponse(NoticeBoardEndpoints.fetchSms);
       if (response is List) {
         //todo change the model over herr
-        List<EmailNoticeModel> notices =
-        response.map((e) => EmailNoticeModel.fromJson(e)).toList();
+        List<SmsModel> notices =
+        response.map((e) => SmsModel.fromJson(e)).toList();
         logger.d("notices List $notices");
         return {"notices": notices};
       } else {

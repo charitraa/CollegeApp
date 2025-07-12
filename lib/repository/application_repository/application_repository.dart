@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:lbef/data/network/NetworkApiService.dart';
 import 'package:lbef/endpoints/application_endpoints.dart';
 import 'package:lbef/model/application_model.dart';
-import 'package:lbef/model/user_model.dart';
 import 'package:logger/logger.dart';
 import '../../data/api_response.dart';
 import '../../utils/utils.dart';

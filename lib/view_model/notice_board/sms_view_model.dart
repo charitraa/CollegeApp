@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:lbef/model/email_notice_model.dart';
+import 'package:lbef/model/sms_model.dart';
 import 'package:logger/logger.dart';
 import '../../data/api_response.dart';
 import '../../repository/notice_board/notice_board_repository.dart';
 
 class SmsViewModel with ChangeNotifier {
   final NoticeBoardRepository _myrepo = NoticeBoardRepository();
-  final List<EmailNoticeModel> _notices = [];
-  List<EmailNoticeModel>? get notices => _notices;
-  ApiResponse<EmailNoticeModel> userData = ApiResponse.loading();
+  final List<SmsModel> _notices = [];
+  List<SmsModel>? get notices => _notices;
+  ApiResponse<SmsModel> userData = ApiResponse.loading();
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -34,6 +34,4 @@ class SmsViewModel with ChangeNotifier {
       setLoading(false);
     }
   }
-
-
 }

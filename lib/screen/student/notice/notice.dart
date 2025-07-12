@@ -5,6 +5,7 @@ import 'package:lbef/screen/student/notice/skeleton/notice_skeleton.dart';
 import 'package:lbef/screen/student/notice/view_email_notice.dart';
 import 'package:lbef/screen/student/notice/view_notice_board.dart';
 import 'package:lbef/screen/student/notice/widgets/notice_widget.dart';
+import 'package:lbef/screen/student/notice/widgets/sms_widget.dart';
 import 'package:lbef/view_model/notice_board/email_view_model.dart';
 import 'package:lbef/view_model/notice_board/notice_board_view_model.dart';
 import 'package:lbef/view_model/notice_board/sms_view_model.dart';
@@ -134,9 +135,44 @@ class _NoticeBoardState extends State<NoticeBoard>
               },
             ),
           ),
-          const Center(
-            child: Text("No SMS notice available."),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            child: Consumer<SmsViewModel>(
+              builder: (context, viewModel, child) {
+                if (viewModel.isLoading) {
+                  return ListView.builder(
+                    itemCount: 3,
+                    itemBuilder: (context, index) => const Padding(
+                      padding: EdgeInsets.only(bottom: 14),
+                      child: EmailShimmer(),
+                    ),
+                  );
+                }
+
+                if (viewModel.notices == null || viewModel.notices!.isEmpty) {
+                  return const Center(
+                    child: Text("No Sms available."),
+                  );
+                }
+
+                return ListView.separated(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: viewModel.notices!.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 14),
+                  itemBuilder: (context, index) {
+                    final notices = viewModel.notices![index];
+
+                    return SMSWidget(
+                      smsMessage: notices.smsMessage ?? '',
+                      sentOn: notices.sentOn ?? '',
+                    );
+                  },
+                );
+              },
+            ),
           ),
+
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             child: Consumer<EmailViewModel>(
