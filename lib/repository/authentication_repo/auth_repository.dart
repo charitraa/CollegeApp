@@ -27,37 +27,36 @@ class AuthRepository {
       return ApiResponse.error(" ${e.toString()}");
     }
   }
-  Future<bool> recover(BuildContext context, String username, String email,String dob) async {
-    var _logger=Logger();
+  Future<bool> recover(BuildContext context, dynamic body) async {
+    var logger=Logger();
     try {
 
-      _logger.d('Changing password via ${ProfileEndpoints.getProfile}');
-      final response = await _apiServices.getPostUrlResponse(
-        "${ProfileEndpoints.getProfile}/p1:$username/p2:$email/p3:$dob",
+      logger.d('Changing password via ${ProfileEndpoints.recover}');
+      final response = await _apiServices.getPostApiResponse(
+        ProfileEndpoints.recover,body
       );
       if (response == null) {
-        _logger.w('No response from changePassword API');
+        logger.w('No response from changePassword API');
         Utils.flushBarErrorMessage("No response from server", context);
         return false;
       }
 
-      _logger.d('Change password response: $response');
-      if (response['status'] == 'success' || response.containsKey('success')) {
-        Utils.flushBarSuccessMessage("Password changed successfully", context);
+      logger.d('Change password response: $response');
+      if ( response.containsKey('message')) {
+        Utils.flushBarSuccessMessage(response['message'], context);
         return true;
       } else {
-        final errorMessage = response['message'] ?? 'Failed to change password';
-        _logger.w('Change password failed: $errorMessage');
-        Utils.flushBarErrorMessage(errorMessage, context);
+
+        logger.w('Change password failed');
         return false;
       }
     } on TimeoutException {
-      _logger.e('Timeout: No internet connection for changing password');
+      logger.e('Timeout: No internet connection for changing password');
       Utils.flushBarErrorMessage("No internet connection. Please try again later.", context);
       return false;
     } catch (e) {
-      _logger.e('changePassword error: $e');
-      Utils.flushBarErrorMessage('Failed to change password: $e', context);
+      logger.e('changePassword error: $e');
+      Utils.flushBarErrorMessage(e.toString(), context);
       return false;
     }
   }

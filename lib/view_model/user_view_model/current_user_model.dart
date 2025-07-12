@@ -49,19 +49,21 @@ class UserDataViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> changePassword(
-      BuildContext context, String oldPassword, String newPassword) async {
+  Future<bool> changePassword(
+      BuildContext context, dynamic body) async {
     setLoading(true);
     try {
       bool? check =
-          await _myRepo.changePassword(context, oldPassword, newPassword);
+          await _myRepo.changePassword(context, body);
       if (check) {
-        Utils.flushBarSuccessMessage("Password Changed Successfully!", context);
+        return true;
       } else {
-        Utils.flushBarErrorMessage('Failed to change password', context);
+        return false;
+
       }
     } catch (e) {
       _logger.e('getUser error: $e');
+      return false;
     } finally {
       setLoading(false);
     }

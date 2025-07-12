@@ -13,7 +13,7 @@ class ProfileRepository {
     try {
       _logger.d('Fetching user from ${ProfileEndpoints.getProfile}');
       final dynamic response =
-      await _apiServices.getApiResponse(ProfileEndpoints.getProfile);
+          await _apiServices.getApiResponse(ProfileEndpoints.getProfile);
       if (response == null) {
         _logger.w('No response from getUser API');
         Utils.flushBarErrorMessage("No response from server", context);
@@ -24,7 +24,8 @@ class ProfileRepository {
       return ProfileModel.fromJson(response);
     } on TimeoutException {
       _logger.e('Timeout: No internet connection for fetching user');
-      Utils.flushBarErrorMessage("No internet connection. Please try again later.", context);
+      Utils.flushBarErrorMessage(
+          "No internet connection. Please try again later.", context);
       throw Exception("No internet connection");
     } catch (e) {
       _logger.e('getUser error: $e');
@@ -32,12 +33,12 @@ class ProfileRepository {
       throw e;
     }
   }
-  Future<bool> changePassword(BuildContext context, String oldPassword, String newPassword) async {
+
+  Future<bool> changePassword(BuildContext context, dynamic body) async {
     try {
       _logger.d('Changing password via ${ProfileEndpoints.getProfile}');
-      final response = await _apiServices.putUrlResponse(
-        "${ProfileEndpoints.getProfile}/p1:$oldPassword/p2:$newPassword",
-      );
+      final response =
+          await _apiServices.getPutResponse(ProfileEndpoints.getProfile, body);
       if (response == null) {
         _logger.w('No response from changePassword API');
         Utils.flushBarErrorMessage("No response from server", context);
@@ -45,22 +46,21 @@ class ProfileRepository {
       }
 
       _logger.d('Change password response: $response');
-      if (response['status'] == 'success' || response.containsKey('success')) {
-        Utils.flushBarSuccessMessage("Password changed successfully", context);
+      if (response.containsKey('message')) {
+        Utils.flushBarSuccessMessage(response['message'], context);
         return true;
       } else {
-        final errorMessage = response['message'] ?? 'Failed to change password';
-        _logger.w('Change password failed: $errorMessage');
-        Utils.flushBarErrorMessage(errorMessage, context);
+        _logger.w('Change password failed');
         return false;
       }
     } on TimeoutException {
       _logger.e('Timeout: No internet connection for changing password');
-      Utils.flushBarErrorMessage("No internet connection. Please try again later.", context);
+      Utils.flushBarErrorMessage(
+          "No internet connection. Please try again later.", context);
       return false;
     } catch (e) {
       _logger.e('changePassword error: $e');
-      Utils.flushBarErrorMessage('Failed to change password: $e', context);
+      Utils.flushBarErrorMessage(e.toString(), context);
       return false;
     }
   }

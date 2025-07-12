@@ -73,24 +73,25 @@ class AuthViewModel with ChangeNotifier {
       setLoading(false);
     }
   }
-  Future<void> changePassword(
-      BuildContext context,  String username, String email,String dob) async {
+
+  Future<bool> recover(BuildContext context, dynamic body) async {
     setLoading(true);
-    var _logger=Logger();
+    var _logger = Logger();
     try {
-      bool? check =
-      await _myrepo.recover(context, username, email,dob);
+      bool? check = await _myrepo.recover(context, body);
       if (check) {
-        Utils.flushBarSuccessMessage("Password Changed Successfully!", context);
+        return true;
       } else {
-        Utils.flushBarErrorMessage('Failed to change password', context);
+        return false;
       }
     } catch (e) {
       _logger.e('getUser error: $e');
+      return false;
     } finally {
       setLoading(false);
     }
   }
+
   Future<void> logout(BuildContext context) async {
     setLoading(true);
     try {
@@ -99,7 +100,6 @@ class AuthViewModel with ChangeNotifier {
         Utils.flushBarSuccessMessage(
             response.message ?? "User Logged out Successfully!", context);
         await UserViewModel().remove(context);
-
         Navigator.of(context).pushAndRemoveUntil(
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) =>

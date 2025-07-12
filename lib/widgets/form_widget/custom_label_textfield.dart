@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 class CustomLabelTextfield extends StatefulWidget {
   final String text;
   final String hintText;
-  final String? helperText;
   final Color outlinedColor;
   final bool? obscureText;
   final Color focusedColor;
   final double width;
   final Icon? suffixicon;
   final String? helper;
-  final bool readonly;
   final TextStyle? helperStyle;
   final Icon? prefixicon;
   final Widget? suffixText;
@@ -34,8 +32,6 @@ class CustomLabelTextfield extends StatefulWidget {
     this.helper,
     this.helperStyle,
     this.suffixText,
-    this.helperText,
-    this.readonly = false,
   });
 
   @override
@@ -55,48 +51,47 @@ class _CustomLabelTextfieldState extends State<CustomLabelTextfield> {
             Text(
               widget.text,
               style: const TextStyle(
-color: Color(0xff1967B5),
+                color: Colors.black,
                 fontFamily: 'poppins',
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
               ),
             ),
             const SizedBox(
-              height: 4,
+              height: 8,
             ),
             TextField(
               controller: widget.textController,
               onChanged: widget.onChanged,
               keyboardType: widget.keyboardType,
               style: const TextStyle(fontFamily: 'poppins', fontSize: 15),
-              readOnly: widget.readonly,
               decoration: InputDecoration(
-                helperText: widget.helper,
-                helperStyle: widget.helperStyle,
-                hintText: widget.hintText,
-                hintStyle: const TextStyle(
-                  color: Colors.grey,
-                  fontFamily: 'poppins',
-                  fontSize: 16,
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: widget.outlinedColor,
-                    width: 1.5,
+                  helperText: widget.helper,
+                  helperStyle: widget.helperStyle,
+                  hintText: widget.hintText,
+                  hintStyle: const TextStyle(
+                    color: Colors.grey,
+                    fontFamily: 'poppins',
+                    fontSize: 16,
                   ),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: widget.focusedColor,
-                    width: 1.5,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide(
+                      color: widget.outlinedColor,
+                      width: 1.5,
+                    ),
                   ),
-                ),
-                suffixIcon: widget.prefixicon,
-                prefixIcon: widget.prefixicon,
-                suffix: widget.suffixText,
-              ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide(
+                      color: widget.focusedColor,
+                      width: 1.5,
+                    ),
+                  ),
+                  suffixIcon: widget.prefixicon,
+                  prefixIcon: widget.prefixicon,
+                  suffix: widget.suffixText),
             ),
-
           ],
         ),
       ),

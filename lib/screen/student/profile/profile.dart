@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lbef/screen/student/calender/calender.dart';
 import 'package:lbef/screen/student/class_routines/class_routines.dart';
 import 'package:lbef/screen/student/notice/notice.dart';
+import 'package:lbef/screen/student/profile/recover_password/recover_password.dart';
 
 import 'package:lbef/screen/student/profile/widgets/build_list_tile.dart';
 import 'package:lbef/screen/student/view_my_profile/view_my_profile.dart';
@@ -179,9 +180,9 @@ class ProfilePage extends StatelessWidget {
                     const SizedBox(
                       height: 5,
                     ),
-                    buildListTile(Icons.lock, 'Forgot Password?', () {
+                    buildListTile(Icons.lock, 'Recover Password', () {
                       Navigator.of(context)
-                          .push(_buildSlideRoute(const ChangePassword()));
+                          .push(_buildSlideRoute(const RecoverPassword()));
                     }),
 
                     buildListTile(Icons.lock, 'Change Password', () {

@@ -19,14 +19,14 @@ class AuthNetworkApiService {
     };
     return headers;
   }
-  @override
-  Future getPostUrlResponse(String url) async {
-    final headers = await _getHeaders();
 
+  @override
+  Future getPostApiResponse(String url, dynamic body) async {
+    final headers = await _getHeaders();
     dynamic responseJson;
     try {
       Response response = await http
-          .post(Uri.parse(url), headers: headers)
+          .post(Uri.parse(url), headers: headers, body: jsonEncode(body))
           .timeout(const Duration(seconds: 10));
       responseJson = returnResponse(response);
     } on SocketException {
