@@ -4,6 +4,7 @@ import 'package:lbef/resource/colors.dart';
 import 'package:lbef/screen/student/class_routines/class_routines.dart';
 import 'package:lbef/screen/student/dashboard/display_security.dart';
 import 'package:lbef/screen/student/notice/notice.dart';
+import 'package:lbef/screen/student/profile/changePassword/change_password.dart';
 import 'package:lbef/screen/student/profile/profile.dart';
 import 'package:lbef/screen/student/profile/recover_password/recover_password.dart';
 import 'package:lbef/screen/student/view_my_profile/view_my_profile.dart';
@@ -289,8 +290,8 @@ class _DashboardHeadState extends State<DashboardHead> {
                           },
                           errorBuilder: (context, error, stackTrace) =>
                               Container(
-                            width: 70,
-                            height: 70,
+                            width: 90,
+                            height: 100,
                             color: Colors.white,
                             child: Center(
                               child: Icon(
@@ -473,7 +474,7 @@ class _DashboardHeadState extends State<DashboardHead> {
                                                 Navigator.of(context).push(
                                                   PageRouteBuilder(
                                                     pageBuilder: (context, animation, secondaryAnimation) =>
-                                                    const RecoverPassword(),
+                                                    const ChangePassword(),
                                                     transitionsBuilder: (context, animation, secondaryAnimation, child) {
                                                       const begin = Offset(1.0, 0.0);
                                                       const end = Offset.zero;
