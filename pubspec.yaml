@@ -43,6 +43,8 @@ dependencies:
   url_launcher: ^6.3.1
   http: ^1.2.2
   provider: ^6.1.2
+  dio: ^5.8.0+1
+  open_file: ^3.5.10
   html_unescape: ^2.0.0
   fluttertoast: ^8.2.10
   another_flushbar: ^1.12.30
@@ -58,9 +60,8 @@ dependencies:
   printing: ^5.14.2
   connectivity_plus: ^5.0.2
   internet_connection_checker: ^1.0.0+1
-#  khalti_flutter: ^3.0.0
   loading_indicator: ^3.1.1
-  flutter_html: 3.0.0-beta.2
+  path_provider: ^2.1.5
 dev_dependencies:
   flutter_test:
     sdk: flutter

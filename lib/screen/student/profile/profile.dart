@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lbef/screen/student/calender/calender.dart';
 import 'package:lbef/screen/student/class_routines/class_routines.dart';
 import 'package:lbef/screen/student/notice/notice.dart';
-import 'package:lbef/screen/student/profile/changePassword/change_password.dart';
-import 'package:lbef/screen/student/profile/event/event.dart';
-import 'package:lbef/screen/student/profile/teachers/teachers.dart';
+
 import 'package:lbef/screen/student/profile/widgets/build_list_tile.dart';
 import 'package:lbef/screen/student/view_my_profile/view_my_profile.dart';
 import 'package:lbef/view_model/user_view_model/user_view_model.dart';
@@ -18,6 +16,7 @@ import '../../../constant/base_url.dart';
 import '../../../resource/colors.dart';
 import '../../../view_model/user_view_model/current_user_model.dart';
 import '../../../widgets/custom_shimmer.dart';
+import 'changePassword/change_password.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -164,13 +163,34 @@ class ProfilePage extends StatelessWidget {
                       Navigator.of(context)
                           .push(_buildSlideRoute(const ViewProfilePage()));
                     }),
-                    // buildListTile(Icons.lock, 'Change Password', () {
-                    //   Navigator.of(context)
-                    //       .push(_buildSlideRoute(const ChangePassword()));
-                    // }),
-                    // const SizedBox(
-                    //   height: 15,
-                    // ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Row(
+                      children: [
+                        Text(
+                          'Security Options',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    buildListTile(Icons.lock, 'Forgot Password?', () {
+                      Navigator.of(context)
+                          .push(_buildSlideRoute(const ChangePassword()));
+                    }),
+
+                    buildListTile(Icons.lock, 'Change Password', () {
+                      Navigator.of(context)
+                          .push(_buildSlideRoute(const ChangePassword()));
+                    }),
+                    const SizedBox(
+                      height: 15,
+                    ),
                     const Row(
                       children: [
                         Text(

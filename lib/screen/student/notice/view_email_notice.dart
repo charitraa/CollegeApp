@@ -82,7 +82,8 @@ class _ViewEmailState extends State<ViewEmail> {
               date = parseDate(parts[0]);
               time = formatTimeTo12Hour(parts[1]);
             }
-
+            if (isLoading){
+              return _buildLoadingSkeleton();}
             return Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -139,9 +140,8 @@ class _ViewEmailState extends State<ViewEmail> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  if (isLoading)
-                    _buildLoadingSkeleton()
-                  else
+
+
                     _parseTextWithLinks(stripHtmlTags(
                         email.emailText ?? 'No content available.')),
                 ],
