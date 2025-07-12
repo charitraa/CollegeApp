@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:lbef/utils/permission.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:lbef/screen/student/daily_class_report/reports/reports.dart';
 import 'package:lbef/screen/student/daily_class_report/shimmer/class_card_shimmer.dart';
 import 'package:lbef/utils/parse_date.dart';
 import 'package:lbef/view_model/download_forms/download_forms_view_model.dart';
@@ -23,7 +21,6 @@ class DownloadForums extends StatefulWidget {
 
 class _DownloadForumsState extends State<DownloadForums> {
   final Logger _logger = Logger();
-  final String baseUrl = "https://your-base-url.com/files/";
 
   @override
   void initState() {
@@ -63,10 +60,8 @@ class _DownloadForumsState extends State<DownloadForums> {
       }
 
       final fullPath = '${dir.path}/$fileName';
-      final fullUrl = '$baseUrl$fileLink';
-
       await dio.download(
-        fullUrl,
+        fileLink,
         fullPath,
         onReceiveProgress: (received, total) {
           if (total != -1) {
@@ -122,20 +117,20 @@ class _DownloadForumsState extends State<DownloadForums> {
       ),
       body: Container(
         width: size.width,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Reduced horizontal padding
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Consumer<DownloadFormsViewModel>(
           builder: (context, viewModel, child) {
             if (viewModel.isLoading) {
               return GridView.count(
                 physics: const AlwaysScrollableScrollPhysics(),
                 crossAxisCount: 2,
-                mainAxisSpacing: 14, // Reduced spacing
-                crossAxisSpacing: 8, // Reduced spacing
-                childAspectRatio: 0.8, // Adjusted for better fit
+                mainAxisSpacing: 8, // Unified spacing for consistency
+                crossAxisSpacing: 8,
+                childAspectRatio: 0.85, // Slightly increased to prevent overflow
                 children: List.generate(
-                  (size.height / 220).ceil(), // Adjusted for screen size
+                  (size.height / 240).ceil(), // Adjusted for taller cells
                       (index) => const Padding(
-                    padding: EdgeInsets.all(4), // Reduced padding
+                    padding: EdgeInsets.all(4),
                     child: ClassCardShimmer(),
                   ),
                 ),
@@ -156,9 +151,9 @@ class _DownloadForumsState extends State<DownloadForums> {
             return GridView.count(
               physics: const AlwaysScrollableScrollPhysics(),
               crossAxisCount: 2,
-              mainAxisSpacing: 8, // Reduced spacing
-              crossAxisSpacing: 8, // Reduced spacing
-              childAspectRatio: 0.8, // Adjusted for better fit
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              childAspectRatio: 0.85, // Slightly increased to prevent overflow
               children: viewModel.downloadsList.map((report) {
                 return GestureDetector(
                   onTap: () => downloadFile(
@@ -166,7 +161,7 @@ class _DownloadForumsState extends State<DownloadForums> {
                     report.fileLink ?? '',
                   ),
                   child: Container(
-                    padding: const EdgeInsets.all(10), // Reduced padding
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
@@ -188,14 +183,14 @@ class _DownloadForumsState extends State<DownloadForums> {
                           color: report.fileLink?.endsWith('.pdf') ?? false
                               ? Colors.red
                               : Colors.blue,
-                          size: 36, // Reduced icon size
+                          size: 36,
                         ),
                         const SizedBox(height: 8),
                         Text(
                           report.documentName ?? 'Untitled',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 13, // Reduced font size
+                            fontSize: 13,
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -203,18 +198,18 @@ class _DownloadForumsState extends State<DownloadForums> {
                         const SizedBox(height: 4),
                         Text(
                           report.description ?? report.documentName ?? 'No description',
-                          style: TextStyle(fontSize: 11, color: Colors.grey[800]), // Reduced font size
-                          maxLines: 3, // Reduced max lines
+                          style: TextStyle(fontSize: 11, color: Colors.grey[800]),
+                          maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                         ),
                         const Spacer(),
                         Text(
                           'Published: ${report.publishOn != null && report.publishOn!.isNotEmpty ? parseDate(report.publishOn!) : "Unknown"}',
-                          style: TextStyle(fontSize: 10, color: Colors.grey[600]), // Reduced font size
+                          style: TextStyle(fontSize: 10, color: Colors.grey[600]),
                         ),
                         const Align(
                           alignment: Alignment.bottomRight,
-                          child: Icon(Icons.download, color: Colors.grey, size: 20), // Reduced icon size
+                          child: Icon(Icons.download, color: Colors.grey, size: 20),
                         ),
                       ],
                     ),

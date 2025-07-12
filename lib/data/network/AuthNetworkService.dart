@@ -19,7 +19,21 @@ class AuthNetworkApiService {
     };
     return headers;
   }
+  @override
+  Future getPostUrlResponse(String url) async {
+    final headers = await _getHeaders();
 
+    dynamic responseJson;
+    try {
+      Response response = await http
+          .post(Uri.parse(url), headers: headers)
+          .timeout(const Duration(seconds: 10));
+      responseJson = returnResponse(response);
+    } on SocketException {
+      throw FetchDataException("No internet Connection");
+    }
+    return responseJson;
+  }
   Future getPostResponse(String url, dynamic data,
       {BuildContext? context}) async {
     dynamic responseJson;

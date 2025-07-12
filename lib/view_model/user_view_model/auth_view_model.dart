@@ -73,7 +73,24 @@ class AuthViewModel with ChangeNotifier {
       setLoading(false);
     }
   }
-
+  Future<void> changePassword(
+      BuildContext context,  String username, String email,String dob) async {
+    setLoading(true);
+    var _logger=Logger();
+    try {
+      bool? check =
+      await _myrepo.recover(context, username, email,dob);
+      if (check) {
+        Utils.flushBarSuccessMessage("Password Changed Successfully!", context);
+      } else {
+        Utils.flushBarErrorMessage('Failed to change password', context);
+      }
+    } catch (e) {
+      _logger.e('getUser error: $e');
+    } finally {
+      setLoading(false);
+    }
+  }
   Future<void> logout(BuildContext context) async {
     setLoading(true);
     try {
@@ -82,7 +99,7 @@ class AuthViewModel with ChangeNotifier {
         Utils.flushBarSuccessMessage(
             response.message ?? "User Logged out Successfully!", context);
         await UserViewModel().remove(context);
-        //clear all perivous routes and navigate to login page
+
         Navigator.of(context).pushAndRemoveUntil(
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) =>
