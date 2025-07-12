@@ -4,28 +4,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:lbef/data/network/NetworkApiService.dart';
 import 'package:lbef/endpoints/download_forms_endpoints.dart';
-import 'package:lbef/model/user_model.dart';
+import 'package:lbef/model/downloadModel.dart';
 import 'package:logger/logger.dart';
 import '../../utils/utils.dart';
 
 class DownloadForumsRepository {
   final NetworkApiService _apiServices = NetworkApiService();
   var logger = Logger();
-  Future<Map<String, dynamic>> getDocuments(
-      int page, int limit, BuildContext context) async {
+  Future<Map<String, dynamic>> getDocuments(BuildContext context) async {
     if (kDebugMode) {
-      logger.d(
-          "${DownloadFormsEndpoints.getForms}?page=$page&size=$limit");
+      logger.d(DownloadFormsEndpoints.getForms);
     }
     try {
-      dynamic response = await _apiServices.getApiResponse(
-          "${DownloadFormsEndpoints.getForms}?page=$page&pp=$limit");
+      dynamic response =
+          await _apiServices.getApiResponse(DownloadFormsEndpoints.getForms);
       if (response is List) {
-        //todo change the model over herr
-        List<UserModel> forms =
-        response.map((e) => UserModel.fromJson(e)).toList();
-        logger.d("applications List $forms");
-        return {"forms": forms};
+        List<DownloadModel> downloads =
+            response.map((e) => DownloadModel.fromJson(e)).toList();
+        logger.d("daily class report List $downloads");
+        return {"downloads": downloads};
       } else {
         throw Exception("Unexpected response format: $response");
       }

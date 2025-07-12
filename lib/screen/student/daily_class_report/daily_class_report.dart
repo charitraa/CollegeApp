@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:lbef/screen/student/daily_class_report/reports/reports.dart';
 import 'package:lbef/screen/student/daily_class_report/shimmer/class_card_shimmer.dart';
-import 'package:lbef/view_model/class_routine/class_routine_view_model.dart';
 import 'package:lbef/view_model/daily_class_report/dcr_view_model.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:lbef/screen/student/daily_class_report/widgets/class_card.dart';
-
-import '../../../data/status.dart';
 import '../../../utils/navigate_to.dart';
 import '../../../widgets/no_data/no_data_widget.dart';
 

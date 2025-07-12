@@ -60,13 +60,13 @@ class _DashboardHeadState extends State<DashboardHead> {
       'className': const CalendarScreen()
     },
     {'text': 'Breo', 'icon': Icons.web, 'link': 'https://breo.beds.ac.uk/'},
-    // {
-    //   'text': "Download forms",
-    //   'icon': Icons.assignment,
-    //   'className': DocumentListPage()
-    // },
+    {
+      'text': "Download forms",
+      'icon': Icons.assignment,
+      'className': const DownloadForums()
+    },
     {'text': 'E-vision', 'icon': Icons.laptop, 'link': 'https://evision.beds.ac.uk/'},
-    // {'text': 'Change Password', 'icon': Icons.lock},
+    {'text': 'Security', 'icon': Icons.lock},
   ];
 
   List<Map<String, dynamic>> filteredCards = [];

@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => EmailViewModel()),
         ChangeNotifierProvider(create: (_) => SmsViewModel()),
         ChangeNotifierProvider(create: (_) => EventCalenderViewModel()),
-        ChangeNotifierProvider(create: (_) => DownloadFormViewModel()),
+        ChangeNotifierProvider(create: (_) => DownloadFormsViewModel()),
         ChangeNotifierProvider(create: (_) => NoticeBoardViewModel()),
         ChangeNotifierProvider(create: (_) => UserViewModel()),
         ChangeNotifierProvider(create: (_) => UserDataViewModel()),

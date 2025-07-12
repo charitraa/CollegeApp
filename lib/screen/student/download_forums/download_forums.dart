@@ -1,125 +1,57 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lbef/screen/student/daily_class_report/reports/reports.dart';
+import 'package:lbef/screen/student/daily_class_report/shimmer/class_card_shimmer.dart';
+import 'package:lbef/utils/parse_date.dart';
+import 'package:lbef/view_model/daily_class_report/dcr_view_model.dart';
 import 'package:lbef/view_model/download_forms/download_forms_view_model.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:lbef/screen/student/daily_class_report/widgets/class_card.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../model/document.dart';
-import '../../../resource/colors.dart';
+import '../../../utils/navigate_to.dart';
+import '../../../widgets/no_data/no_data_widget.dart';
 
-class DocumentListPage extends StatefulWidget {
+class DownloadForums extends StatefulWidget {
+  const DownloadForums({super.key});
+
   @override
-  _DocumentListPageState createState() => _DocumentListPageState();
+  State<DownloadForums> createState() => _DownloadForumsState();
 }
 
-class _DocumentListPageState extends State<DocumentListPage> {
-  late ScrollController _scrollController;
-  var logger = Logger();
-  bool isLoad = false;
+class _DownloadForumsState extends State<DownloadForums> {
+  final Logger _logger = Logger();
 
-  void _scrollListener() {
-    if (_scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent &&
-        !isLoad) {
-      loadMore();
-    }
+  @override
+  void initState() {
+    super.initState();
+    fetch();
   }
 
   void fetch() async {
-    await Provider.of<DownloadFormViewModel>(context, listen: false)
-        .fetch(context);
+    // await Provider.of<DownloadFormsViewModel>(context, listen: false).fetch(context);
   }
-
-  Future<void> loadMore() async {
-    if (isLoad) return;
-    setState(() => isLoad = true);
-    try {
-      await Provider.of<DownloadFormViewModel>(context, listen: false)
-          .loadMore(context);
-    } catch (e) {
-      if (kDebugMode) logger.d("Error loading more: $e");
-    } finally {
-      setState(() => isLoad = false);
-    }
-  }
-
-  List<Document> documents = [];
-  @override
-  void initState() {
-    _scrollController = ScrollController()..addListener(_scrollListener);
-    super.initState();
-    // fetch();
-    documents = getDocuments();
-  }
-
-  List<Document> getDocuments() {
-    return [
-      Document(
-        title: 'Online Course Enrollment Contract',
-        description:
-            'This contract is for students to enroll based on their course and level options.',
-        publishedDate: '2019-06-10',
-        pdfUrl:
-            'https://edusys.patancollege.edu.np/html/profiles/downloads/Online_Course_Enrollment_Contract_35b7bbb6408cfb.pdf',
-      ),
-      Document(
-        title: 'Group Weekly Progress Report',
-        description:
-            'Required for group assessments. Submit weekly to faculty, HOD, and Program Coordinator.',
-        publishedDate: '2019-06-10',
-        pdfUrl: 'https://example.com/group_weekly_progress_report.pdf',
-      ),
-      Document(
-        title: 'Individual Weekly Progress Report',
-        description:
-            'Submit weekly to faculty, HOD, and Program Coordinator for individual assessments.',
-        publishedDate: '2019-06-10',
-        pdfUrl: 'https://example.com/individual_weekly_progress_report.pdf',
-      ),
-      Document(
-        title: 'Character Certificate Application',
-        description:
-            'Fill, print, and submit this to the program coordinator for processing.',
-        publishedDate: '2019-06-10',
-        pdfUrl: 'https://example.com/character_certificate_application.pdf',
-      ),
-      Document(
-        title: 'Security Deposit Refund Application',
-        description:
-            'Fill and submit this to the accounts department for refund processing.',
-        publishedDate: '2019-06-10',
-        pdfUrl: 'https://example.com/security_deposit_refund.pdf',
-      ),
-    ];
-  }
-
   void openPdf(String url) async {
     final Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Could not open the PDF")),
+        const SnackBar(content: Text("Could not open the PDF")),
       );
     }
   }
-
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F6F9),
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Text(
           "Download Forms",
-          style: TextStyle(fontFamily: 'poppins'),
+          style: TextStyle(fontFamily: 'poppins', fontSize: 18),
         ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: AppColors.primary),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          iconSize: 18,
-        ),
+        automaticallyImplyLeading: false,
         actions: const [
           Image(
             image: AssetImage('assets/images/pcpsLogo.png'),
@@ -130,66 +62,99 @@ class _DocumentListPageState extends State<DocumentListPage> {
           SizedBox(width: 14),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: GridView.count(
-          physics: AlwaysScrollableScrollPhysics(),
-          crossAxisCount: 2,
-          mainAxisSpacing: 12,
-          crossAxisSpacing: 12,
-          childAspectRatio: 0.75,
-          children: documents.map((doc) {
-            return GestureDetector(
-              onTap: () => openPdf(doc.pdfUrl),
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 6,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
+      body: Container(
+        width: size.width,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        child: Consumer<DownloadFormsViewModel>(
+          builder: (context, viewModel, child) {
+            if (viewModel.isLoading) {
+              return GridView.count(
+                physics: const AlwaysScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                childAspectRatio: 0.75,
+                children: List.generate(
+                  (size.height / 200).ceil(),
+                      (index) => const Padding(
+                    padding: EdgeInsets.all(4),
+                    child: ClassCardShimmer(),
+                  ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Icon(Icons.picture_as_pdf,
-                        color: Colors.red, size: 40),
-                    const SizedBox(height: 10),
-                    Text(
-                      doc.title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      doc.description,
-                      style: TextStyle(fontSize: 12, color: Colors.grey[800]),
-                      maxLines: 4,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const Spacer(),
-                    Text(
-                      'Published: ${doc.publishedDate}',
-                      style: TextStyle(fontSize: 11, color: Colors.grey[600]),
-                    ),
-                    const Align(
-                      alignment: Alignment.bottomRight,
-                      child: Icon(Icons.download, color: Colors.grey),
-                    ),
-                  ],
+              );
+            }
+
+            if (viewModel.downloadsList.isEmpty) {
+              return SizedBox(
+                height: 100,
+                child: BuildNoData(
+                  size,
+                  'No forms available',
+                  Icons.disabled_visible_rounded,
                 ),
-              ),
+              );
+            }
+
+            return GridView.count(
+              physics: const AlwaysScrollableScrollPhysics(),
+              crossAxisCount: 2,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              childAspectRatio: 0.75,
+              children: viewModel.downloadsList.map((report) {
+                return GestureDetector(
+                  onTap: () => openPdf(report.fileLink??''),
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 6,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.picture_as_pdf,
+                            color: Colors.red, size: 40),
+                        const SizedBox(height: 10),
+                        Text(
+                          report.documentName??'',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          report.documentName??'',
+                          style: TextStyle(fontSize: 12, color: Colors.grey[800]),
+                          maxLines: 4,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const Spacer(),
+                        Text(
+                          'Published: ${report.publishOn!=null||report.publishOn!=''?parseDate(report.publishOn??''):""}',
+                          style: TextStyle(fontSize: 11, color: Colors.grey[600]),
+                        ),
+                        const Align(
+                          alignment: Alignment.bottomRight,
+                          child: Icon(Icons.download, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
             );
-          }).toList(),
+          },
         ),
       ),
     );
