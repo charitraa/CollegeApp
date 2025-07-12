@@ -114,7 +114,7 @@ class _ReportsState extends State<Reports> {
                   final data = viewModel.currentDetails;
 
                   if (viewModel.isLoading) {
-                    return const Expanded(child: ReportsShimmer());
+                    return ReportsShimmer();
                   }
 
                   if (data == null ||
