@@ -49,21 +49,19 @@ class _ChangePasswordState extends State<ChangePassword> {
         backgroundColor: Colors.white,
         title: const Text(
           "Change Password",
-          style: TextStyle(fontFamily: 'poppins'),
+          style: TextStyle(fontFamily: 'poppins', fontSize: 18),
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: AppColors.primary),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
           iconSize: 18,
         ),
         actions: const [
           Image(
             image: AssetImage('assets/images/pcpsLogo.png'),
-            width: 56,
+            width: 70,
             height: 50,
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
           ),
           SizedBox(width: 14),
         ],
