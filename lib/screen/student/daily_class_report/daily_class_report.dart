@@ -57,7 +57,7 @@ class _DailyClassReportState extends State<DailyClassReport> {
           builder: (context, viewModel, child) {
             if (viewModel.isLoading) {
               return ListView.builder(
-                itemCount: 3,
+                itemCount: 2,
                 itemBuilder: (context, index) => const Padding(
                   padding: EdgeInsets.only(bottom: 14),
                   child: ClassCardShimmer(),

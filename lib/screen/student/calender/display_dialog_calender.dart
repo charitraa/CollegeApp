@@ -11,7 +11,8 @@ class DisplayDialogCalender extends StatefulWidget {
   const DisplayDialogCalender({
     super.key,
     required this.text,
-    required this.show, required this.id,
+    required this.show,
+    required this.id,
   });
 
   @override
@@ -19,16 +20,18 @@ class DisplayDialogCalender extends StatefulWidget {
 }
 
 class _DisplayDialogCalenderState extends State<DisplayDialogCalender> {
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
     fetch();
   }
-  void fetch()async{
-  await  Provider.of<EventCalenderViewModel>(context, listen: false).getApplicationDetails(widget.id??'', context);
 
+  void fetch() async {
+    await Provider.of<EventCalenderViewModel>(context, listen: false)
+        .getApplicationDetails(widget.id ?? '', context);
   }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -50,86 +53,86 @@ class _DisplayDialogCalenderState extends State<DisplayDialogCalender> {
             ),
           ],
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.blue.shade700, Colors.blueAccent],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.blue.shade700, Colors.blueAccent],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(16)),
                 ),
-                borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(16)),
-              ),
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    widget.text,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close, color: Colors.white),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Container(
-                      width: 140,
-                      height: 60,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/lbef.png'),
-                          fit: BoxFit.contain,
-                        ),
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      widget.text,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
                     ),
-                  ),
-
-
-                  widget.show,
-                  const SizedBox(height: 20),
-                  Center(
-                    child: ElevatedButton(
+                    IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
                       onPressed: () => Navigator.of(context).pop(),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 12),
-                        elevation: 4,
-                      ),
-                      child: const Text(
-                        'Close',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Container(
+                        width: 140,
+                        height: 60,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/pcpsLogo.png'),
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    widget.show,
+                    const SizedBox(height: 20),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 12),
+                          elevation: 4,
+                        ),
+                        child: const Text(
+                          'Close',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

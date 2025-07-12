@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lbef/model/event_model.dart';
+import 'package:lbef/utils/format_time.dart';
 import 'package:lbef/utils/parse_date.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +32,7 @@ class _CalenderViewDetailsState extends State<CalenderViewDetails> {
           );
         }
 
-        return SingleChildScrollView(child: Column(
+        return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (event.eventName != null && event.eventName!.isNotEmpty)
@@ -53,26 +53,21 @@ class _CalenderViewDetailsState extends State<CalenderViewDetails> {
                 parseDate(event.startDate!),
                 valueColor: Colors.black87,
               ),
-            if (event.startTime != null &&
-                event.startTime!.isNotEmpty &&
-                event.startTime != '00:00:00')
-              _buildDetailRow(
-                'Start Time',
-                event.startTime!,
-                valueColor: Colors.black87,
-              ),
             if (event.endDate != null && event.endDate!.isNotEmpty)
               _buildDetailRow(
                 'End Date',
                 parseDate(event.endDate!),
                 valueColor: Colors.black87,
               ),
-            if (event.endTime != null &&
+            if (event.startTime != null &&
+                event.startTime!.isNotEmpty &&
+                event.startTime != '00:00:00' &&
+                event.endTime != null &&
                 event.endTime!.isNotEmpty &&
                 event.endTime != '00:00:00')
               _buildDetailRow(
-                'End Time',
-                event.endTime!,
+                'Time',
+                formatTimeRange(event.startTime!, event.endTime!),
                 valueColor: Colors.black87,
               ),
             if (event.location != null && event.location!.isNotEmpty)
@@ -87,31 +82,27 @@ class _CalenderViewDetailsState extends State<CalenderViewDetails> {
                 event.organizerName!,
                 valueColor: Colors.black87,
               ),
-            if (event.organizerEmail != null && event.organizerEmail!.isNotEmpty)
-              _buildDetailRow(
-                'Organizer Email',
-                event.organizerEmail!,
-                valueColor: Colors.blue,
-              ),
-            if (event.organizerMobile != null && event.organizerMobile!.isNotEmpty)
+            if (event.organizerEmail != null &&
+                event.organizerEmail!.isNotEmpty)
+
+
+            if (event.organizerMobile != null &&
+                event.organizerMobile!.isNotEmpty)
               _buildDetailRow(
                 'Organizer Mobile',
                 event.organizerMobile!,
                 valueColor: Colors.black87,
               ),
-            if (event.eventContactName != null && event.eventContactName!.isNotEmpty)
+            if (event.eventContactName != null &&
+                event.eventContactName!.isNotEmpty)
               _buildDetailRow(
                 'Contact Name',
                 event.eventContactName!,
                 valueColor: Colors.black87,
               ),
-            if (event.eventContactEmail != null && event.eventContactEmail!.isNotEmpty)
-              _buildDetailRow(
-                'Contact Email',
-                event.eventContactEmail!,
-                valueColor: Colors.blue,
-              ),
-            if (event.eventContactMobile != null && event.eventContactMobile!.isNotEmpty)
+
+            if (event.eventContactMobile != null &&
+                event.eventContactMobile!.isNotEmpty)
               _buildDetailRow(
                 'Contact Mobile',
                 event.eventContactMobile!,
@@ -129,15 +120,97 @@ class _CalenderViewDetailsState extends State<CalenderViewDetails> {
                 event.summary!,
                 valueColor: Colors.black87,
               ),
-            if (event.description != null && event.description!.isNotEmpty)
-              _buildDetailRow(
-                'Description',
-                event.description!,
-                valueColor: Colors.black87,
+            if (event.eventContactEmail != null &&
+                event.eventContactEmail!.isNotEmpty)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Organizer Email',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 3,),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade50,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.blue.shade100),
+                    ),
+                    child: Text(
+                      "${event.eventContactEmail}",
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-          ],
-        ));
+            if (event.organizerEmail != null && event.organizerEmail!.isNotEmpty)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Organizer Email',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 3,),
 
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade50,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.blue.shade100),
+                  ),
+                  child: Text(
+                    "${event.organizerEmail}",
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            if (event.description != null && event.description!.isNotEmpty)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Description',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade50,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.blue.shade100),
+                    ),
+                    child: Text(
+                      "${event.description}",
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
+              )
+          ],
+        );
       },
     );
   }
@@ -152,10 +225,9 @@ class _CalenderViewDetailsState extends State<CalenderViewDetails> {
             width: 120,
             child: Text(
               label,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: Colors.grey.shade700,
                 fontFamily: 'poppins',
               ),
             ),
@@ -163,10 +235,9 @@ class _CalenderViewDetailsState extends State<CalenderViewDetails> {
           Expanded(
             child: Text(
               value,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: valueColor ?? Colors.black87,
                 fontFamily: 'poppins',
               ),
             ),

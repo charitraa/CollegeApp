@@ -74,6 +74,24 @@ class AuthViewModel with ChangeNotifier {
     }
   }
 
+  Future<bool> recover(BuildContext context, dynamic body) async {
+    setLoading(true);
+    var _logger = Logger();
+    try {
+      bool? check = await _myrepo.recover(context, body);
+      if (check) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      _logger.e('getUser error: $e');
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
   Future<void> logout(BuildContext context) async {
     setLoading(true);
     try {
@@ -82,7 +100,6 @@ class AuthViewModel with ChangeNotifier {
         Utils.flushBarSuccessMessage(
             response.message ?? "User Logged out Successfully!", context);
         await UserViewModel().remove(context);
-        //clear all perivous routes and navigate to login page
         Navigator.of(context).pushAndRemoveUntil(
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) =>

@@ -56,8 +56,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     selectedDateStr)
             .toList();
 
-        print(
-            'Selected day: $selectedDateStr, Events: ${selectedDayEvents.length}'); // Debug log
 
         return Scaffold(
           appBar: AppBar(
@@ -76,7 +74,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     _selectedDay = selectedDay;
                     _focusedDay = focusedDay;
                   });
-                  // Fetch events for the selected date's month if not already loaded
                   final selectedMonth =
                       DateFormat('yyyy-MM').format(selectedDay);
                   if (selectedMonth !=
@@ -100,8 +97,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                   .format(DateTime.parse(event.startDate!)) ==
                               dayStr)
                       .toList();
-                  print(
-                      'EventLoader for $dayStr: ${events.length} events'); // Debug log
+
                   return events;
                 },
                 calendarBuilders: CalendarBuilders(
@@ -139,7 +135,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
               const SizedBox(height: 8),
               Expanded(
-                // Use Expanded to prevent overflow
                 child: viewModel.isLoading
                     ? const ShimmerWidget()
                     : viewModel.userData.status == Status.ERROR
@@ -199,13 +194,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                                 id: event.eventId.toString() ??
                                                     '',
                                                 text: 'Event Details',
-                                                show: CalenderViewDetails()),
+                                                show:
+                                                    const CalenderViewDetails()),
                                       );
                                     },
                                     child: CalenderWidget(
                                       title:
                                           event.eventName ?? 'Untitled Event',
-                                      name: event.organizerName ??
+                                      organizerName: event.organizerName ??
                                           'Unknown Organizer',
                                       date: event.eventType ?? 'No Type',
                                       color: _parseColor(
@@ -213,7 +209,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                       dateTime: event.startDate != null ||
                                               event.startDate != ''
                                           ? parseDate(event.startDate ?? '')
-                                          : "",
+                                          : "", location:  event.location??'',
                                     ),
                                   );
                                 },

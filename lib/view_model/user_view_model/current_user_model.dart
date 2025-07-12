@@ -48,4 +48,24 @@ class UserDataViewModel with ChangeNotifier {
       setLoading(false);
     }
   }
+
+  Future<bool> changePassword(
+      BuildContext context, dynamic body) async {
+    setLoading(true);
+    try {
+      bool? check =
+          await _myRepo.changePassword(context, body);
+      if (check) {
+        return true;
+      } else {
+        return false;
+
+      }
+    } catch (e) {
+      _logger.e('getUser error: $e');
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
 }

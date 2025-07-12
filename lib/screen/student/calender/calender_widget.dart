@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:lbef/resource/colors.dart';
 
 class CalenderWidget extends StatelessWidget {
-  final String date, dateTime, title, name;
+  final String date, dateTime, title, organizerName, location;
   final Color color;
 
   const CalenderWidget({
     super.key,
     required this.title,
-    required this.name,
+    required this.organizerName,
     required this.date,
     required this.color,
     required this.dateTime,
+    required this.location,
   });
 
   @override
@@ -56,7 +56,7 @@ class CalenderWidget extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: 4,),
+                    const SizedBox(height: 4),
                     Text(
                       title,
                       style: const TextStyle(fontWeight: FontWeight.bold),
@@ -64,12 +64,47 @@ class CalenderWidget extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 2),
-                    if (name != '') ...[
-                      Text(
-                        name,
-                        style: const TextStyle(fontSize: 12),
-                      )
-                    ]
+                    if (organizerName != '') ...[
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.person,
+                            color: color,
+                            size: 16,
+                          ),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              organizerName,
+                              style: const TextStyle(fontSize: 12),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                    ],
+                    if (location != '') ...[
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.location_on,
+                            color: color,
+                            size: 16,
+                          ),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              location,
+                              style: const TextStyle(fontSize: 12),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ],
                 ),
               ),
