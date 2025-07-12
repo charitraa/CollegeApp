@@ -23,7 +23,9 @@ class CollegeFeeViewModel with ChangeNotifier {
   void setLoading(bool value) {
     _logger.i('Loading status set to: $value');
     _isLoading = value;
-    notifyListeners();
+    Future.microtask(() {
+      notifyListeners();
+    });
   }
 
   Future<void> fetch(BuildContext context) async {
@@ -42,7 +44,8 @@ class CollegeFeeViewModel with ChangeNotifier {
         setDetails(ApiResponse.error('No data available'));
       }
     } catch (error, stackTrace) {
-      _logger.e('Error fetching fee details', error: error, stackTrace: stackTrace);
+      _logger.e('Error fetching fee details',
+          error: error, stackTrace: stackTrace);
       setDetails(ApiResponse.error('Error fetching data: $error'));
     } finally {
       setLoading(false);
