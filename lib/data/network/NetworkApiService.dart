@@ -170,7 +170,7 @@ var logger=Logger();
       case 403:
         throw FetchDataException("Forbidden: $errorMessage");
       case 404:
-        throw FetchDataException("Not Found: $errorMessage");
+        return responseBody;
       case 410:
         throw FetchDataException("Not Found: $errorMessage");
 

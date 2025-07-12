@@ -17,13 +17,13 @@ class DcrDetailViewModel with ChangeNotifier {
   void setDetails(ApiResponse<DCRDetailModel> response) {
     _logger.i('Setting DCR details: ${response.status}');
     dcrDetails = response;
-    notifyListeners();
+    Future.microtask(() => notifyListeners());
   }
 
   void setLoading(bool value) {
     _logger.i('Loading status set to: $value');
     _isLoading = value;
-    notifyListeners();
+    Future.microtask(() => notifyListeners());
   }
 
   Future<void> fetch(String subjectId, String facultyId, BuildContext context) async {
