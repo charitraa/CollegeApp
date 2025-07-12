@@ -3,7 +3,6 @@ import 'package:lbef/constant/base_url.dart';
 import 'package:lbef/resource/colors.dart';
 import 'package:lbef/screen/student/class_routines/class_routines.dart';
 import 'package:lbef/screen/student/notice/notice.dart';
-import 'package:lbef/screen/student/notification/notification.dart';
 import 'package:lbef/utils/navigate_to.dart';
 import 'package:lbef/widgets/custom_shimmer.dart';
 import 'package:logger/logger.dart';
@@ -65,8 +64,12 @@ class _DashboardHeadState extends State<DashboardHead> {
       'icon': Icons.assignment,
       'className': const DownloadForums()
     },
-    {'text': 'E-vision', 'icon': Icons.laptop, 'link': 'https://evision.beds.ac.uk/'},
-    {'text': 'Security', 'icon': Icons.lock},
+    {
+      'text': 'E-vision',
+      'icon': Icons.laptop,
+      'link': 'https://evision.beds.ac.uk/'
+    },
+    {'text': 'Security', 'icon': Icons.lock, 'alert': true},
   ];
 
   List<Map<String, dynamic>> filteredCards = [];
@@ -102,6 +105,8 @@ class _DashboardHeadState extends State<DashboardHead> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Column(
       children: [
         SizedBox(
@@ -113,23 +118,25 @@ class _DashboardHeadState extends State<DashboardHead> {
                 left: 0,
                 right: 0,
                 child: SizedBox(
-                  height: 320,
+                  height: size.height * 0.38,
                   child: SizedBox(
-                    width: 150,
-                    height: 120,
+                    width: size.width * 0.4,
+                    height: size.height * 0.15,
                     child: Image.asset('assets/images/content.png',
                         fit: BoxFit.cover),
                   ),
                 ),
               ),
               Positioned(
-                top: 30,
-                left: 15,
+                top: size.height * -0.04,
+                left: size.width * 0.04,
                 child: SizedBox(
-                  width: 190,
-                  height: 120,
-                  child: Image.asset('assets/images/pcps_bg.png',
-                      fit: BoxFit.contain),
+                  width: size.width * 0.5,
+                  height: size.height * 0.3,
+                  child: Image.asset(
+                    'assets/images/pcps_bg.png',
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
               Consumer<UserDataViewModel>(
@@ -214,8 +221,8 @@ class _DashboardHeadState extends State<DashboardHead> {
                 },
               ),
               Positioned(
-                top: 70,
-                right: 24,
+                top: size.height * 0.08,
+                right: size.width * 0.08,
                 child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(
@@ -376,7 +383,9 @@ class _DashboardHeadState extends State<DashboardHead> {
                   children: filteredCards.map((card) {
                     return InkWell(
                       onTap: () {
-                        if (card.containsKey('className')) {
+                        if (card.containsKey('alert') == true) {
+                          _showSecurityDialog(context); // Show alert dialog
+                        } else if (card.containsKey('className')) {
                           Navigator.of(context).push(
                             SlideRightRoute(page: card['className']),
                           );
@@ -393,6 +402,126 @@ class _DashboardHeadState extends State<DashboardHead> {
                 ),
         ),
       ],
+    );
+  }
+
+  void _showSecurityDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          contentPadding: const EdgeInsets.all(10),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  InkWell(
+                    onTap: () {},
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: const Color(0xff868484),
+                              width: 0.4,
+                            ),
+                            color: Colors.white,
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.lock_reset,
+                                  size: 33,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        const SizedBox(
+                          width: 70,
+                          child: Text(
+                            'Recover Password',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 11, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: const Color(0xff868484),
+                              width: 0.4,
+                            ),
+                            color: Colors.white,
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.lock_clock_sharp,
+                                  size: 33,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        const SizedBox(
+                          width: 70,
+                          child: Text(
+                            'Change Password',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 11, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("Cancel"),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
