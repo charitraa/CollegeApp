@@ -10,7 +10,9 @@ class AppException implements Exception{
 class FetchDataException extends AppException{
   FetchDataException([String?message]):super(message,"");
 }
-
+class NoDataException extends AppException{
+  NoDataException([String?message]):super(message,"");
+}
 class BadRequestException extends AppException{
   BadRequestException([String?message]):super(message,"Invalid Request!! ");
 }

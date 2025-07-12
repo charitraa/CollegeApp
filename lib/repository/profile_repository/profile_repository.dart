@@ -44,7 +44,6 @@ class ProfileRepository {
         Utils.flushBarErrorMessage("No response from server", context);
         return false;
       }
-
       _logger.d('Change password response: $response');
       if (response.containsKey('message')) {
         Utils.flushBarSuccessMessage(response['message'], context);

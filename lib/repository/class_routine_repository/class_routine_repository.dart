@@ -11,17 +11,16 @@ import '../../utils/utils.dart';
 class ClassRoutineRepository {
   final NetworkApiService _apiServices = NetworkApiService();
   var logger = Logger();
-  Future<RoutineModel> fetchClassRoutine(
-    BuildContext context) async {
+  Future<RoutineModel> fetchClassRoutine(BuildContext context) async {
     if (kDebugMode) {
       logger.d(RoutineEndpoints.getRoutine);
     }
     try {
-      dynamic response = await _apiServices.getApiResponse(
-          RoutineEndpoints.getRoutine);
+      dynamic response =
+          await _apiServices.getApiResponse(RoutineEndpoints.getRoutine);
       RoutineModel routineData = RoutineModel.fromJson(response);
       logger.d("Report details: $routineData");
-      return  routineData;
+      return routineData;
     } on TimeoutException {
       return Utils.noInternet(
           "No internet connection. Please try again later.");
@@ -30,6 +29,4 @@ class ClassRoutineRepository {
       return Utils.flushBarErrorMessage("$error", context);
     }
   }
-
-
 }

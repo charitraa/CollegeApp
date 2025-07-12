@@ -8,6 +8,7 @@ import 'package:lbef/model/email_notice_model.dart';
 import 'package:lbef/model/notice_model.dart';
 import 'package:lbef/model/sms_model.dart';
 import 'package:logger/logger.dart';
+import '../../data/api_exception.dart';
 import '../../utils/utils.dart';
 
 class NoticeBoardRepository {
@@ -128,6 +129,10 @@ class NoticeBoardRepository {
       return Utils.noInternet(
           "No internet connection. Please try again later.");
     } catch (error) {
+      if (error is NoDataException ) {
+        logger.w("404 Error: $error");
+        return Utils.flushBarNOdata(error.toString(), context);
+      }
       logger.w(error);
       return Utils.flushBarErrorMessage("$error", context);
     }

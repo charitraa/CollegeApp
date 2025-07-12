@@ -73,7 +73,7 @@ class NetworkApiService extends BaseApiServices {
       final response = await http
           .get(Uri.parse(url), headers: headers)
           .timeout(const Duration(seconds: 10));
-var logger=Logger();
+      var logger = Logger();
 // logger.d(jsonDecode(response.body));
       responseJson = returnResponse(response);
     } on SocketException {
@@ -157,7 +157,6 @@ var logger=Logger();
     } else if (responseBody is Map && responseBody.containsKey('message')) {
       errorMessage = responseBody['message'];
     }
-
     switch (response.statusCode) {
       case 200:
         return responseBody;
@@ -170,10 +169,10 @@ var logger=Logger();
       case 403:
         throw FetchDataException("Forbidden: $errorMessage");
       case 404:
-        return responseBody;
+
+        throw NoDataException("Not Found: $errorMessage");
       case 410:
         throw FetchDataException("Not Found: $errorMessage");
-
       case 500:
         throw FetchDataException("Not Found: $errorMessage");
       default:

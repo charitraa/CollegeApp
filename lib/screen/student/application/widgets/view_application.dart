@@ -224,49 +224,7 @@ class _ViewApplicationPageState extends State<ViewApplicationPage> {
                           );
                         },
                       ),
-                      const SizedBox(width: 10),
-                      CustomButton(
-                        text: 'Delete',
-                        isLoading: false,
-                        btnwid: size.width / 2.5,
-                        buttonColor: Colors.red,
-                        onPressed: () async {
-                          final confirmDelete =
-                              await showDeleteConfirmationDialog(context);
-                          if (confirmDelete != true || !context.mounted) return;
 
-                          final id = provider.currentDetails?.applicationId
-                              ?.toString();
-                          if (id == null || id.isEmpty) {
-                            if (context.mounted) {
-                              Utils.flushBarErrorMessage(
-                                  "Invalid application ID", context);
-                            }
-                            return;
-                          }
-
-                          try {
-                            // final success = await Provider.of<ApplicationViewModel>(context, listen: false)
-                            //     .deleteApplication(id, context);\
-                            bool success = true;
-                            if (success && context.mounted) {
-                              await Provider.of<ApplicationViewModel>(context,
-                                      listen: false)
-                                  .fetch(context);
-                              Utils.flushBarSuccessMessage(
-                                  "Application deleted successfully!", context);
-                              Navigator.pop(context);
-                            } else if (context.mounted) {
-                              Utils.flushBarErrorMessage(
-                                  "Failed to delete application", context);
-                            }
-                          } catch (e) {
-                            if (context.mounted) {
-                              Utils.flushBarErrorMessage("Error: $e", context);
-                            }
-                          }
-                        },
-                      ),
                     ],
                   ),
                 ]

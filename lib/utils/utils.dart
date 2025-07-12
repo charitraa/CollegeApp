@@ -72,7 +72,7 @@ class Utils {
   static flushBarNOdata(String message, BuildContext context) {
     Flushbar(
       message: message,
-      backgroundColor: Colors.yellow,
+      backgroundColor: Colors.black,
       title: 'No Data',
       messageColor: Colors.white,
       duration: const Duration(seconds: 2),
