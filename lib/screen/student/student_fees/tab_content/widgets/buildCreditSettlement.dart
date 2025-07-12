@@ -47,6 +47,16 @@ Widget buildCreditSettlement(List<CreditSettlementModel>? note, BuildContext con
                 const SizedBox(height: 8),
                 Text("Rs. ${ double.parse(note.amount ?? '0').toInt()}",
                     style: const TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text('Click to view details!!',style: TextStyle(fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue.shade700,),)
+                  ],
+                )
               ],
             ),
           ),

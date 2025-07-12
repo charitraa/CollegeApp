@@ -135,12 +135,11 @@ class StatementCard extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      'Tap to view details',
+                      'Tap to view details!!',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                         color: Colors.blue.shade700,
-                        fontStyle: FontStyle.italic,
                       ),
                     ),
                   ),

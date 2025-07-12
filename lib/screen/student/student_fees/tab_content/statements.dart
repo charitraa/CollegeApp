@@ -28,8 +28,7 @@ class _StatementsState extends State<Statements> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          PayKhalti(),
-          const SizedBox(height: 16),
+
           const Text(
             'Your Statement',
             style: TextStyle(

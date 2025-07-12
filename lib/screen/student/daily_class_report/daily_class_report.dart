@@ -21,7 +21,9 @@ class _DailyClassReportState extends State<DailyClassReport> {
   @override
   void initState() {
     super.initState();
-    fetch();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      fetch();
+    });
   }
 
   void fetch() async {
@@ -50,62 +52,70 @@ class _DailyClassReportState extends State<DailyClassReport> {
           SizedBox(width: 14),
         ],
       ),
-      body: Container(
-        width: size.width,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-        child: Consumer<DcrViewModel>(
-          builder: (context, viewModel, child) {
-            if (viewModel.isLoading) {
-              return ListView.builder(
-                itemCount: 2,
-                itemBuilder: (context, index) => const Padding(
-                  padding: EdgeInsets.only(bottom: 14),
-                  child: ClassCardShimmer(),
-                ),
-              );
-            }
+      body: SafeArea(
+        child: Container(
+          width: size.width,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          child: Consumer<DcrViewModel>(
+            builder: (context, viewModel, child) {
+              final dcrList = viewModel.dcrList ?? [];
 
-            if (viewModel.dcrList.isEmpty) {
-              return BuildNoData(
-                  size, 'No dcr available', Icons.disabled_visible_rounded);
-            }
-
-            return ListView.separated(
-              physics: const BouncingScrollPhysics(),
-              itemCount: viewModel.dcrList.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 14),
-              itemBuilder: (context, index) {
-                final report = viewModel.dcrList[index];
-                return InkWell(
-                  onTap: () {
-                    _logger.d('Navigating to Reports with report: $report');
-                    Navigator.of(context).push(
-                      SlideRightRoute(
-                        page: Reports(
-                          subjectId: report.subjectId.toString() ?? '',
-                          uid: report.facultyId.toString() ?? '',
-                          image: 'assets/images/mountain.jpg',
-                          facultyName: report.facultyName ?? '',
-                          code: report.subjectCode ?? '',
-                          section: report.sectionId ?? '',
-                          subject: report.subjectName ?? '',
-                          session: report.sessionName ?? '',
-                        ),
-                      ),
-                    );
-                  },
-                  child: ClassCard(
-                    text: report.subjectName ?? '',
-                    code: report.subjectCode ?? '',
-                    faculty: report.facultyName ?? '',
-                    session: report.sessionName ?? '',
-                    section: report.sectionId ?? '',
-                    semester: report.semesterName ?? '',
+              if (viewModel.isLoading) {
+                return ListView.builder(
+                  itemCount: 2,
+                  itemBuilder: (context, index) => const Padding(
+                    padding: EdgeInsets.only(bottom: 14),
+                    child: ClassCardShimmer(),
                   ),
                 );
-              },
-            );
-          },
+              }
+
+              if (dcrList.isEmpty) {
+                return BuildNoData(
+                  size,
+                  'No class reports available',
+                  Icons.disabled_visible_rounded,
+                );
+              }
+
+              return ListView.separated(
+                physics: const BouncingScrollPhysics(),
+                itemCount: dcrList.length,
+                separatorBuilder: (context, index) =>
+                const SizedBox(height: 14),
+                itemBuilder: (context, index) {
+                  final report = dcrList[index];
+                  return InkWell(
+                    onTap: () {
+                      _logger.d('Navigating to Reports with report: $report');
+                      Navigator.of(context).push(
+                        SlideRightRoute(
+                          page: Reports(
+                            subjectId: report.subjectId?.toString() ?? '',
+                            uid: report.facultyId?.toString() ?? '',
+                            image: 'assets/images/mountain.jpg',
+                            facultyName: report.facultyName ?? '',
+                            code: report.subjectCode ?? '',
+                            section: report.sectionId ?? '',
+                            subject: report.subjectName ?? '',
+                            session: report.sessionName ?? '',
+                          ),
+                        ),
+                      );
+                    },
+                    child: ClassCard(
+                      text: report.subjectName ?? '',
+                      code: report.subjectCode ?? '',
+                      faculty: report.facultyName ?? '',
+                      session: report.sessionName ?? '',
+                      section: report.sectionId ?? '',
+                      semester: report.semesterName ?? '',
+                    ),
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
     );

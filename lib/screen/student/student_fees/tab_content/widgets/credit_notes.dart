@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lbef/model/fee_model.dart';
 import 'package:lbef/utils/parse_date.dart';
 
+import '../../../../../resource/colors.dart';
 import '../../../../../widgets/display_dialog/display_dialog.dart';
 import '../../../../../widgets/no_data/no_data_widget.dart';
 import '../dialog_content/credit_note_content.dart';
@@ -60,6 +61,16 @@ Widget buildCreditNotesSection(List<CreditNotes> note, BuildContext context) {
                       child: Text(note.status ?? '',
                           style: const TextStyle(color: Colors.green)),
                     )
+                  ],
+                ),
+                const SizedBox(height: 8),
+
+                 Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                   Text('Click to view details!!',style: TextStyle(fontSize: 12,
+                     fontWeight: FontWeight.bold,
+                     color: Colors.blue.shade700,),)
                   ],
                 )
               ],

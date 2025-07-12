@@ -59,8 +59,7 @@ class _BalanceState extends State<Balance> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          PayKhalti(),
-          const SizedBox(height: 16),
+
           const Text(
             'Your Balance',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),

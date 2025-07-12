@@ -69,6 +69,27 @@ class Utils {
       forwardAnimationCurve: Curves.easeInOut,
     ).show(context);
   }
+  static flushBarNOdata(String message, BuildContext context) {
+    Flushbar(
+      message: message,
+      backgroundColor: Colors.yellow,
+      title: 'No Data',
+      messageColor: Colors.white,
+      duration: const Duration(seconds: 2),
+      icon: const Icon(
+        Icons.check,
+        size: 28.0,
+        color: Colors.white,
+      ),
+      leftBarIndicatorColor:AppColors.primary,
+      animationDuration: const Duration(milliseconds: 500),
+      isDismissible: true,
+      flushbarPosition: FlushbarPosition.TOP,
+      flushbarStyle: FlushbarStyle.FLOATING,
+      forwardAnimationCurve: Curves.easeInOut,
+    ).show(context);
+  }
+
   static void fieldFocusChange(String message, BuildContext context, FocusNode current, FocusNode nextFocus){
     current.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);

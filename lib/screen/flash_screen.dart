@@ -35,7 +35,7 @@ class _FlashScreenState extends State<FlashScreen> {
 
     var logger = Logger();
     logger.d(session);
-    final bool hasSeenIntro = prefs.getBool('isIntro') ?? false;
+    final bool hasSeenIntro = prefs.getBool('isIntroCollege') ?? false;
     if (!hasSeenIntro) {
       await prefs.setBool('hasSeenIntro', false);
     }
