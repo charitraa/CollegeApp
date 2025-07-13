@@ -1,4 +1,4 @@
-package com.lbef.edu.np.lbef
+package com.patancollegeorg.lbef
 
 import io.flutter.embedding.android.FlutterActivity
 
