@@ -440,7 +440,7 @@ class _DashboardHeadState extends State<DashboardHead> {
                                                       ),
                                                       color: Colors.white,
                                                     ),
-                                                    child: const Padding(
+                                                    child:  Padding(
                                                       padding: EdgeInsets.all(8.0),
                                                       child: Column(
                                                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -449,6 +449,7 @@ class _DashboardHeadState extends State<DashboardHead> {
                                                           Icon(
                                                             Icons.lock_reset,
                                                             size: 33,
+                                                            color: AppColors.primary,
                                                           ),
                                                         ],
                                                       ),
@@ -503,7 +504,7 @@ class _DashboardHeadState extends State<DashboardHead> {
                                                       ),
                                                       color: Colors.white,
                                                     ),
-                                                    child: const Padding(
+                                                    child:  Padding(
                                                       padding: EdgeInsets.all(8.0),
                                                       child: Column(
                                                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -511,6 +512,7 @@ class _DashboardHeadState extends State<DashboardHead> {
                                                         children: [
                                                           Icon(
                                                             Icons.lock_clock_sharp,
+                                                            color: AppColors.primary,
                                                             size: 33,
                                                           ),
                                                         ],

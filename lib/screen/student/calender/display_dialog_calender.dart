@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lbef/view_model/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../view_model/calender/event_calender_view_model.dart';
@@ -40,10 +41,13 @@ class _DisplayDialogCalenderState extends State<DisplayDialogCalender> {
       ),
       elevation: 8,
       backgroundColor: Colors.transparent,
-      child: Container(
+      child:
+    Consumer<ThemeProvider>(
+    builder: (context, viewModel, child) {
+    return  Container(
         constraints: const BoxConstraints(maxWidth: 400),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: viewModel.isDarkMode?Colors.black:Colors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -66,7 +70,7 @@ class _DisplayDialogCalenderState extends State<DisplayDialogCalender> {
                     end: Alignment.bottomRight,
                   ),
                   borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(16)),
+                  const BorderRadius.vertical(top: Radius.circular(16)),
                 ),
                 padding: const EdgeInsets.all(16),
                 child: Row(
@@ -134,7 +138,9 @@ class _DisplayDialogCalenderState extends State<DisplayDialogCalender> {
             ],
           ),
         ),
-      ),
+      );
+
+    })
     );
   }
 

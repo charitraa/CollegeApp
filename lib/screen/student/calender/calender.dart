@@ -8,6 +8,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../../data/status.dart';
 import '../../../model/event_model.dart';
+import '../../../resource/colors.dart';
 import '../../../view_model/calender/event_calender_view_model.dart';
 import 'calender_widget.dart';
 import 'display_dialog_calender.dart';
@@ -34,7 +35,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   void _fetchMonthlyEvents(EventCalenderViewModel viewModel, String date) {
-    print('Fetching events for month: $date'); // Debug log
     viewModel.fetchMonthly(
       'monthly',
       date,
@@ -59,7 +59,24 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Event Calendar'),
+            title: const Text(
+              "Event Calender",
+              style: TextStyle(fontFamily: 'poppins', fontSize: 18),
+            ),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios, color: AppColors.primary),
+              onPressed: () => Navigator.pop(context),
+              iconSize: 18,
+            ),
+            actions: const [
+              Image(
+                image: AssetImage('assets/images/pcpsLogo.png'),
+                width: 70,
+                height: 50,
+                fit: BoxFit.contain,
+              ),
+              SizedBox(width: 14),
+            ],
           ),
           body: Column(
             children: [

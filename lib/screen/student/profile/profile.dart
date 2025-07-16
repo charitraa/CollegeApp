@@ -15,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constant/base_url.dart';
 import '../../../resource/colors.dart';
+import '../../../view_model/theme_provider.dart';
 import '../../../view_model/user_view_model/current_user_model.dart';
 import '../../../widgets/custom_shimmer.dart';
 import 'changePassword/change_password.dart';
@@ -31,16 +32,14 @@ class ProfilePage extends StatelessWidget {
 
       if (!await launchUrl(
         uri,
-        mode: LaunchMode.externalApplication, 
+        mode: LaunchMode.externalApplication,
       )) {
         throw Exception('Could not launch $url');
       }
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         title: const Text(
           "Account Settings",
           style: TextStyle(fontFamily: 'poppins', fontSize: 20),
@@ -59,7 +58,6 @@ class ProfilePage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // User Info (Fixed)
           Consumer<UserDataViewModel>(
             builder: (context, userDataViewModel, child) {
               final user = userDataViewModel.currentUser;
@@ -138,8 +136,6 @@ class ProfilePage extends StatelessWidget {
             },
           ),
           const SizedBox(height: 10),
-
-          // Scrollable ListTiles
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
@@ -159,8 +155,8 @@ class ProfilePage extends StatelessWidget {
                     const SizedBox(
                       height: 5,
                     ),
-                    buildListTile(Icons.people_alt_outlined, 'View Profile',
-                        () {
+                    buildListTile(
+                        Icons.people_alt_outlined, 'View Profile', context, () {
                       Navigator.of(context)
                           .push(_buildSlideRoute(const ViewProfilePage()));
                     }),
@@ -180,12 +176,13 @@ class ProfilePage extends StatelessWidget {
                     const SizedBox(
                       height: 5,
                     ),
-                    buildListTile(Icons.lock, 'Recover Password', () {
+
+                    buildListTile(Icons.lock, 'Recover Password', context, () {
                       Navigator.of(context)
                           .push(_buildSlideRoute(const RecoverPassword()));
                     }),
 
-                    buildListTile(Icons.lock, 'Change Password', () {
+                    buildListTile(Icons.lock, 'Change Password', context, () {
                       Navigator.of(context)
                           .push(_buildSlideRoute(const ChangePassword()));
                     }),
@@ -207,12 +204,13 @@ class ProfilePage extends StatelessWidget {
                     ),
                     // buildListTile(
                     //     Icons.picture_as_pdf, 'Print Admit Card', () {}),
-                    buildListTile(Icons.schedule, 'Class Routine', () {
+                    buildListTile(Icons.schedule, 'Class Routine', context, () {
                       Navigator.of(context)
                           .push(_buildSlideRoute(const ClassRoutines()));
                     }),
 
-                    buildListTile(Icons.laptop, 'E-vision access', () async {
+                    buildListTile(Icons.laptop, 'E-vision access', context,
+                        () async {
                       final shouldExit = await showDialog<bool>(
                         context: context,
                         builder: (context) => Alert(
@@ -227,7 +225,7 @@ class ProfilePage extends StatelessWidget {
                         _launchUrl('https://evision.beds.ac.uk/');
                       }
                     }),
-                    buildListTile(Icons.web, 'Breo access', () async {
+                    buildListTile(Icons.web, 'Breo access', context, () async {
                       final shouldExit = await showDialog<bool>(
                         context: context,
                         builder: (context) => Alert(
@@ -266,11 +264,12 @@ class ProfilePage extends StatelessWidget {
                     const SizedBox(
                       height: 5,
                     ),
-                    buildListTile(Icons.newspaper, 'Notice Board', () {
+                    buildListTile(Icons.newspaper, 'Notice Board', context, () {
                       Navigator.of(context)
                           .push(_buildSlideRoute(const NoticeBoard()));
                     }),
-                    buildListTile(Icons.calendar_month, 'Calender', () {
+                    buildListTile(Icons.calendar_month, 'Calender', context,
+                        () {
                       Navigator.of(context)
                           .push(_buildSlideRoute(const CalendarScreen()));
                     }),
@@ -297,56 +296,128 @@ class ProfilePage extends StatelessWidget {
                     // buildListTile(Icons.info, 'About', () {}),
                     // buildListTile(Icons.help_outline, 'Help', () {}),
                     // buildListTile(Icons.call, 'Contact', () {}),
-                    buildListTile(Icons.logout, 'Sign Out', () async {
-                      bool? shouldLogout = await showDialog<bool>(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          title: const Row(
-                            children: [
-                              Icon(Icons.exit_to_app, color: Colors.redAccent),
-                              SizedBox(width: 10),
-                              Text('Logout'),
-                            ],
-                          ),
-                          content: const Text(
-                            'Are you sure you want to logout?',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          actionsPadding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          actions: [
-                            CustomOutlineButton(
-                              onPressed: () => Navigator.of(context).pop(false),
-                              labelText: 'Cancel',
-                              width: size.width * 0.2,
-                              height: size.height * 0.04,
-                              buttonColor: Colors.red,
-                              textColor: Colors.red,
-                            ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.primary,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
+                    Consumer<ThemeProvider>(
+                      builder: (context, themeProvider, child) {
+                        return Column(
+                          children: [
+                            ListTile(
+                              leading: Icon(
+                                Icons.color_lens,
+                                color: themeProvider.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
+                                size: 24,
                               ),
-                              onPressed: () => Navigator.of(context).pop(true),
-                              child: const Text('Logout'),
+                              title: const Text('Theme Mode'),
+                              subtitle: Text(
+                                themeProvider.themeMode == ThemeMode.light
+                                    ? 'Light'
+                                    : 'Dark',
+                              ),
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(16)),
+                                  ),
+                                  builder: (context) {
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        ListTile(
+                                          leading: const Icon(Icons.light_mode),
+                                          title: const Text('Light Mode'),
+                                          onTap: () {
+                                            themeProvider
+                                                .setTheme(ThemeMode.light);
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                        ListTile(
+                                          leading: const Icon(Icons.dark_mode),
+                                          title: const Text('Dark Mode'),
+                                          onTap: () {
+                                            themeProvider
+                                                .setTheme(ThemeMode.dark);
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
+                              tileColor: themeProvider.isDarkMode
+                                  ? Colors.black
+                                  : Colors.grey[50],
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
-                          ],
-                        ),
-                      );
+                            buildListTile(Icons.logout, 'Sign Out', context,
+                                () async {
+                              bool? shouldLogout = await showDialog<bool>(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  backgroundColor:themeProvider.isDarkMode?Colors.black: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  title: const Row(
+                                    children: [
+                                      Icon(Icons.exit_to_app,
+                                          color: Colors.redAccent),
+                                      SizedBox(width: 10),
+                                      Text('Logout'),
+                                    ],
+                                  ),
+                                  content: const Text(
+                                    'Are you sure you want to logout?',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                  actionsPadding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  actions: [
+                                    CustomOutlineButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(false),
+                                      labelText: 'Cancel',
+                                      width: size.width * 0.2,
+                                      height: size.height * 0.04,
+                                      buttonColor: Colors.red,
+                                      textColor: Colors.red,
+                                    ),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.primary,
+                                        foregroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(true),
+                                      child: const Text('Logout'),
+                                    ),
+                                  ],
+                                ),
+                              );
 
-                      if (shouldLogout == true) {
-                        await Provider.of<UserViewModel>(context, listen: false)
-                            .remove(context);
-                      }
-                    }),
+                              if (shouldLogout == true) {
+                                await Provider.of<UserViewModel>(context,
+                                        listen: false)
+                                    .remove(context);
+                              }
+                            }),
+                          ],
+                        );
+                      },
+                    ),
+
                     const SizedBox(height: 30),
                   ],
                 ),

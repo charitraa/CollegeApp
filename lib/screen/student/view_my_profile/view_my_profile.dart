@@ -13,8 +13,6 @@ class ViewProfilePage extends StatefulWidget {
   State<ViewProfilePage> createState() => _ViewProfilePageState();
 }
 
-// ... keep your imports and class declaration
-
 class _ViewProfilePageState extends State<ViewProfilePage> {
   @override
   Widget build(BuildContext context) {
@@ -41,9 +39,7 @@ class _ViewProfilePageState extends State<ViewProfilePage> {
         child: Consumer<UserDataViewModel>(
           builder: (context, viewModel, _) {
             final user = viewModel.currentUser;
-
             if (user == null) return const ViewProfileShimmer();
-
             final image =
                 "${BaseUrl.imageDisplay}/html/profiles/students/${user.stuProfilePath}/${user.stuPhoto}";
 
@@ -175,11 +171,11 @@ class _ViewProfilePageState extends State<ViewProfilePage> {
                     style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
-                        color: Colors.black),
+                       ),
                   ),
                   TextSpan(
                     text: value,
-                    style: const TextStyle(fontSize: 15, color: Colors.black87),
+                    style: const TextStyle(fontSize: 15, ),
                   ),
                 ],
               ),
