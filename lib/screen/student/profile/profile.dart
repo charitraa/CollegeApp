@@ -58,83 +58,88 @@ class ProfilePage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Consumer<UserDataViewModel>(
-            builder: (context, userDataViewModel, child) {
-              final user = userDataViewModel.currentUser;
+          Consumer<ThemeProvider>(builder: (context, themeProvider, child) {
+            return Container(
+              child: Consumer<UserDataViewModel>(
+                builder: (context, userDataViewModel, child) {
+                  final user = userDataViewModel.currentUser;
 
-              String? image =
-                  "${BaseUrl.imageDisplay}/html/profiles/students/${user?.stuProfilePath}/${user?.stuPhoto}";
-              var logger = Logger();
-              logger.d(image);
+                  String? image =
+                      "${BaseUrl.imageDisplay}/html/profiles/students/${user?.stuProfilePath}/${user?.stuPhoto}";
+                  var logger = Logger();
+                  logger.d(image);
 
-              return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      height: 100,
-                      width: 100,
-                      child: ClipOval(
-                        child: Image.network(
-                          image,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                              child: CustomShimmerLoading(
-                                width: 100.0,
-                                height: 100.0,
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
-                              ),
-                            );
-                          },
-                          errorBuilder: (context, error, stackTrace) =>
-                              Container(
-                            width: 100,
-                            height: 100,
-                            color: AppColors.primary,
-                            child: const Center(
-                              child: Icon(
-                                Icons.school,
-                                color: Colors.white,
-                                size: 40,
-                              ),
+                  return Container(
+                    color: themeProvider.isDarkMode? Colors.black:Colors.grey[50],
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          height: 100,
+                          width: 100,
+                          child: ClipOval(
+                            child: Image.network(
+                              image,
+                              fit: BoxFit.cover,
+                              loadingBuilder: (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                  child: CustomShimmerLoading(
+                                    width: 100.0,
+                                    height: 100.0,
+                                    baseColor: Colors.grey[300]!,
+                                    highlightColor: Colors.grey[100]!,
+                                  ),
+                                );
+                              },
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(
+                                    width: 100,
+                                    height: 100,
+                                    color: AppColors.primary,
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.school,
+                                        color: Colors.white,
+                                        size: 40,
+                                      ),
+                                    ),
+                                  ),
                             ),
                           ),
                         ),
-                      ),
+                        const SizedBox(width: 30),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Hi',
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              Text(
+                                "${user?.stuFirstname ?? ''} ${user?.stuLastname ?? ''}",
+                                style: const TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                user?.stuRollNo?.toString() ?? '',
+                                style: const TextStyle(fontSize: 18),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 30),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Hi',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Text(
-                            "${user?.stuFirstname ?? ''} ${user?.stuLastname ?? ''}",
-                            style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            user?.stuRollNo?.toString() ?? '',
-                            style: const TextStyle(fontSize: 18),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+                  );
+                },
+              )
+            );
+          }),
           const SizedBox(height: 10),
           Expanded(
             child: SingleChildScrollView(
@@ -362,7 +367,9 @@ class ProfilePage extends StatelessWidget {
                               bool? shouldLogout = await showDialog<bool>(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                  backgroundColor:themeProvider.isDarkMode?Colors.black: Colors.white,
+                                  backgroundColor: themeProvider.isDarkMode
+                                      ? Colors.black
+                                      : Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20),
                                   ),
