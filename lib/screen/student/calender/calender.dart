@@ -154,28 +154,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               Expanded(
                 child: viewModel.isLoading
                     ? const ShimmerWidget()
-                    : viewModel.userData.status == Status.ERROR
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 8),
-                                child: Row(
-                                  children: [
-                                    const Icon(Icons.calendar_month_outlined),
-                                    Text(parseDate(_selectedDay.toString())),
-                                  ],
-                                ),
-                              ),
-                              BuildNoData(
-                                MediaQuery.of(context).size,
-                                "Error loading events",
-                                Icons.error_outline,
-                              ),
-                            ],
-                          )
-                        : selectedDayEvents.isEmpty
+                    : selectedDayEvents.isEmpty
                             ? Column(
                                 children: [
                                   Padding(
