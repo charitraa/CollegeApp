@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
             child: Consumer<ThemeProvider>(
               builder: (context, themeProvider, child) {
                 return MaterialApp(
-                  title: 'LBEF',
+                  title: 'PCPS',
                   debugShowCheckedModeBanner: false,
                   themeMode: themeProvider.themeMode,
                   theme: ThemeData(
