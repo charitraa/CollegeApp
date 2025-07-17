@@ -48,14 +48,22 @@ class _CalendarScreenState extends State<CalendarScreen> {
     return Consumer<EventCalenderViewModel>(
       builder: (context, viewModel, child) {
         final selectedDateStr = DateFormat('yyyy-MM-dd').format(_selectedDay);
-        final selectedDayEvents = viewModel.events
-            .where((event) =>
-                event.startDate != null &&
-                DateFormat('yyyy-MM-dd')
-                        .format(DateTime.parse(event.startDate!)) ==
-                    selectedDateStr)
-            .toList();
+        final selectedDayEvents = viewModel.events.where((event) {
+          if (event.startDate == null) return false;
 
+          final start = DateTime.parse(event.startDate!);
+          final end =
+              event.endDate != null ? DateTime.parse(event.endDate!) : start;
+
+          final selected =
+              DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day);
+          final startOnly = DateTime(start.year, start.month, start.day);
+          final endOnly = DateTime(end.year, end.month, end.day);
+
+          return selected.isAtSameMomentAs(startOnly) ||
+              selected.isAtSameMomentAs(endOnly) ||
+              (selected.isAfter(startOnly) && selected.isBefore(endOnly));
+        }).toList();
 
         return Scaffold(
           appBar: AppBar(
@@ -106,16 +114,24 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   );
                 },
                 eventLoader: (day) {
-                  final dayStr = DateFormat('yyyy-MM-dd').format(day);
-                  final events = viewModel.events
-                      .where((event) =>
-                          event.startDate != null &&
-                          DateFormat('yyyy-MM-dd')
-                                  .format(DateTime.parse(event.startDate!)) ==
-                              dayStr)
-                      .toList();
+                  return viewModel.events.where((event) {
+                    if (event.startDate == null) return false;
 
-                  return events;
+                    final start = DateTime.parse(event.startDate!);
+                    final end = event.endDate != null
+                        ? DateTime.parse(event.endDate!)
+                        : start;
+
+                    final dayOnly = DateTime(day.year, day.month, day.day);
+                    final startOnly =
+                        DateTime(start.year, start.month, start.day);
+                    final endOnly = DateTime(end.year, end.month, end.day);
+
+                    return dayOnly.isAtSameMomentAs(startOnly) ||
+                        dayOnly.isAtSameMomentAs(endOnly) ||
+                        (dayOnly.isAfter(startOnly) &&
+                            dayOnly.isBefore(endOnly));
+                  }).toList();
                 },
                 calendarBuilders: CalendarBuilders(
                   markerBuilder: (context, date, events) {
@@ -223,10 +239,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                       date: event.eventType ?? 'No Type',
                                       color: _parseColor(
                                           event.colorCode ?? 'grey'),
-                                      dateTime: event.startDate != null ||
+                                      dateTime: event.startDate != null &&
                                               event.startDate != ''
                                           ? parseDate(event.startDate ?? '')
-                                          : "", location:  event.location??'',
+                                          : "",
+                                      location: event.location ?? '',
                                     ),
                                   );
                                 },
@@ -247,6 +264,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
         return Colors.red;
       case 'green':
         return Colors.green;
+      case 'yellow':
+        return Colors.yellow;
       default:
         return Colors.grey;
     }
