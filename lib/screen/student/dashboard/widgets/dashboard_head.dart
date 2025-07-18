@@ -3,22 +3,19 @@ import 'package:lbef/constant/base_url.dart';
 import 'package:lbef/resource/colors.dart';
 import 'package:lbef/screen/student/class_routines/class_routines.dart';
 import 'package:lbef/screen/student/dashboard/display_security.dart';
+import 'package:lbef/screen/student/identity_card/student_id_card.dart';
 import 'package:lbef/screen/student/notice/notice.dart';
 import 'package:lbef/screen/student/profile/changePassword/change_password.dart';
-import 'package:lbef/screen/student/profile/profile.dart';
 import 'package:lbef/screen/student/profile/recover_password/recover_password.dart';
-import 'package:lbef/screen/student/view_my_profile/view_my_profile.dart';
 import 'package:lbef/utils/navigate_to.dart';
 import 'package:lbef/widgets/custom_shimmer.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../../data/status.dart';
 import '../../../../view_model/theme_provider.dart';
 import '../../../../view_model/user_view_model/current_user_model.dart';
-import '../../../admit_card/admit_card.dart';
 import '../../calender/calender.dart';
 import '../../download_forums/download_forums.dart';
 import 'dashboard_card.dart';
@@ -54,9 +51,9 @@ class _DashboardHeadState extends State<DashboardHead> {
       'className': const ClassRoutines()
     },
     {
-      'text': 'Profile',
+      'text': 'Identity Card',
       'icon': Icons.badge,
-      'className': const ViewProfilePage()
+      'className': const StudentIdCard()
     },
     {
       'text': 'Notice',
