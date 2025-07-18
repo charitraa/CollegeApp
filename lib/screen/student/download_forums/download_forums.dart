@@ -4,13 +4,13 @@ import 'package:lbef/utils/permission.dart';
 import 'package:lbef/screen/student/daily_class_report/shimmer/class_card_shimmer.dart';
 import 'package:lbef/utils/parse_date.dart';
 import 'package:lbef/view_model/download_forms/download_forms_view_model.dart';
-import 'package:lbef/view_model/theme_provider.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:open_file/open_file.dart';
 import '../../../resource/colors.dart';
+import '../../../view_model/theme_provider.dart';
 import '../../../widgets/no_data/no_data_widget.dart';
 
 class DownloadForums extends StatefulWidget {
@@ -30,7 +30,8 @@ class _DownloadForumsState extends State<DownloadForums> {
   }
 
   void fetch() async {
-    await Provider.of<DownloadFormsViewModel>(context, listen: false).fetch(context);
+    await Provider.of<DownloadFormsViewModel>(context, listen: false)
+        .fetch(context);
   }
 
   Future<void> downloadFile(String fileName, String fileLink) async {
@@ -125,10 +126,11 @@ class _DownloadForumsState extends State<DownloadForums> {
                 crossAxisCount: 2,
                 mainAxisSpacing: 8, // Unified spacing for consistency
                 crossAxisSpacing: 8,
-                childAspectRatio: 0.85, // Slightly increased to prevent overflow
+                childAspectRatio:
+                    0.85, // Slightly increased to prevent overflow
                 children: List.generate(
                   (size.height / 240).ceil(), // Adjusted for taller cells
-                      (index) => const Padding(
+                  (index) => const Padding(
                     padding: EdgeInsets.all(4),
                     child: ClassCardShimmer(),
                   ),
@@ -154,66 +156,78 @@ class _DownloadForumsState extends State<DownloadForums> {
               crossAxisSpacing: 8,
               childAspectRatio: 0.85, // Slightly increased to prevent overflow
               children: viewModel.downloadsList.map((report) {
-                return GestureDetector(
-                  onTap: () => downloadFile(
-                    report.documentName ?? 'Untitled',
-                    report.fileLink ?? '',
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 6,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
+                return Consumer<ThemeProvider>(
+                    builder: (context, provider, child) {
+                  return GestureDetector(
+                    onTap: () => downloadFile(
+                      report.documentName ?? 'Untitled',
+                      report.fileLink ?? '',
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(
-                          report.fileLink?.endsWith('.pdf') ?? false
-                              ? Icons.picture_as_pdf
-                              : Icons.description,
-                          color: report.fileLink?.endsWith('.pdf') ?? false
-                              ? Colors.red
-                              : Colors.blue,
-                          size: 36,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          report.documentName ?? 'Untitled',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: provider.isDarkMode?Colors.black:Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 6,
+                            offset: Offset(0, 3),
                           ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          report.description ?? report.documentName ?? 'No description',
-                          style: TextStyle(fontSize: 11, color: Colors.grey[800]),
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const Spacer(),
-                        Text(
-                          'Published: ${report.publishOn != null && report.publishOn!.isNotEmpty ? parseDate(report.publishOn!) : "Unknown"}',
-                          style: TextStyle(fontSize: 10, color: Colors.grey[600]),
-                        ),
-                        const Align(
-                          alignment: Alignment.bottomRight,
-                          child: Icon(Icons.download, color: Colors.grey, size: 20),
-                        ),
-                      ],
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            report.fileLink?.endsWith('.pdf') ?? false
+                                ? Icons.picture_as_pdf
+                                : Icons.description,
+                            color: report.fileLink?.endsWith('.pdf') ?? false
+                                ? Colors.red
+                                : Colors.blue,
+                            size: 36,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            report.documentName ?? 'Untitled',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                              color: provider.isDarkMode?Colors.white38:Colors.black,
+
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            report.description ??
+                                report.documentName ??
+                                'No description',
+                            style: TextStyle(
+                                color: provider.isDarkMode?Colors.white60:Colors.grey[800],
+
+                                fontSize: 11,  ),
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const Spacer(),
+                          Text(
+                            'Published: ${report.publishOn != null && report.publishOn!.isNotEmpty ? parseDate(report.publishOn!) : "Unknown"}',
+                            style: TextStyle(
+                                fontSize: 10, color: Colors.grey[600]),
+                          ),
+                          const Align(
+                            alignment: Alignment.bottomRight,
+                            child: Icon(Icons.download,
+                                color: Colors.grey, size: 20),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
+                  );
+                });
               }).toList(),
             );
           },

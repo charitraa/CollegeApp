@@ -252,16 +252,25 @@ class _ReportsState extends State<Reports> {
 
   double _calculateAttendancePercentage(Attendance attendance) {
     try {
+      var logger=Logger();
       final present = double.parse(attendance.present ?? '0');
+      final leave = double.parse(attendance.leave ?? '0');
+      final late = double.parse(attendance.late ?? '0');
+
       final total = double.parse(attendance.totalPeriod ?? '1');
+      logger.wtf("present $present");
+      logger.wtf("present $leave");
+      logger.wtf("present $total");
 
       if (total == 0) return 0.0;
+      final percentage = ((present + leave+late) / total) * 100;
+      logger.d("percentage $total");
 
-      final percentage = (present / total) * 100;
       return double.parse(percentage.toStringAsFixed(2));
     } catch (e) {
       _logger.e('Error calculating attendance percentage: $e');
       return 0.0;
     }
   }
+
 }

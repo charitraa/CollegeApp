@@ -92,10 +92,12 @@ class _StudentNavbarState extends State<StudentNavbar> {
                   child: SizedBox(
                     height: 35,
                     width: 35,
-                    child: Icon(
-                      Icons.dashboard,
-                      color: _selectedIndex == 0 ? Colors.blue : (provider.isDarkMode? Colors.white:Colors.black)
-                    ),
+                    child: Icon(Icons.dashboard,
+                        color: _selectedIndex == 0
+                            ? Colors.blue
+                            : (provider.isDarkMode
+                                ? Colors.white
+                                : Colors.black)),
                   ),
                   label: 'Home',
                   labelStyle: TextStyle(
@@ -108,7 +110,11 @@ class _StudentNavbarState extends State<StudentNavbar> {
                       width: 35,
                       child: Icon(
                         Icons.assignment_outlined,
-                        color: _selectedIndex == 1 ? Colors.blue : (provider.isDarkMode? Colors.white:Colors.black),
+                        color: _selectedIndex == 1
+                            ? Colors.blue
+                            : (provider.isDarkMode
+                                ? Colors.white
+                                : Colors.black),
                         size: 24,
                       ),
                     ),
@@ -123,7 +129,11 @@ class _StudentNavbarState extends State<StudentNavbar> {
                       width: 35,
                       child: Icon(
                         Icons.outgoing_mail,
-                        color: _selectedIndex == 2 ? Colors.blue : (provider.isDarkMode? Colors.white:Colors.black),
+                        color: _selectedIndex == 2
+                            ? Colors.blue
+                            : (provider.isDarkMode
+                                ? Colors.white
+                                : Colors.black),
                         size: 25,
                       ),
                     ),
@@ -138,7 +148,11 @@ class _StudentNavbarState extends State<StudentNavbar> {
                       width: 35,
                       child: Icon(
                         Icons.payments_outlined,
-                        color: _selectedIndex == 3 ? Colors.blue : (provider.isDarkMode? Colors.white:Colors.black),
+                        color: _selectedIndex == 3
+                            ? Colors.blue
+                            : (provider.isDarkMode
+                                ? Colors.white
+                                : Colors.black),
                         size: 25,
                       ),
                     ),
@@ -153,7 +167,11 @@ class _StudentNavbarState extends State<StudentNavbar> {
                       width: 35,
                       child: Icon(
                         Icons.person_outline,
-                        color: _selectedIndex == 4 ? Colors.blue : (provider.isDarkMode? Colors.white:Colors.black),
+                        color: _selectedIndex == 4
+                            ? Colors.blue
+                            : (provider.isDarkMode
+                                ? Colors.white
+                                : Colors.black),
                         size: 25,
                       ),
                     ),

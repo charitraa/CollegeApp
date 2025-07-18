@@ -5,8 +5,6 @@ import 'package:lbef/utils/parse_date.dart';
 import 'package:lbef/widgets/no_data/no_data_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
-
-import '../../../data/status.dart';
 import '../../../model/event_model.dart';
 import '../../../resource/colors.dart';
 import '../../../view_model/calender/event_calender_view_model.dart';
@@ -135,26 +133,46 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 },
                 calendarBuilders: CalendarBuilders(
                   markerBuilder: (context, date, events) {
-                    if (events.isNotEmpty) {
-                      return Row(
+                    if (events.isEmpty) return const SizedBox.shrink();
+
+                    final eventColors = events
+                        .take(2)
+                        .map((event) =>
+                        _parseColor((event as EventModel).colorCode ?? 'grey'))
+                        .toList();
+
+                    final extraCount = events.length - 2;
+
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 2),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: events.map((event) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 1.0),
-                            width: 6,
-                            height: 6,
-                            decoration: BoxDecoration(
-                              color: _parseColor(
-                                  (event as EventModel).colorCode ?? 'grey'),
-                              shape: BoxShape.circle,
+                        children: [
+                          ...eventColors.map(
+                                (color) => Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 1.0),
+                              width: 6,
+                              height: 6,
+                              decoration: BoxDecoration(
+                                color: color,
+                                shape: BoxShape.circle,
+                              ),
                             ),
-                          );
-                        }).toList(),
-                      );
-                    }
-                    return null;
+                          ),
+                          if (extraCount > 0)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 2),
+                              child: Text(
+                                '+$extraCount',
+                                style: const TextStyle(fontSize: 10),
+                              ),
+                            ),
+                        ],
+                      ),
+                    );
                   },
                 ),
+
                 calendarStyle: const CalendarStyle(
                   todayDecoration: BoxDecoration(
                     color: Colors.blueAccent,

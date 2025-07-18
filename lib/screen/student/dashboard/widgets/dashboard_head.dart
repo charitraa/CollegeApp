@@ -16,6 +16,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../data/status.dart';
+import '../../../../view_model/theme_provider.dart';
 import '../../../../view_model/user_view_model/current_user_model.dart';
 import '../../../admit_card/admit_card.dart';
 import '../../calender/calender.dart';
@@ -311,69 +312,73 @@ class _DashboardHeadState extends State<DashboardHead> {
                 bottom: 0,
                 left: 20,
                 right: 20,
-                child: TextField(
-                  controller: _controller,
-                  onChanged: filterCards,
-                  decoration: InputDecoration(
-                    hintText: 'Looking for...',
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide.none,
-                    ),
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: searchQuery.isNotEmpty
-                        ? Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  _controller.clear();
-                                  filterCards('');
-                                },
-                                child:
-                                    const Icon(Icons.clear, color: Colors.grey),
-                              ),
-                              const SizedBox(width: 8),
-                              GestureDetector(
-                                onTap: () {
-                                  filterCards(_controller.text);
-                                },
+                child: Consumer<ThemeProvider>(
+                    builder: (context, provider, child) {
+                  return TextField(
+                    controller: _controller,
+                    onChanged: filterCards,
+                    decoration: InputDecoration(
+                      hintText: 'Looking for...',
+                      filled: true,
+                      fillColor:
+                          provider.isDarkMode ? Colors.black : Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: searchQuery.isNotEmpty
+                          ? Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    _controller.clear();
+                                    filterCards('');
+                                  },
+                                  child: const Icon(Icons.clear,
+                                      color: Colors.grey),
+                                ),
+                                const SizedBox(width: 8),
+                                GestureDetector(
+                                  onTap: () {
+                                    filterCards(_controller.text);
+                                  },
+                                  child: Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primary,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: const Icon(Icons.search,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+                              ],
+                            )
+                          : GestureDetector(
+                              onTap: () {
+                                filterCards(_controller.text);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 2),
                                 child: Container(
-                                  width: 40,
-                                  height: 40,
+                                  width: 45,
                                   decoration: BoxDecoration(
                                     color: AppColors.primary,
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
                                   child: const Icon(Icons.search,
-                                      color: Colors.white),
+                                      color: Colors.white, size: 26),
                                 ),
-                              ),
-                              const SizedBox(width: 6),
-                            ],
-                          )
-                        : GestureDetector(
-                            onTap: () {
-                              filterCards(_controller.text);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0, vertical: 2),
-                              child: Container(
-                                width: 45,
-                                decoration: BoxDecoration(
-                                  color: AppColors.primary,
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                child: const Icon(Icons.search,
-                                    color: Colors.white, size: 26),
                               ),
                             ),
-                          ),
-                  ),
-                ),
+                    ),
+                  );
+                }),
               ),
             ],
           ),
@@ -395,151 +400,189 @@ class _DashboardHeadState extends State<DashboardHead> {
                         if (card.containsKey('alert') == true) {
                           showDialog(
                             context: context,
-                            builder: (context) =>
-                                DisplaySecurity(
-                                    text: 'Security options',
-                                    show:
-                                    Column(
-                                      mainAxisSize: MainAxisSize.min,
+                            builder: (context) => DisplaySecurity(
+                                text: 'Security options',
+                                show: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const SizedBox(height: 20),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        const SizedBox(height: 20),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            InkWell(
-                                              onTap: () {
-                                                Navigator.of(context).push(
-                                                  PageRouteBuilder(
-                                                    pageBuilder: (context, animation, secondaryAnimation) =>
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                              PageRouteBuilder(
+                                                pageBuilder: (context,
+                                                        animation,
+                                                        secondaryAnimation) =>
                                                     const RecoverPassword(),
-                                                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                                      const begin = Offset(1.0, 0.0);
-                                                      const end = Offset.zero;
-                                                      const curve = Curves.easeInOut;
-                                                      var tween =
-                                                      Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                                                      var offsetAnimation = animation.drive(tween);
-                                                      return SlideTransition(
-                                                        position: offsetAnimation,
-                                                        child: child,
-                                                      );
-                                                    },
-                                                  ),
-                                                );
-                                              },
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                    height: 80,
-                                                    width: 80,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(8),
-                                                      border: Border.all(
-                                                        color: const Color(0xff868484),
-                                                        width: 0.4,
-                                                      ),
-                                                      color: Colors.white,
-                                                    ),
-                                                    child:  Padding(
-                                                      padding: EdgeInsets.all(8.0),
-                                                      child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                        children: [
-                                                          Icon(
-                                                            Icons.lock_reset,
-                                                            size: 33,
-                                                            color: AppColors.primary,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 70,
-                                                    child: Text(
-                                                      'Recover Password',
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontSize: 11, fontWeight: FontWeight.bold),
-                                                    ),
-                                                  ),
-                                                ],
+                                                transitionsBuilder: (context,
+                                                    animation,
+                                                    secondaryAnimation,
+                                                    child) {
+                                                  const begin =
+                                                      Offset(1.0, 0.0);
+                                                  const end = Offset.zero;
+                                                  const curve =
+                                                      Curves.easeInOut;
+                                                  var tween = Tween(
+                                                          begin: begin,
+                                                          end: end)
+                                                      .chain(CurveTween(
+                                                          curve: curve));
+                                                  var offsetAnimation =
+                                                      animation.drive(tween);
+                                                  return SlideTransition(
+                                                    position: offsetAnimation,
+                                                    child: child,
+                                                  );
+                                                },
                                               ),
-                                            ),
-                                            InkWell(
-                                              onTap: () {
-                                                Navigator.of(context).push(
-                                                  PageRouteBuilder(
-                                                    pageBuilder: (context, animation, secondaryAnimation) =>
-                                                    const ChangePassword(),
-                                                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                                      const begin = Offset(1.0, 0.0);
-                                                      const end = Offset.zero;
-                                                      const curve = Curves.easeInOut;
-                                                      var tween =
-                                                      Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                                                      var offsetAnimation = animation.drive(tween);
-                                                      return SlideTransition(
-                                                        position: offsetAnimation,
-                                                        child: child,
-                                                      );
-                                                    },
+                                            );
+                                          },
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                height: 80,
+                                                width: 80,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  border: Border.all(
+                                                    color:
+                                                        const Color(0xff868484),
+                                                    width: 0.4,
                                                   ),
-                                                );
-                                              },
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                    height: 80,
-                                                    width: 80,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(8),
-                                                      border: Border.all(
-                                                        color: const Color(0xff868484),
-                                                        width: 0.4,
+                                                  color: Colors.white,
+                                                ),
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(8.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.lock_reset,
+                                                        size: 33,
+                                                        color:
+                                                            AppColors.primary,
                                                       ),
-                                                      color: Colors.white,
-                                                    ),
-                                                    child:  Padding(
-                                                      padding: EdgeInsets.all(8.0),
-                                                      child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                        children: [
-                                                          Icon(
-                                                            Icons.lock_clock_sharp,
-                                                            color: AppColors.primary,
-                                                            size: 33,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
+                                                    ],
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 70,
-                                                    child: Text(
-                                                      'Change Password',
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontSize: 11, fontWeight: FontWeight.bold),
-                                                    ),
-                                                  ),
-                                                ],
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                              const SizedBox(
+                                                height: 5,
+                                              ),
+                                              const SizedBox(
+                                                width: 70,
+                                                child: Text(
+                                                  'Recover Password',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: 11,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                              PageRouteBuilder(
+                                                pageBuilder: (context,
+                                                        animation,
+                                                        secondaryAnimation) =>
+                                                    const ChangePassword(),
+                                                transitionsBuilder: (context,
+                                                    animation,
+                                                    secondaryAnimation,
+                                                    child) {
+                                                  const begin =
+                                                      Offset(1.0, 0.0);
+                                                  const end = Offset.zero;
+                                                  const curve =
+                                                      Curves.easeInOut;
+                                                  var tween = Tween(
+                                                          begin: begin,
+                                                          end: end)
+                                                      .chain(CurveTween(
+                                                          curve: curve));
+                                                  var offsetAnimation =
+                                                      animation.drive(tween);
+                                                  return SlideTransition(
+                                                    position: offsetAnimation,
+                                                    child: child,
+                                                  );
+                                                },
+                                              ),
+                                            );
+                                          },
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                height: 80,
+                                                width: 80,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  border: Border.all(
+                                                    color:
+                                                        const Color(0xff868484),
+                                                    width: 0.4,
+                                                  ),
+                                                  color: Colors.white,
+                                                ),
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(8.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.lock_clock_sharp,
+                                                        color:
+                                                            AppColors.primary,
+                                                        size: 33,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 5,
+                                              ),
+                                              const SizedBox(
+                                                width: 70,
+                                                child: Text(
+                                                  'Change Password',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: 11,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       ],
-                                    )),
-                          );// Show alert dialog
+                                    ),
+                                  ],
+                                )),
+                          ); // Show alert dialog
                         } else if (card.containsKey('className')) {
                           Navigator.of(context).push(
                             SlideRightRoute(page: card['className']),
@@ -559,5 +602,4 @@ class _DashboardHeadState extends State<DashboardHead> {
       ],
     );
   }
-
 }
