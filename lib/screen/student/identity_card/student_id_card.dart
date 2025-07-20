@@ -52,7 +52,7 @@ class _StudentIdCardState extends State<StudentIdCard> {
               width: size.width,
               padding: const EdgeInsets.all(12),
               child: Card(
-                color: const Color(0xFFFFEEEE),
+                color:  Colors.white,
                 elevation: 2,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
