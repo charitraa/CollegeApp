@@ -7,6 +7,7 @@ import 'package:lbef/screen/student/identity_card/student_id_card.dart';
 import 'package:lbef/screen/student/notice/notice.dart';
 import 'package:lbef/screen/student/profile/changePassword/change_password.dart';
 import 'package:lbef/screen/student/profile/recover_password/recover_password.dart';
+import 'package:lbef/screen/student/view_my_profile/view_my_profile.dart';
 import 'package:lbef/utils/navigate_to.dart';
 import 'package:lbef/widgets/custom_shimmer.dart';
 import 'package:logger/logger.dart';
@@ -51,9 +52,9 @@ class _DashboardHeadState extends State<DashboardHead> {
       'className': const ClassRoutines()
     },
     {
-      'text': 'Identity Card',
+      'text': 'Profile',
       'icon': Icons.badge,
-      'className': const StudentIdCard()
+      'className': const ViewProfilePage()
     },
     {
       'text': 'Notice',
