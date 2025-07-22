@@ -129,7 +129,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         dayOnly.isAtSameMomentAs(endOnly) ||
                         (dayOnly.isAfter(startOnly) &&
                             dayOnly.isBefore(endOnly));
-                  }).toList();g
+                  }).toList();
                 },
                 calendarBuilders: CalendarBuilders(
                   markerBuilder: (context, date, events) {
