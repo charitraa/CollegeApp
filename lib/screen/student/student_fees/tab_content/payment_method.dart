@@ -139,6 +139,25 @@ class _PaymentMethodState extends State<PaymentMethod> {
                 }).toList(),
                 const SizedBox(height: 20),
                 Text(
+                  "Payment Via Cheque",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: isDark ? Colors.white : Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  "Please issue the cheque in favor of \"Patan College for Professional Studies Pvt. Ltd.\", "
+                  "and write your (Student Name and College Roll No) at the back of the cheque",                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(
                   "We Accept FonePay",
                   style: TextStyle(
                     fontSize: 20,
