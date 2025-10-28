@@ -5,6 +5,7 @@ import 'package:lbef/screen/student/dashboard/widgets/dashboard_head.dart';
 import 'package:lbef/screen/student/notice/notice.dart';
 import 'package:lbef/view_model/banner_view_model.dart';
 import 'package:lbef/view_model/notice_board/notice_board_view_model.dart';
+import 'package:lbef/view_model/survery_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../../utils/navigate_to.dart';
@@ -24,7 +25,8 @@ class _DashboardState extends State<Dashboard> {
   void fetch() async {
     await Provider.of<NoticeBoardViewModel>(context, listen: false)
         .fetch(context);
-
+    await Provider.of<SurveryViewModel>(context, listen: false)
+        .fetch(context);
   }
 
   @override
@@ -44,6 +46,8 @@ class _DashboardState extends State<Dashboard> {
           child: Column(
             children: [
               const DashboardHead(),
+              // Place this above the BannerCarousel() in your Dashboard build method
+
               BannerCarousel(),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),

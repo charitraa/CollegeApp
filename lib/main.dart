@@ -12,6 +12,7 @@ import 'package:lbef/view_model/download_forms/download_forms_view_model.dart';
 import 'package:lbef/view_model/notice_board/email_view_model.dart';
 import 'package:lbef/view_model/notice_board/notice_board_view_model.dart';
 import 'package:lbef/view_model/notice_board/sms_view_model.dart';
+import 'package:lbef/view_model/survery_view_model.dart';
 import 'package:lbef/view_model/theme_provider.dart';
 import 'package:lbef/view_model/user_view_model/auth_view_model.dart';
 import 'package:lbef/view_model/user_view_model/current_user_model.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => BannerViewModel()),
+        ChangeNotifierProvider(create: (_) => SurveryViewModel()),
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(create: (_) => ApplicationViewModel()),
         ChangeNotifierProvider(create: (_) => ClassRoutineViewModel()),
